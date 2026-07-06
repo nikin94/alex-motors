@@ -1,5 +1,18 @@
-@import '@fontsource/bebas-neue';
 @import 'tailwindcss';
+
+/* Self-declared instead of @fontsource's index.css: their faces ship
+   font-display: swap, which paints the fallback font first and swaps it
+   for Bebas Neue a beat later — a visible flash on every cold load.
+   block hides the text for the (local, tiny-file) load instead, so the
+   sign appears already in its display face. All site copy is Latin, so
+   only that subset is bundled; woff2 support is universal. */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('@fontsource/bebas-neue/files/bebas-neue-latin-400-normal.woff2') format('woff2');
+}
 
 @theme {
   --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
