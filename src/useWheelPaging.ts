@@ -1,10 +1,13 @@
 import { useEffect } from 'react'
 
-/* Native CSS scroll snap only settles once a gesture ends: a short wheel
-   nudge that never crosses the midpoint between screens animates straight
-   back to where it started. On the snap viewports (>= 768px, matching the
-   media query in index.css) any wheel intent should page one full screen
-   instead — the behaviour a full-page site is expected to have.
+/* Native CSS scroll snap only settles once a gesture ends, and it snaps to
+   the NEAREST screen — a wheel gesture has to cross the midpoint between
+   screens before it pages. On the snap viewports (>= 768px, matching the
+   media query in index.css) the wheel should feel like a full-page site
+   instead, but with a little give: within FREE_PLAY px of a snap point the
+   wheel scrolls natively (and CSS snap eases the page back if the gesture
+   ends there); once the page drifts past that, the transition completes on
+   its own — no long drag to the midpoint, no dead-stiff hijack either.
    The handler owns wheel only: keyboard, scrollbar, touch and anchor
    scrolling stay native (and still snap via CSS). Ctrl+wheel is left
    alone — that's pinch-zoom on most platforms. */
@@ -12,6 +15,11 @@ import { useEffect } from 'react'
 /* Fractional scroll positions on HiDPI screens land within a pixel or two
    of a snap point — treat that as aligned. */
 const EPSILON = 2
+
+/* The give before a wheel gesture commits to paging: roughly one mouse-wheel
+   notch (~100px in Chrome) stays in the elastic zone and snaps back, a
+   second notch (or a firmer trackpad flick) completes the transition. */
+const FREE_PLAY = 120
 
 export function useWheelPaging() {
   useEffect(() => {
@@ -45,22 +53,35 @@ export function useWheelPaging() {
          screen by real geometry instead: the last one whose top is at or
          above the viewport top. */
       let current = 0
+      let nearest = Infinity
       screens.forEach((screen, index) => {
-        if (screen.getBoundingClientRect().top <= EPSILON) current = index
+        const top = screen.getBoundingClientRect().top
+        if (top <= EPSILON) current = index
+        nearest = Math.min(nearest, Math.abs(top))
       })
+      /* Elastic zone: close to a snap point the wheel stays native — the
+         page visibly gives, and CSS snap pulls it home if the gesture ends
+         here. Only once the drift exceeds FREE_PLAY does paging take over
+         and finish the transition. Intermediate stops inside an over-tall
+         screen sit far from every screen top, so stepping there is never
+         swallowed by the elastic zone. */
+      if (nearest < FREE_PLAY) return
       const rect = screens[current].getBoundingClientRect()
-      const aligned = Math.abs(rect.top) <= EPSILON
       /* Any screen can be taller than the viewport (hero is on short
          laptop viewports, services usually is), so paging must never skip
          unseen content. Down steps through an over-tall screen at most one
          viewport at a time, stopping at its bottom edge — a straight jump
          to the edge would itself skip a band whenever the screen is taller
          than two viewports. Only a fully-viewed screen advances to the
-         next screen's top. Up from inside a screen realigns to that
-         screen's own top; only an already-aligned viewport pages to the
-         previous screen. Every stop keeps the over-tall snap area covering
-         the viewport (the clamp never scrolls past the bottom edge), so
-         mandatory snap accepts each intermediate position. */
+         next screen's top. Every stop keeps the over-tall snap area
+         covering the viewport (the clamp never scrolls past the bottom
+         edge), so mandatory snap accepts each intermediate position.
+         Up completes to the top of the screen the viewport is in: past the
+         free-play zone below a screen top that screen is already the one
+         above, so a committed upward gesture lands on the previous screen;
+         from deep inside an over-tall screen it realigns to that screen's
+         own top. (An exactly-aligned viewport never reaches this code —
+         alignment implies nearest ≈ 0, inside the elastic zone.) */
       const unseenBelow = rect.bottom - window.innerHeight > EPSILON
       let scroll: (() => void) | undefined
       if (event.deltaY > 0) {
@@ -74,8 +95,8 @@ export function useWheelPaging() {
           if (next) scroll = () => next.scrollIntoView({ behavior: 'auto' })
         }
       } else {
-        const target = aligned ? screens[current - 1] : screens[current]
-        if (target) scroll = () => target.scrollIntoView({ behavior: 'auto' })
+        const target = screens[current]
+        scroll = () => target.scrollIntoView({ behavior: 'auto' })
       }
       if (!scroll) return // past the edges: native scroll (and snap) rule
       event.preventDefault()

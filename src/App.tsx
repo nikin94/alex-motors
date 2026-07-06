@@ -109,8 +109,8 @@ function App() {
   useWheelPaging()
 
   return (
-    <main>
-      <section className="brick-wall snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
+    <main className="brick-wall">
+      <section className="snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
         <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
         <div className="intro-veil pointer-events-none absolute inset-0" />
@@ -183,21 +183,32 @@ function App() {
 
       <section
         id="services"
-        className="services-bg snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 px-4 py-16"
+        className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
       >
-        <header className="text-center">
+        <img
+          src={logoCar}
+          alt=""
+          aria-hidden
+          width={1280}
+          height={853}
+          loading="lazy"
+          className="services-watermark pointer-events-none absolute -right-[6%] bottom-[2%] w-[min(58vw,46rem)]"
+        />
+        <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             Our Services
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-stone-400 sm:text-base">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-stone-400 sm:text-base">
             All makes and models — from daily drivers to sports cars. Based in Letterkenny,
             call-outs available.
           </p>
         </header>
 
-        <div className="w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/40 p-6 transition-colors hover:border-amber-300/60 sm:p-8">
+        <div className="relative w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/60 p-5 transition-colors hover:border-amber-300/60 sm:p-6">
           <div className="flex items-center gap-3">
-            <FaClipboardCheck aria-hidden className="size-7 shrink-0 text-amber-300" />
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
+              <FaClipboardCheck aria-hidden className="size-6 text-amber-300" />
+            </span>
             <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
               Pre-NCT Check &amp; Repairs
             </h3>
@@ -209,14 +220,16 @@ function App() {
           </p>
         </div>
 
-        <ul className="grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        <ul className="relative grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           {services.map(({ title, Icon, description }) => (
             <li
               key={title}
-              className="rounded-lg border border-amber-100/15 bg-black/30 p-4 transition-colors hover:border-amber-100/40 sm:p-6"
+              className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
             >
-              <Icon aria-hidden className="size-6 text-amber-300/80 sm:size-7" />
-              <h3 className="font-display mt-3 text-lg tracking-[0.08em] text-amber-50 sm:mt-4 sm:text-2xl">
+              <span className="flex size-9 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
+                <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
+              </span>
+              <h3 className="font-display mt-3 text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
                 {title}
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">

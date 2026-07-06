@@ -44,14 +44,20 @@ html {
   );
 }
 
-/* Vignette so the wall fades into darkness at the edges. */
+/* Vignette so the wall fades into darkness at the edges. The extra bottom
+   layer flattens the radial falloff into a near-uniform darkness along the
+   hero's bottom edge, where .services-shade picks up at the same level —
+   the two screens share one continuous brick wall (on <main>), so any
+   overlay mismatch at the boundary would print as a visible seam line. */
 .vignette {
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 45%,
-    transparent 30%,
-    rgb(0 0 0 / 0.72) 72%,
-    rgb(0 0 0 / 0.96) 100%
-  );
+  background:
+    linear-gradient(to bottom, transparent 80%, rgb(0 0 0 / 0.65) 100%),
+    radial-gradient(
+      ellipse 80% 70% at 50% 45%,
+      transparent 30%,
+      rgb(0 0 0 / 0.72) 72%,
+      rgb(0 0 0 / 0.96) 100%
+    );
 }
 
 /* The logo is a transparent image (car outline + lettering), so the glow has
@@ -121,16 +127,25 @@ html {
     0 0 20px rgb(255 143 40 / 0.25);
 }
 
-/* Second screen: a plainer, darker workshop backdrop with a faint amber
-   wash bleeding in from the top, as if cast by the sign on the screen
-   above — the two screens read as one scene, not two designs. */
-.services-bg {
-  background-color: #0b0a09;
-  background-image: radial-gradient(
-    ellipse 70% 45% at 50% 0%,
-    rgb(255 143 40 / 0.06),
-    transparent 70%
-  );
+/* Second screen: translucent shading over the same brick wall (the wall
+   lives on <main> and runs through both screens), so scrolling never
+   crosses a background change — only deeper shadow. The top edge starts
+   at the same darkness the hero's vignette reaches at its bottom edge,
+   then relaxes so the cards sit in a slightly lifted pool of light; the
+   faint amber wash reads as the sign's light spilling down from above. */
+.services-shade {
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgb(255 143 40 / 0.05), transparent 70%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.66) 30%, rgb(0 0 0 / 0.66));
+}
+
+/* Faint car silhouette anchoring the services grid: the same artwork as
+   the sign, washed down to a ghost on the wall. Masked so it dissolves
+   toward the text instead of ending on a hard edge. */
+.services-watermark {
+  opacity: 0.06;
+  filter: grayscale(1) brightness(1.6);
+  mask-image: linear-gradient(to right, transparent 4%, black 55%);
 }
 
 /* Full-page snap between the hero and the services screen on desktop.
