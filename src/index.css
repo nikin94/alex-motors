@@ -1,5 +1,18 @@
-@import '@fontsource/bebas-neue';
 @import 'tailwindcss';
+
+/* Self-declared instead of @fontsource's index.css: their faces ship
+   font-display: swap, which paints the fallback font first and swaps it
+   for Bebas Neue a beat later — a visible flash on every cold load.
+   block hides the text for the (local, tiny-file) load instead, so the
+   sign appears already in its display face. All site copy is Latin, so
+   only that subset is bundled; woff2 support is universal. */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('@fontsource/bebas-neue/files/bebas-neue-latin-400-normal.woff2') format('woff2');
+}
 
 @theme {
   --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
@@ -41,21 +54,71 @@ html {
   );
 }
 
-/* The logo image framed as a wall-mounted light-box sign. The warm glow
-   lives on .sign-glow (a layer behind the image) so the flicker animates
+/* The logo is a transparent image (car outline + lettering), so the glow has
+   to hug the artwork's contour rather than a rectangular panel. drop-shadow
+   follows the alpha channel; the wide halo lives on .sign-glow — a blurred,
+   warm-tinted copy of the logo behind the real one — so the flicker animates
    the light around the sign, never the sign itself. */
-.sign-panel {
-  border-radius: var(--radius-xl);
-  border: 1px solid rgb(255 200 130 / 0.2);
-  box-shadow: 0 14px 44px rgb(0 0 0 / 0.6);
+.sign-mark {
+  /* The rim light stays wide and faint: a tight high-alpha edge reads as a
+     drawn yellow outline around the solid MOTORS glyphs, not as light. */
+  filter: drop-shadow(0 0 4px rgb(255 238 220 / 0.3)) drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
 }
 
+/* Dark contour ring separating the thin line work from the lamp-lit bricks,
+   the way a painted shadow board would on a real wall sign. It lives on its
+   own copy of the artwork so a mask can end it above the MOTORS band: the
+   solid red glyphs read cleaner with no dark edging around them. */
+.sign-edge {
+  filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.85));
+  mask-image: linear-gradient(to bottom, black 62%, transparent 68%);
+}
+
+/* Realistic neon reads as many stacked halos — a tight bright core plus
+   progressively wider layers — not a few strong ones. Following the
+   Red Stapler tonal ramp, the near layers are pale and the far layers keep
+   a deeper, more saturated orange instead of just fading out: dissipating
+   neon light shifts toward the tube color, it does not wash out to grey.
+   The mask fades the halo over the lower half of the artwork: the solid
+   ALEX/MOTORS glyphs carry far more alpha mass than the thin car outline,
+   so unmasked they bloom much brighter than the silhouette. */
 .sign-glow {
-  border-radius: var(--radius-xl);
-  box-shadow:
-    0 0 30px rgb(255 179 71 / 0.5),
-    0 0 90px rgb(255 143 40 / 0.34),
-    0 0 170px rgb(255 110 20 / 0.22);
+  filter: sepia(1) saturate(4) hue-rotate(-12deg) brightness(0.85) blur(12px)
+    drop-shadow(0 0 14px rgb(255 224 176 / 0.35)) drop-shadow(0 0 34px rgb(255 179 71 / 0.24))
+    drop-shadow(0 0 75px rgb(255 122 26 / 0.18)) drop-shadow(0 0 150px rgb(232 89 12 / 0.12));
+  mask-image: linear-gradient(
+    to bottom,
+    black 38%,
+    rgb(0 0 0 / 0.32) 55%,
+    rgb(0 0 0 / 0.1) 70%,
+    rgb(0 0 0 / 0.07) 100%
+  );
+}
+
+/* Dark backing patch behind the sign: with the rectangular panel gone the
+   lamp-lit bricks sit right behind the line art, washing out its contrast.
+   A soft shadow "board" keeps the wall visibly darker under the sign and
+   the tagline only. */
+.sign-backdrop {
+  background: radial-gradient(
+    ellipse 52% 52% at 50% 50%,
+    rgb(0 0 0 / 0.7) 0%,
+    rgb(0 0 0 / 0.42) 55%,
+    transparent 80%
+  );
+}
+
+/* Tagline treated as a small neon tube of its own: solid warm color, a tight
+   bright core with faint amber halos, and dark under-shadows that cut it off
+   the lit bricks so the letterforms stay legible. */
+.sign-tagline {
+  color: #ffedd5;
+  text-shadow:
+    0 2px 6px rgb(0 0 0 / 0.9),
+    0 0 14px rgb(0 0 0 / 0.7),
+    0 0 1px rgb(255 237 213 / 0.6),
+    0 0 8px rgb(255 179 71 / 0.45),
+    0 0 20px rgb(255 143 40 / 0.25);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
