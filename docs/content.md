@@ -27,8 +27,10 @@ subtitle, not in a card.
 > honest diagnostics and NCT preparation. Open Monday to Saturday, with call-outs
 > available if your car won't make it to us. Call or WhatsApp Alex to book.
 
-(The hours sentence was "Open 9am to 9pm" in the original package; edited after
-the owner corrected the hours — wording pending Content manager sign-off.)
+(The hours sentence was "Open 9am to 9pm" in the original package; reworded to
+"Open Monday to Saturday" after the owner corrected the hours — signed off by
+the Content manager. Exact hours live in the JSON-LD and the future footer line,
+not in the copy, since hours change more often than copy gets recached.)
 
 ## Gallery alt-text template (future)
 
@@ -44,5 +46,5 @@ photos stored as files in the repo so swapping a couple is a five-minute edit.
 
 - Add `url` to the LocalBusiness JSON-LD once the production domain exists
   (also needed to link the future Google Business Profile)
-- Content manager sign-off on the reworded hours in the meta description and
-  About block (owner changed hours after the original copy was written)
+- Gallery package: 6–8 photos picked, then final alt texts from the Content
+  manager
