@@ -52,7 +52,7 @@ function App() {
               className="sign-mark relative w-[min(88vw,40rem)]"
             />
           </h1>
-          <p className="neon-tube font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
+          <p className="sign-tagline font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
             Auto Repair &amp; Service
           </p>
         </div>
@@ -60,7 +60,7 @@ function App() {
         <div className="relative flex flex-col items-center gap-6">
           <a
             href={`tel:${PHONE_E164}`}
-            className="neon-tube font-display text-3xl tracking-[0.15em] transition-[filter] hover:brightness-125 sm:text-4xl"
+            className="font-display text-3xl tracking-[0.15em] text-amber-50/90 transition-colors hover:text-amber-50 sm:text-4xl"
           >
             {PHONE_DISPLAY}
           </a>

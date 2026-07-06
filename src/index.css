@@ -93,29 +93,17 @@ html {
   );
 }
 
-/* Small neon tubes (tagline, phone), after the Red Stapler technique
-   (https://redstapler.co/realistic-css-neon-text-effect-tutorial/):
-   the glyph color is a pale tint of the tube color rather than white, every
-   shadow layer carries a small horizontal offset so the light spills to one
-   side the way a physical tube sits proud of the wall, and the tonal ramp
-   runs pale-and-tight to deep-saturated-and-wide. Shadows paint first-on-top,
-   so the dark cut-off layers go last: they sit behind the amber halo and keep
-   the letterforms legible against the lamp-lit bricks. em units scale the
-   whole effect with the font size. */
-.neon-tube {
-  color: #ffe9cf;
+/* Tagline treated as a small neon tube of its own: solid warm color, a tight
+   bright core with faint amber halos, and dark under-shadows that cut it off
+   the lit bricks so the letterforms stay legible. */
+.sign-tagline {
+  color: #ffedd5;
   text-shadow:
-    0.03em 0 0.06em #ffe9cf,
-    0.06em 0 0.06em #ffe9cf,
-    0.03em 0 0.02em #ffb347,
-    0.06em 0 0.02em #ffb347,
-    0.03em 0 0.35em #ffb347,
-    0.06em 0 0.35em #ffb347,
-    0.03em 0 0.9em #ff7a1a,
-    0.06em 0 1.8em #ff7a1a,
-    0.03em 0 3em #f96706,
-    0 0.1em 0.3em rgb(0 0 0 / 0.9),
-    0 0 0.7em rgb(0 0 0 / 0.7);
+    0 2px 6px rgb(0 0 0 / 0.9),
+    0 0 14px rgb(0 0 0 / 0.7),
+    0 0 1px rgb(255 237 213 / 0.6),
+    0 0 8px rgb(255 179 71 / 0.45),
+    0 0 20px rgb(255 143 40 / 0.25);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
