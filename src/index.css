@@ -34,13 +34,14 @@
   );
 }
 
-.neon-sign {
-  color: #fff3e0;
-  text-shadow:
-    0 0 4px rgb(255 220 160 / 0.9),
-    0 0 12px rgb(255 179 71 / 0.8),
-    0 0 32px rgb(255 143 40 / 0.6),
-    0 0 72px rgb(255 110 20 / 0.4);
+/* The logo image framed as a wall-mounted light-box sign with a warm glow. */
+.sign-panel {
+  border-radius: var(--radius-xl);
+  border: 1px solid rgb(255 200 130 / 0.14);
+  box-shadow:
+    0 0 22px rgb(255 179 71 / 0.28),
+    0 0 70px rgb(255 110 20 / 0.18),
+    0 14px 44px rgb(0 0 0 / 0.6);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
