@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
+import { useWheelPaging } from './useWheelPaging'
 
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
@@ -44,6 +45,8 @@ const services = [
 ]
 
 function App() {
+  useWheelPaging()
+
   return (
     <main>
       <section className="brick-wall snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
