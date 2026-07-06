@@ -184,11 +184,11 @@ html {
 }
 
 /* The backdrop is contrast shading cast by the lit sign, so it has no
-   business on the bare wall: it eases in across the moment the tube
-   catches (~1.4s). A steady fade, not the strike flicker — a shadow
-   strobing with the tube would read as a rendering glitch. */
+   business on the bare wall: it snaps in quickly as the tube catches
+   (~1.4s). A steady fade, not the strike flicker — a shadow strobing
+   with the tube would read as a rendering glitch. */
 .intro-shade {
-  animation: intro-shade 1s ease-out 1.2s backwards;
+  animation: intro-shade 0.3s ease-out 1.3s backwards;
 }
 
 @keyframes intro-shade {
