@@ -39,3 +39,5 @@ photos stored as files in the repo so swapping a couple is a five-minute edit.
 - Opening days confirmation (currently Mo–Su in JSON-LD)
 - Publish street address vs. service-area business — decides whether
   `streetAddress` is added to the JSON-LD
+- Add `url` to the LocalBusiness JSON-LD once the production domain exists
+  (also needed to link the future Google Business Profile)
