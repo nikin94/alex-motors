@@ -4,6 +4,7 @@
 @theme {
   --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
   --color-lamp: #ffb347;
+  --radius-xl: 0.5rem;
 }
 
 /* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
