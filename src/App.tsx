@@ -21,11 +21,12 @@ function App() {
   return (
     <main>
       <section className="brick-wall relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
-        <div className="lamp-glow flicker pointer-events-none absolute inset-0" />
+        <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
+        <div className="intro-veil pointer-events-none absolute inset-0" />
 
         <div className="relative text-center">
-          <span aria-hidden className="sign-backdrop pointer-events-none absolute -inset-x-[12%] -inset-y-[16%]" />
+          <span aria-hidden className="sign-backdrop intro-ignite pointer-events-none absolute -inset-x-[12%] -inset-y-[16%]" />
           <h1 className="relative inline-block">
             <img
               src={logoCar}
@@ -33,7 +34,7 @@ function App() {
               aria-hidden
               width={1280}
               height={853}
-              className="sign-glow flicker pointer-events-none absolute inset-0"
+              className="sign-glow flicker intro-ignite pointer-events-none absolute inset-0"
             />
             <img
               src={logoCar}
@@ -41,7 +42,7 @@ function App() {
               aria-hidden
               width={1280}
               height={853}
-              className="sign-edge pointer-events-none absolute inset-0"
+              className="sign-edge intro-ignite pointer-events-none absolute inset-0"
             />
             <img
               src={logoCar}
@@ -49,15 +50,15 @@ function App() {
               width={1280}
               height={853}
               fetchPriority="high"
-              className="sign-mark relative w-[min(88vw,40rem)]"
+              className="sign-mark intro-ignite relative w-[min(88vw,40rem)]"
             />
           </h1>
-          <p className="sign-tagline font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
+          <p className="sign-tagline intro-rise font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
             Auto Repair &amp; Service
           </p>
         </div>
 
-        <div className="relative flex flex-col items-center gap-6">
+        <div className="intro-rise-late relative flex flex-col items-center gap-6">
           <a
             href={`tel:${PHONE_E164}`}
             className="font-display text-3xl tracking-[0.15em] text-amber-50/90 transition-colors hover:text-amber-50 sm:text-4xl"
