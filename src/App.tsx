@@ -198,10 +198,6 @@ function App() {
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             Our Services
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-stone-400 sm:text-base">
-            All makes and models — from daily drivers to sports cars. Based in Letterkenny,
-            call-outs available.
-          </p>
         </header>
 
         <div className="relative w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/60 p-5 transition-colors hover:border-amber-300/60 sm:p-6">
@@ -226,12 +222,14 @@ function App() {
               key={title}
               className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
             >
-              <span className="flex size-9 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
-                <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
-              </span>
-              <h3 className="font-display mt-3 text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
-                {title}
-              </h3>
+              <div className="flex items-center gap-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
+                  <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
+                </span>
+                <h3 className="font-display text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
+                  {title}
+                </h3>
+              </div>
               <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
                 {description}
               </p>
