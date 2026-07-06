@@ -124,7 +124,8 @@ html {
 /* --- Page-load sequence: the sign gets switched on. ---
    1. The bare wall emerges from full darkness (.intro-veil fades out).
    2. The neon tube strikes twice, sputters, then catches and holds
-      (intro-ignite on the sign layers and on the lamp light they cast).
+      (intro-ignite on the sign layers, the lamp light they cast and the
+      backdrop shading — sign and shadow ignite as one body).
    3. Once the sign burns steady, the tagline and contacts rise in.
    All one-shot; `backwards` keeps late elements hidden until their cue.
    The veil paints BELOW the content (DOM order), so the sequence only
@@ -183,20 +184,6 @@ html {
   }
 }
 
-/* The backdrop is contrast shading cast by the lit sign, so it has no
-   business on the bare wall: it snaps in quickly as the tube catches
-   (~1.4s). A steady fade, not the strike flicker — a shadow strobing
-   with the tube would read as a rendering glitch. */
-.intro-shade {
-  animation: intro-shade 0.3s ease-out 1.3s backwards;
-}
-
-@keyframes intro-shade {
-  from {
-    opacity: 0;
-  }
-}
-
 .intro-rise,
 .intro-rise-late {
   animation: intro-rise 0.7s ease-out 1.8s backwards;
@@ -238,7 +225,6 @@ html {
   .intro-veil,
   .intro-ignite,
   .flicker.intro-ignite,
-  .intro-shade,
   .intro-rise,
   .intro-rise-late {
     animation: none;

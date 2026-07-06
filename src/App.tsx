@@ -26,7 +26,7 @@ function App() {
         <div className="intro-veil pointer-events-none absolute inset-0" />
 
         <div className="relative text-center">
-          <span aria-hidden className="sign-backdrop intro-shade pointer-events-none absolute -inset-x-[12%] -inset-y-[16%]" />
+          <span aria-hidden className="sign-backdrop intro-ignite pointer-events-none absolute -inset-x-[12%] -inset-y-[16%]" />
           <h1 className="relative inline-block">
             <img
               src={logoCar}
