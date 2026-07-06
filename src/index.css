@@ -60,14 +60,17 @@ html {
 }
 
 /* Realistic neon reads as many stacked halos — a tight bright core plus
-   progressively wider, progressively fainter layers — not a few strong ones.
+   progressively wider layers — not a few strong ones. Following the
+   Red Stapler tonal ramp, the near layers are pale and the far layers keep
+   a deeper, more saturated orange instead of just fading out: dissipating
+   neon light shifts toward the tube color, it does not wash out to grey.
    The mask fades the halo over the lower half of the artwork: the solid
    ALEX/MOTORS glyphs carry far more alpha mass than the thin car outline,
    so unmasked they bloom much brighter than the silhouette. */
 .sign-glow {
   filter: sepia(1) saturate(4) hue-rotate(-12deg) brightness(0.95) blur(8px)
-    drop-shadow(0 0 10px rgb(255 200 120 / 0.45)) drop-shadow(0 0 24px rgb(255 179 71 / 0.3))
-    drop-shadow(0 0 55px rgb(255 143 40 / 0.2)) drop-shadow(0 0 110px rgb(255 110 20 / 0.12));
+    drop-shadow(0 0 10px rgb(255 224 176 / 0.5)) drop-shadow(0 0 24px rgb(255 179 71 / 0.32))
+    drop-shadow(0 0 55px rgb(255 122 26 / 0.24)) drop-shadow(0 0 110px rgb(232 89 12 / 0.16));
   mask-image: linear-gradient(
     to bottom,
     black 38%,
@@ -90,17 +93,29 @@ html {
   );
 }
 
-/* Tagline treated as a small neon tube of its own: solid warm color, a tight
-   bright core with faint amber halos, and dark under-shadows that cut it off
-   the lit bricks so the letterforms stay legible. */
-.sign-tagline {
-  color: #ffedd5;
+/* Small neon tubes (tagline, phone), after the Red Stapler technique
+   (https://redstapler.co/realistic-css-neon-text-effect-tutorial/):
+   the glyph color is a pale tint of the tube color rather than white, every
+   shadow layer carries a small horizontal offset so the light spills to one
+   side the way a physical tube sits proud of the wall, and the tonal ramp
+   runs pale-and-tight to deep-saturated-and-wide. Shadows paint first-on-top,
+   so the dark cut-off layers go last: they sit behind the amber halo and keep
+   the letterforms legible against the lamp-lit bricks. em units scale the
+   whole effect with the font size. */
+.neon-tube {
+  color: #ffe9cf;
   text-shadow:
-    0 2px 6px rgb(0 0 0 / 0.9),
-    0 0 14px rgb(0 0 0 / 0.7),
-    0 0 1px rgb(255 237 213 / 0.6),
-    0 0 8px rgb(255 179 71 / 0.45),
-    0 0 20px rgb(255 143 40 / 0.25);
+    0.03em 0 0.06em #ffe9cf,
+    0.06em 0 0.06em #ffe9cf,
+    0.03em 0 0.02em #ffb347,
+    0.06em 0 0.02em #ffb347,
+    0.03em 0 0.35em #ffb347,
+    0.06em 0 0.35em #ffb347,
+    0.03em 0 0.9em #ff7a1a,
+    0.06em 0 1.8em #ff7a1a,
+    0.03em 0 3em #f96706,
+    0 0.1em 0.3em rgb(0 0 0 / 0.9),
+    0 0 0.7em rgb(0 0 0 / 0.7);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
