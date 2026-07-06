@@ -1,0 +1,70 @@
+@import '@fontsource/bebas-neue';
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --color-lamp: #ffb347;
+}
+
+/* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
+   with slight color variation on a mortar background. */
+.brick-wall {
+  background-color: #0e0a08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='64'%3E%3Crect width='128' height='64' fill='%230e0a08'/%3E%3Crect x='2' y='2' width='60' height='28' rx='1' fill='%23261811'/%3E%3Crect x='66' y='2' width='60' height='28' rx='1' fill='%23221510'/%3E%3Crect x='-30' y='34' width='60' height='28' rx='1' fill='%23231610'/%3E%3Crect x='34' y='34' width='60' height='28' rx='1' fill='%23281a12'/%3E%3Crect x='98' y='34' width='60' height='28' rx='1' fill='%23231610'/%3E%3C/svg%3E");
+  background-size: 128px 64px;
+}
+
+/* Warm pool of lamp light on the wall, centred on the sign. */
+.lamp-glow {
+  background: radial-gradient(
+    ellipse 55% 45% at 50% 42%,
+    rgb(255 179 71 / 0.28) 0%,
+    rgb(255 143 40 / 0.12) 45%,
+    transparent 75%
+  );
+}
+
+/* Vignette so the wall fades into darkness at the edges. */
+.vignette {
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    transparent 40%,
+    rgb(0 0 0 / 0.55) 80%,
+    rgb(0 0 0 / 0.85) 100%
+  );
+}
+
+.neon-sign {
+  color: #fff3e0;
+  text-shadow:
+    0 0 4px rgb(255 220 160 / 0.9),
+    0 0 12px rgb(255 179 71 / 0.8),
+    0 0 32px rgb(255 143 40 / 0.6),
+    0 0 72px rgb(255 110 20 / 0.4);
+}
+
+/* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
+@keyframes flicker {
+  0%, 12%, 14%, 23%, 25%, 48%, 52%, 79%, 81%, 100% {
+    opacity: 1;
+  }
+  13%, 24%, 80% {
+    opacity: 0.4;
+  }
+  49%, 51% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.flicker {
+  animation: flicker 7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flicker {
+    animation: none;
+  }
+}
