@@ -121,6 +121,49 @@ html {
     0 0 20px rgb(255 143 40 / 0.25);
 }
 
+/* Second screen: a plainer, darker workshop backdrop with a faint amber
+   wash bleeding in from the top, as if cast by the sign on the screen
+   above — the two screens read as one scene, not two designs. */
+.services-bg {
+  background-color: #0b0a09;
+  background-image: radial-gradient(
+    ellipse 70% 45% at 50% 0%,
+    rgb(255 143 40 / 0.06),
+    transparent 70%
+  );
+}
+
+/* Full-page snap between the hero and the services screen on desktop.
+   Native CSS scroll snap instead of a scroll-hijack library: the browser
+   keeps ownership of wheel/touch/keyboard scrolling, so accessibility and
+   momentum feel stay intact. Below 768px (mobile per project convention)
+   the media query never turns snapping on — the page scrolls normally.
+   Smooth scrolling is deliberately outside the media query: the chevron
+   anchor jump should be smooth on every viewport, not only where snapping
+   is active. If a third, taller-than-viewport section is added later,
+   switch mandatory → proximity so long content cannot get trapped between
+   snap points. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
+  .snap-screen {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* --- Page-load sequence: the sign gets switched on. ---
    1. The bare wall emerges from full darkness (.intro-veil fades out).
    2. The neon tube strikes twice, sputters, then catches and holds
