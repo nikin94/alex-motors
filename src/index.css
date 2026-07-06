@@ -60,7 +60,9 @@ html {
    warm-tinted copy of the logo behind the real one — so the flicker animates
    the light around the sign, never the sign itself. */
 .sign-mark {
-  filter: drop-shadow(0 0 2px rgb(255 224 170 / 0.7)) drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
+  /* The rim light stays wide and faint: a tight high-alpha edge reads as a
+     drawn yellow outline around the solid MOTORS glyphs, not as light. */
+  filter: drop-shadow(0 0 4px rgb(255 238 220 / 0.3)) drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
 }
 
 /* Dark contour ring separating the thin line work from the lamp-lit bricks,
@@ -87,9 +89,9 @@ html {
   mask-image: linear-gradient(
     to bottom,
     black 38%,
-    rgb(0 0 0 / 0.38) 55%,
-    rgb(0 0 0 / 0.16) 70%,
-    rgb(0 0 0 / 0.12) 100%
+    rgb(0 0 0 / 0.32) 55%,
+    rgb(0 0 0 / 0.1) 70%,
+    rgb(0 0 0 / 0.07) 100%
   );
 }
 
