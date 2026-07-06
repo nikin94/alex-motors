@@ -1,4 +1,17 @@
-import { FaInstagram, FaTelegram, FaTiktok, FaViber, FaWhatsapp } from 'react-icons/fa6'
+import {
+  FaCarBattery,
+  FaChevronDown,
+  FaClipboardCheck,
+  FaGaugeHigh,
+  FaGears,
+  FaInstagram,
+  FaOilCan,
+  FaScrewdriverWrench,
+  FaTelegram,
+  FaTiktok,
+  FaViber,
+  FaWhatsapp,
+} from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
 
@@ -17,10 +30,23 @@ const contactLinks = [
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
 ]
 
+// Placeholder copy until the real services content lands (tracked in the backlog).
+const LOREM =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+
+const services = [
+  { title: 'Diagnostics', Icon: FaGaugeHigh },
+  { title: 'Engine Repair', Icon: FaGears },
+  { title: 'Oil & Maintenance', Icon: FaOilCan },
+  { title: 'Brakes & Suspension', Icon: FaScrewdriverWrench },
+  { title: 'Battery & Electrics', Icon: FaCarBattery },
+  { title: 'Pre-NCT Check', Icon: FaClipboardCheck },
+]
+
 function App() {
   return (
     <main>
-      <section className="brick-wall relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
+      <section className="brick-wall snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
         <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
         <div className="intro-veil pointer-events-none absolute inset-0" />
@@ -81,9 +107,41 @@ function App() {
             ))}
           </ul>
         </div>
+
+        <a
+          href="#services"
+          aria-label="Scroll to services"
+          className="intro-rise-late absolute bottom-5 p-2 text-amber-100/50 transition-colors hover:text-amber-100"
+        >
+          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
+        </a>
       </section>
 
-      {/* Coming next: services, address + map, opening hours */}
+      <section
+        id="services"
+        className="services-bg snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 px-4 py-16"
+      >
+        <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+          Our Services
+        </h2>
+        <ul className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map(({ title, Icon }) => (
+            <li
+              key={title}
+              className="rounded-lg border border-amber-100/15 bg-black/30 p-6 transition-colors hover:border-amber-100/40"
+            >
+              <Icon aria-hidden className="size-7 text-amber-300/80" />
+              <h3 className="font-display mt-4 text-2xl tracking-[0.08em] text-amber-50">
+                {title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-stone-400">{LOREM}</p>
+            </li>
+          ))}
+        </ul>
+        {/* Site footer (language switcher, address, hours) will live at the bottom of this screen. */}
+      </section>
+
+      {/* Coming next: address + map, opening hours, footer with language switcher */}
     </main>
   )
 }
