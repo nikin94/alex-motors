@@ -7,6 +7,13 @@
   --radius-xl: 0.5rem;
 }
 
+/* Match the page background to the brick wall so rubber-band overscroll
+   never reveals a white flash behind the content. */
+html {
+  background-color: #0e0a08;
+  color-scheme: dark;
+}
+
 /* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
    with slight color variation on a mortar background. */
 .brick-wall {
