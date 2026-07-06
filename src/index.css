@@ -121,6 +121,84 @@ html {
     0 0 20px rgb(255 143 40 / 0.25);
 }
 
+/* --- Page-load sequence: the sign gets switched on. ---
+   1. The bare wall emerges from full darkness (.intro-veil fades out).
+   2. The neon tube strikes twice, sputters, then catches and holds
+      (intro-ignite on the sign layers and on the lamp light they cast).
+   3. Once the sign burns steady, the tagline and contacts rise in.
+   All one-shot; `backwards` keeps late elements hidden until their cue.
+   The veil paints BELOW the content (DOM order), so the sequence only
+   works because every element hides itself: anything added to the hero
+   without its own entrance class will sit fully visible over the black
+   veil during the first second.
+   The veil's resting opacity is 0, so with animations removed (reduced
+   motion) nothing is ever covered and everything is simply visible. */
+.intro-veil {
+  background: #000;
+  opacity: 0;
+  animation: intro-veil 0.9s ease-out;
+}
+
+@keyframes intro-veil {
+  from {
+    opacity: 1;
+  }
+}
+
+.intro-ignite {
+  animation: intro-ignite 2.2s linear;
+}
+
+/* The glow layers keep their endless flicker, but only once the tube is lit. */
+.flicker.intro-ignite {
+  animation:
+    intro-ignite 2.2s linear,
+    flicker 7s linear 2.2s infinite;
+}
+
+@keyframes intro-ignite {
+  0%, 36% {
+    opacity: 0; /* dark while the wall fades in */
+  }
+  39% {
+    opacity: 0.55; /* first strike... */
+  }
+  41%, 48% {
+    opacity: 0; /* ...dies */
+  }
+  51% {
+    opacity: 0.75; /* second strike flutters */
+  }
+  53% {
+    opacity: 0.15;
+  }
+  56% {
+    opacity: 0.9;
+  }
+  59% {
+    opacity: 0.4;
+  }
+  64%, 100% {
+    opacity: 1; /* catches and holds */
+  }
+}
+
+.intro-rise,
+.intro-rise-late {
+  animation: intro-rise 0.7s ease-out 1.8s backwards;
+}
+
+.intro-rise-late {
+  animation-delay: 2.1s;
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
 @keyframes flicker {
   0%, 12%, 14%, 23%, 25%, 48%, 52%, 79%, 81%, 100% {
@@ -142,7 +220,12 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flicker {
+  .flicker,
+  .intro-veil,
+  .intro-ignite,
+  .flicker.intro-ignite,
+  .intro-rise,
+  .intro-rise-late {
     animation: none;
   }
 }
