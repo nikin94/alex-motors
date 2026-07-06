@@ -10,16 +10,18 @@ One-page business-card website for the Alex Motors auto repair shop (Ireland).
 
 ## Development
 
+Requires Node 24 (`.nvmrc`) and [Yarn 4](https://yarnpkg.com/) (`corepack enable`).
+
 ```sh
-npm install
-npm run dev      # dev server with HMR
-npm run build    # type-check + production build to dist/
-npm run preview  # serve the production build locally
+yarn install
+yarn dev      # dev server with HMR
+yarn build    # type-check + production build to dist/
+yarn preview  # serve the production build locally
 ```
 
 ## Deployment
 
 Static build (`dist/`), intended for Cloudflare Pages:
 
-- Build command: `npm run build`
+- Build command: `yarn build`
 - Output directory: `dist`
