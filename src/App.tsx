@@ -1,6 +1,6 @@
 import { FaInstagram, FaTelegram, FaTiktok, FaViber, FaWhatsapp } from 'react-icons/fa6'
 
-import logoCar from './assets/logo-car.jpg'
+import logoCar from './assets/logo-car.webp'
 
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
@@ -26,14 +26,21 @@ function App() {
 
         <div className="relative text-center">
           <h1 className="relative inline-block">
-            <span aria-hidden className="sign-glow flicker pointer-events-none absolute inset-0" />
+            <img
+              src={logoCar}
+              alt=""
+              aria-hidden
+              width={1280}
+              height={853}
+              className="sign-glow flicker pointer-events-none absolute inset-0"
+            />
             <img
               src={logoCar}
               alt="Alex Motors"
               width={1280}
               height={853}
               fetchPriority="high"
-              className="sign-panel relative w-[min(88vw,40rem)]"
+              className="sign-mark relative w-[min(88vw,40rem)]"
             />
           </h1>
           <p className="font-display mt-8 text-xl tracking-[0.45em] text-amber-100/60 sm:text-2xl">
