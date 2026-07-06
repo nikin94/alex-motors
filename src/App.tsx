@@ -12,7 +12,7 @@ const newTab = { target: '_blank', rel: 'noopener noreferrer' }
 const contactLinks = [
   { name: 'WhatsApp', href: `https://wa.me/${PHONE_E164.slice(1)}`, Icon: FaWhatsapp, ...newTab },
   { name: 'Viber', href: `viber://chat?number=${encodeURIComponent(PHONE_E164)}`, Icon: FaViber },
-  { name: 'Telegram', href: `https://t.me/${PHONE_E164}`, Icon: FaTelegram, ...newTab },
+  { name: 'Telegram', href: 'https://t.me/Alex_Motors_ie', Icon: FaTelegram, ...newTab },
   { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', Icon: FaInstagram, ...newTab },
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
 ]
@@ -24,15 +24,16 @@ function App() {
         <div className="lamp-glow flicker pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
 
-        <div className="flicker relative text-center">
-          <h1>
+        <div className="relative text-center">
+          <h1 className="relative inline-block">
+            <span aria-hidden className="sign-glow flicker pointer-events-none absolute inset-0" />
             <img
               src={logoCar}
               alt="Alex Motors"
               width={1280}
               height={853}
               fetchPriority="high"
-              className="sign-panel w-[min(88vw,40rem)]"
+              className="sign-panel relative w-[min(88vw,40rem)]"
             />
           </h1>
           <p className="font-display mt-8 text-xl tracking-[0.45em] text-amber-100/60 sm:text-2xl">
