@@ -47,7 +47,11 @@ html {
    warm-tinted copy of the logo behind the real one — so the flicker animates
    the light around the sign, never the sign itself. */
 .sign-mark {
-  filter: drop-shadow(0 0 5px rgb(255 214 150 / 0.4)) drop-shadow(0 4px 18px rgb(0 0 0 / 0.55));
+  /* Tight warm rim first, then a dark contour ring wrapping art + rim:
+     the dark edge separates the thin line work from the lamp-lit bricks
+     the way a painted shadow board would on a real wall sign. */
+  filter: drop-shadow(0 0 2px rgb(255 224 170 / 0.7)) drop-shadow(0 0 6px rgb(0 0 0 / 0.85))
+    drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
 }
 
 /* Realistic neon reads as many stacked halos — a tight bright core plus
@@ -70,14 +74,28 @@ html {
 
 /* Dark backing patch behind the sign: with the rectangular panel gone the
    lamp-lit bricks sit right behind the line art, washing out its contrast.
-   A soft shadow "board" keeps the wall visibly darker under the sign only. */
+   A soft shadow "board" keeps the wall visibly darker under the sign and
+   the tagline only. */
 .sign-backdrop {
   background: radial-gradient(
     ellipse 52% 52% at 50% 50%,
-    rgb(0 0 0 / 0.6) 0%,
-    rgb(0 0 0 / 0.34) 55%,
+    rgb(0 0 0 / 0.7) 0%,
+    rgb(0 0 0 / 0.42) 55%,
     transparent 80%
   );
+}
+
+/* Tagline treated as a small neon tube of its own: solid warm color, a tight
+   bright core with faint amber halos, and dark under-shadows that cut it off
+   the lit bricks so the letterforms stay legible. */
+.sign-tagline {
+  color: #ffedd5;
+  text-shadow:
+    0 2px 6px rgb(0 0 0 / 0.9),
+    0 0 14px rgb(0 0 0 / 0.7),
+    0 0 1px rgb(255 237 213 / 0.6),
+    0 0 8px rgb(255 179 71 / 0.45),
+    0 0 20px rgb(255 143 40 / 0.25);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */

@@ -25,8 +25,8 @@ function App() {
         <div className="vignette pointer-events-none absolute inset-0" />
 
         <div className="relative text-center">
+          <span aria-hidden className="sign-backdrop pointer-events-none absolute -inset-x-[12%] -inset-y-[16%]" />
           <h1 className="relative inline-block">
-            <span aria-hidden className="sign-backdrop pointer-events-none absolute -inset-[14%]" />
             <img
               src={logoCar}
               alt=""
@@ -44,7 +44,7 @@ function App() {
               className="sign-mark relative w-[min(88vw,40rem)]"
             />
           </h1>
-          <p className="font-display mt-8 text-xl tracking-[0.45em] text-amber-100/60 sm:text-2xl">
+          <p className="sign-tagline font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
             Auto Repair &amp; Service
           </p>
         </div>
