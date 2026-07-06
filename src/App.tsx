@@ -5,6 +5,7 @@ import {
   FaGaugeHigh,
   FaGears,
   FaInstagram,
+  FaLink,
   FaOilCan,
   FaScrewdriverWrench,
   FaTelegram,
@@ -31,18 +32,68 @@ const contactLinks = [
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
 ]
 
-// Placeholder copy until the real services content lands (tracked in the backlog).
-const LOREM =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-
 const services = [
-  { title: 'Diagnostics', Icon: FaGaugeHigh },
-  { title: 'Engine Repair', Icon: FaGears },
-  { title: 'Oil & Maintenance', Icon: FaOilCan },
-  { title: 'Brakes & Suspension', Icon: FaScrewdriverWrench },
-  { title: 'Battery & Electrics', Icon: FaCarBattery },
-  { title: 'Pre-NCT Check', Icon: FaClipboardCheck },
+  {
+    title: 'Car Servicing',
+    Icon: FaOilCan,
+    description:
+      'Full and interim services for all makes and models — oil and filters, fluids, and a health check that catches problems before they get expensive.',
+  },
+  {
+    title: 'Diagnostics',
+    Icon: FaGaugeHigh,
+    description:
+      'Dashboard warning light? We read fault codes with dealer-level tools, find the actual cause and explain your options before any work starts.',
+  },
+  {
+    title: 'Engine Repair',
+    Icon: FaGears,
+    description:
+      'From misfires and oil leaks to major engine work — honest assessment first, then a clear quote. Daily drivers, vans and sports cars alike.',
+  },
+  {
+    title: 'Timing Belt & Chain',
+    Icon: FaLink,
+    description:
+      'Belt and chain replacement at the right mileage — the job that protects your engine from the most expensive failure it can have.',
+  },
+  {
+    title: 'Brakes & Suspension',
+    Icon: FaScrewdriverWrench,
+    description:
+      'Pads, discs, shocks, springs and bushings — everything that keeps you stopping straight and riding smooth on Donegal roads.',
+  },
+  {
+    title: 'Battery & Electrics',
+    Icon: FaCarBattery,
+    description:
+      'Battery testing and replacement, alternators, starters and wiring faults — including the ones that only show up on cold mornings.',
+  },
 ]
+
+// Street address is deliberately absent until the owner decides between a published
+// address and a service-area listing; opening days await confirmation (Mo–Su for now).
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoRepair',
+  name: 'Alex Motors',
+  telephone: PHONE_E164,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Letterkenny',
+    addressRegion: 'Co. Donegal',
+    addressCountry: 'IE',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '09:00',
+    closes: '21:00',
+  },
+  sameAs: contactLinks
+    .filter(({ name }) => name === 'Instagram' || name === 'TikTok')
+    .map(({ href }) => href),
+}
 
 function App() {
   useWheelPaging()
@@ -124,25 +175,53 @@ function App() {
         id="services"
         className="services-bg snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 px-4 py-16"
       >
-        <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-          Our Services
-        </h2>
-        <ul className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ title, Icon }) => (
+        <header className="text-center">
+          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+            Our Services
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-stone-400 sm:text-base">
+            All makes and models — from daily drivers to sports cars. Based in Letterkenny,
+            call-outs available.
+          </p>
+        </header>
+
+        <div className="w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/40 p-6 transition-colors hover:border-amber-300/60 sm:p-8">
+          <div className="flex items-center gap-3">
+            <FaClipboardCheck aria-hidden className="size-7 shrink-0 text-amber-300" />
+            <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
+              Pre-NCT Check &amp; Repairs
+            </h3>
+          </div>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-stone-300 sm:text-base">
+            Failed the NCT — or worried you might? We do a full pre-NCT inspection covering
+            brakes, suspension, lights, emissions and tyres — and fix what needs fixing, so you
+            go into the test ready to pass. Retest checks too.
+          </p>
+        </div>
+
+        <ul className="grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          {services.map(({ title, Icon, description }) => (
             <li
               key={title}
-              className="rounded-lg border border-amber-100/15 bg-black/30 p-6 transition-colors hover:border-amber-100/40"
+              className="rounded-lg border border-amber-100/15 bg-black/30 p-4 transition-colors hover:border-amber-100/40 sm:p-6"
             >
-              <Icon aria-hidden className="size-7 text-amber-300/80" />
-              <h3 className="font-display mt-4 text-2xl tracking-[0.08em] text-amber-50">
+              <Icon aria-hidden className="size-6 text-amber-300/80 sm:size-7" />
+              <h3 className="font-display mt-3 text-lg tracking-[0.08em] text-amber-50 sm:mt-4 sm:text-2xl">
                 {title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-stone-400">{LOREM}</p>
+              <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
+                {description}
+              </p>
             </li>
           ))}
         </ul>
         {/* Site footer (language switcher, address, hours) will live at the bottom of this screen. */}
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
 
       {/* Coming next: address + map, opening hours, footer with language switcher */}
     </main>
