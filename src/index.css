@@ -81,15 +81,15 @@ html {
    ALEX/MOTORS glyphs carry far more alpha mass than the thin car outline,
    so unmasked they bloom much brighter than the silhouette. */
 .sign-glow {
-  filter: sepia(1) saturate(4) hue-rotate(-12deg) brightness(0.95) blur(8px)
-    drop-shadow(0 0 10px rgb(255 224 176 / 0.5)) drop-shadow(0 0 24px rgb(255 179 71 / 0.32))
-    drop-shadow(0 0 55px rgb(255 122 26 / 0.24)) drop-shadow(0 0 110px rgb(232 89 12 / 0.16));
+  filter: sepia(1) saturate(4) hue-rotate(-12deg) brightness(0.85) blur(12px)
+    drop-shadow(0 0 14px rgb(255 224 176 / 0.35)) drop-shadow(0 0 34px rgb(255 179 71 / 0.24))
+    drop-shadow(0 0 75px rgb(255 122 26 / 0.18)) drop-shadow(0 0 150px rgb(232 89 12 / 0.12));
   mask-image: linear-gradient(
     to bottom,
     black 38%,
-    rgb(0 0 0 / 0.45) 55%,
-    rgb(0 0 0 / 0.22) 70%,
-    rgb(0 0 0 / 0.18) 100%
+    rgb(0 0 0 / 0.38) 55%,
+    rgb(0 0 0 / 0.16) 70%,
+    rgb(0 0 0 / 0.12) 100%
   );
 }
 
