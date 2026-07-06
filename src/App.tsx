@@ -71,8 +71,8 @@ const services = [
   },
 ]
 
-// Street address is deliberately absent until the owner decides between a published
-// address and a service-area listing; opening days await confirmation (Mo–Su for now).
+// Killea is the physical townland; Letterkenny stays in meta/copy because that is
+// where the search demand is (F93 is the Letterkenny routing key).
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoRepair',
@@ -80,16 +80,26 @@ const localBusinessJsonLd = {
   telephone: PHONE_E164,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Letterkenny',
+    streetAddress: 'Altaghaderry',
+    addressLocality: 'Killea',
     addressRegion: 'Co. Donegal',
+    postalCode: 'F93 P768',
     addressCountry: 'IE',
   },
-  openingHoursSpecification: {
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    opens: '09:00',
-    closes: '21:00',
-  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '17:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '09:00',
+      closes: '13:00',
+    },
+  ],
   sameAs: contactLinks
     .filter(({ name }) => name === 'Instagram' || name === 'TikTok')
     .map(({ href }) => href),

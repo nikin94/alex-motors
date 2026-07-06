@@ -12,8 +12,11 @@ subtitle, not in a card.
 
 ## Facts
 
-- Town: Letterkenny, Co. Donegal
-- Hours: 09:00–21:00 (days pending confirmation; Mo–Su assumed in JSON-LD)
+- Address (published, footer + JSON-LD): Altaghaderry, Killea, Co. Donegal, F93 P768
+- Town in meta/copy stays Letterkenny — that is where the search demand is and
+  F93 is the Letterkenny routing key. Do not replace with Killea in copy.
+- Hours: Mon–Fri 09:00–17:00, Sat 09:00–13:00, Sun closed
+- Footer line: `Mon–Fri 9:00–17:00 · Sat 9:00–13:00`
 - Call-outs available
 - No Google Business Profile yet (Content manager is walking the owner through it)
 
@@ -21,8 +24,11 @@ subtitle, not in a card.
 
 > Alex Motors is an independent garage in Letterkenny, Co. Donegal. We work on
 > all makes and models — daily drivers, vans and sports cars — with a focus on
-> honest diagnostics and NCT preparation. Open 9am to 9pm, with call-outs
+> honest diagnostics and NCT preparation. Open Monday to Saturday, with call-outs
 > available if your car won't make it to us. Call or WhatsApp Alex to book.
+
+(The hours sentence was "Open 9am to 9pm" in the original package; edited after
+the owner corrected the hours — wording pending Content manager sign-off.)
 
 ## Gallery alt-text template (future)
 
@@ -36,8 +42,7 @@ photos stored as files in the repo so swapping a couple is a five-minute edit.
 
 ## Open items (not blocking)
 
-- Opening days confirmation (currently Mo–Su in JSON-LD)
-- Publish street address vs. service-area business — decides whether
-  `streetAddress` is added to the JSON-LD
 - Add `url` to the LocalBusiness JSON-LD once the production domain exists
   (also needed to link the future Google Business Profile)
+- Content manager sign-off on the reworded hours in the meta description and
+  About block (owner changed hours after the original copy was written)
