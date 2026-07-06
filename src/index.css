@@ -47,11 +47,16 @@ html {
    warm-tinted copy of the logo behind the real one — so the flicker animates
    the light around the sign, never the sign itself. */
 .sign-mark {
-  /* Tight warm rim first, then a dark contour ring wrapping art + rim:
-     the dark edge separates the thin line work from the lamp-lit bricks
-     the way a painted shadow board would on a real wall sign. */
-  filter: drop-shadow(0 0 2px rgb(255 224 170 / 0.7)) drop-shadow(0 0 6px rgb(0 0 0 / 0.85))
-    drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
+  filter: drop-shadow(0 0 2px rgb(255 224 170 / 0.7)) drop-shadow(0 4px 18px rgb(0 0 0 / 0.6));
+}
+
+/* Dark contour ring separating the thin line work from the lamp-lit bricks,
+   the way a painted shadow board would on a real wall sign. It lives on its
+   own copy of the artwork so a mask can end it above the MOTORS band: the
+   solid red glyphs read cleaner with no dark edging around them. */
+.sign-edge {
+  filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.85));
+  mask-image: linear-gradient(to bottom, black 62%, transparent 68%);
 }
 
 /* Realistic neon reads as many stacked halos — a tight bright core plus

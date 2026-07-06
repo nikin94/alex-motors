@@ -37,6 +37,14 @@ function App() {
             />
             <img
               src={logoCar}
+              alt=""
+              aria-hidden
+              width={1280}
+              height={853}
+              className="sign-edge pointer-events-none absolute inset-0"
+            />
+            <img
+              src={logoCar}
               alt="Alex Motors"
               width={1280}
               height={853}
