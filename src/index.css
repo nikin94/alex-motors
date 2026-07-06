@@ -6,6 +6,13 @@
   --color-lamp: #ffb347;
 }
 
+/* Match the page background to the brick wall so rubber-band overscroll
+   never reveals a white flash behind the content. */
+html {
+  background-color: #0e0a08;
+  color-scheme: dark;
+}
+
 /* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
    with slight color variation on a mortar background. */
 .brick-wall {
@@ -28,19 +35,27 @@
 .vignette {
   background: radial-gradient(
     ellipse 80% 70% at 50% 45%,
-    transparent 40%,
-    rgb(0 0 0 / 0.55) 80%,
-    rgb(0 0 0 / 0.85) 100%
+    transparent 30%,
+    rgb(0 0 0 / 0.72) 72%,
+    rgb(0 0 0 / 0.96) 100%
   );
 }
 
-.neon-sign {
-  color: #fff3e0;
-  text-shadow:
-    0 0 4px rgb(255 220 160 / 0.9),
-    0 0 12px rgb(255 179 71 / 0.8),
-    0 0 32px rgb(255 143 40 / 0.6),
-    0 0 72px rgb(255 110 20 / 0.4);
+/* The logo image framed as a wall-mounted light-box sign. The warm glow
+   lives on .sign-glow (a layer behind the image) so the flicker animates
+   the light around the sign, never the sign itself. */
+.sign-panel {
+  border-radius: var(--radius-xl);
+  border: 1px solid rgb(255 200 130 / 0.2);
+  box-shadow: 0 14px 44px rgb(0 0 0 / 0.6);
+}
+
+.sign-glow {
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 0 30px rgb(255 179 71 / 0.5),
+    0 0 90px rgb(255 143 40 / 0.34),
+    0 0 170px rgb(255 110 20 / 0.22);
 }
 
 /* Irregular neon-tube flicker: mostly on, with short random-feeling drops. */
