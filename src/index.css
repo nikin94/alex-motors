@@ -4,7 +4,6 @@
 @theme {
   --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
   --color-lamp: #ffb347;
-  --radius-xl: 0.5rem;
 }
 
 /* Match the page background to the brick wall so rubber-band overscroll
