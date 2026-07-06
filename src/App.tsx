@@ -5,12 +5,16 @@ import logoCar from './assets/logo-car.jpg'
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
 
+const newTab = { target: '_blank', rel: 'noopener noreferrer' }
+
+// Viber deep link intentionally has no target: with `_blank`, desktops
+// without Viber installed would open a dead empty tab.
 const contactLinks = [
-  { name: 'WhatsApp', href: 'https://wa.me/353852896539', Icon: FaWhatsapp },
-  { name: 'Viber', href: 'viber://chat?number=%2B353852896539', Icon: FaViber },
-  { name: 'Telegram', href: 'https://t.me/+353852896539', Icon: FaTelegram },
-  { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', Icon: FaInstagram },
-  { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok },
+  { name: 'WhatsApp', href: `https://wa.me/${PHONE_E164.slice(1)}`, Icon: FaWhatsapp, ...newTab },
+  { name: 'Viber', href: `viber://chat?number=${encodeURIComponent(PHONE_E164)}`, Icon: FaViber },
+  { name: 'Telegram', href: `https://t.me/${PHONE_E164}`, Icon: FaTelegram, ...newTab },
+  { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', Icon: FaInstagram, ...newTab },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
 ]
 
 function App() {
@@ -20,17 +24,17 @@ function App() {
         <div className="lamp-glow flicker pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
 
-        <h1 className="sr-only">Alex Motors — Auto Repair &amp; Service</h1>
-
         <div className="flicker relative text-center">
-          <img
-            src={logoCar}
-            alt="Alex Motors — car silhouette logo"
-            width={1280}
-            height={853}
-            fetchPriority="high"
-            className="sign-panel w-[min(88vw,40rem)]"
-          />
+          <h1>
+            <img
+              src={logoCar}
+              alt="Alex Motors"
+              width={1280}
+              height={853}
+              fetchPriority="high"
+              className="sign-panel w-[min(88vw,40rem)]"
+            />
+          </h1>
           <p className="font-display mt-8 text-xl tracking-[0.45em] text-amber-100/60 sm:text-2xl">
             Auto Repair &amp; Service
           </p>
@@ -44,12 +48,11 @@ function App() {
             {PHONE_DISPLAY}
           </a>
           <ul className="flex items-center gap-3 sm:gap-4">
-            {contactLinks.map(({ name, href, Icon }) => (
+            {contactLinks.map(({ name, href, Icon, ...linkProps }) => (
               <li key={name}>
                 <a
                   href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...linkProps}
                   aria-label={name}
                   title={name}
                   className="flex size-11 items-center justify-center rounded-full border border-amber-100/25 text-amber-50/80 transition-colors hover:border-amber-100/70 hover:text-amber-50"
