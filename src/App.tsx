@@ -147,7 +147,7 @@ function App() {
             <span className="text-3xl tracking-[0.35em] sm:text-4xl sm:tracking-[0.4em]">
               Motor Sport
             </span>
-            <span className="text-xl tracking-[0.35em] sm:text-2xl sm:tracking-[0.45em]">
+            <span className="text-xl tracking-[0.3em] sm:text-2xl sm:tracking-[0.38em]">
               Auto Repair &amp; Service
             </span>
           </p>
