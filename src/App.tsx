@@ -143,8 +143,13 @@ function App() {
               className="sign-mark intro-ignite relative w-[min(88vw,40rem)]"
             />
           </h1>
-          <p className="sign-tagline intro-rise font-display relative mt-8 text-xl tracking-[0.45em] sm:text-2xl">
-            Auto Repair &amp; Service
+          <p className="sign-tagline intro-rise font-display relative mt-8 flex flex-col items-center gap-2 text-center">
+            <span className="text-3xl tracking-[0.35em] sm:text-4xl sm:tracking-[0.4em]">
+              Motor Sport
+            </span>
+            <span className="text-xl tracking-[0.3em] sm:text-2xl sm:tracking-[0.38em]">
+              Auto Repair &amp; Service
+            </span>
           </p>
         </div>
 
