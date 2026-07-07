@@ -1,12 +1,17 @@
+import { lazy, Suspense } from 'react'
 import {
   FaCarBattery,
   FaChevronDown,
   FaClipboardCheck,
+  FaClock,
   FaGaugeHigh,
   FaGears,
   FaInstagram,
   FaLink,
+  FaLocationDot,
   FaOilCan,
+  FaPhone,
+  FaRoute,
   FaScrewdriverWrench,
   FaTelegram,
   FaTiktok,
@@ -16,6 +21,10 @@ import {
 
 import logoCar from './assets/logo-car.webp'
 import { useWheelPaging } from './useWheelPaging'
+
+// Leaflet pulls in ~40 kB; the map sits two screens below the fold, so it is
+// code-split out of the hero's critical path and streamed in on its own chunk.
+const LocationMap = lazy(() => import('./LocationMap'))
 
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
@@ -73,6 +82,23 @@ const services = [
 
 // Killea is the physical townland; Letterkenny stays in meta/copy because that is
 // where the search demand is (F93 is the Letterkenny routing key).
+const ADDRESS_LINES = ['Altaghaderry, Killea', 'Co. Donegal, F93 P768']
+// Townland-level coordinate from OSM Nominatim geocoding of "Altaghaderry, Killea".
+// TODO: owner to confirm the pin sits on the actual workshop entrance.
+const GEO = { lat: 54.9878, lng: -7.409 }
+const MAP_QUERY = 'Alex Motors, Altaghaderry, Killea, Co. Donegal, F93 P768'
+// api=1 directions deep-link keyed on the address string, so it resolves in
+// Google Maps regardless of the pin's exact coordinate. Powers the Get
+// Directions button.
+const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  MAP_QUERY,
+)}`
+// A place/search URL — a map *of* the location, which is what schema.org
+// hasMap expects (the directions deep-link above is an action, not a map).
+const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  MAP_QUERY,
+)}`
+
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoRepair',
@@ -86,6 +112,12 @@ const localBusinessJsonLd = {
     postalCode: 'F93 P768',
     addressCountry: 'IE',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: GEO.lat,
+    longitude: GEO.lng,
+  },
+  hasMap: MAP_URL,
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -241,7 +273,105 @@ function App() {
             </li>
           ))}
         </ul>
-        {/* Site footer (language switcher, address, hours) will live at the bottom of this screen. */}
+        <a
+          href="#location"
+          aria-label="Scroll to location"
+          className="absolute bottom-5 p-2 text-amber-100/40 transition-colors hover:text-amber-100"
+        >
+          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
+        </a>
+      </section>
+
+      <section
+        id="location"
+        className="location-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
+      >
+        <header className="text-center">
+          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+            Find Us
+          </h2>
+        </header>
+
+        <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-2 lg:items-stretch">
+          <div className="flex flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
+            <div className="flex items-start gap-3">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
+                <FaLocationDot aria-hidden className="size-5 text-amber-300" />
+              </span>
+              <div>
+                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">Workshop</h3>
+                <p className="mt-1 text-sm leading-relaxed text-stone-300 sm:text-base">
+                  {ADDRESS_LINES.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
+                <FaClock aria-hidden className="size-5 text-amber-300" />
+              </span>
+              <div>
+                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">
+                  Opening Hours
+                </h3>
+                <dl className="mt-1 space-y-0.5 text-sm text-stone-300 sm:text-base">
+                  <div className="flex justify-between gap-6">
+                    <dt>Mon–Fri</dt>
+                    <dd>9:00–17:00</dd>
+                  </div>
+                  <div className="flex justify-between gap-6">
+                    <dt>Saturday</dt>
+                    <dd>9:00–13:00</dd>
+                  </div>
+                  <div className="flex justify-between gap-6 text-stone-500">
+                    <dt>Sunday</dt>
+                    <dd>Closed</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
+                <FaPhone aria-hidden className="size-5 text-amber-300" />
+              </span>
+              <div>
+                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">Call Us</h3>
+                <a
+                  href={`tel:${PHONE_E164}`}
+                  className="mt-1 inline-block text-sm text-amber-50/90 transition-colors hover:text-amber-50 sm:text-base"
+                >
+                  {PHONE_DISPLAY}
+                </a>
+              </div>
+            </div>
+
+            <a
+              href={DIRECTIONS_URL}
+              {...newTab}
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-md border border-amber-300/40 bg-amber-400/10 px-5 py-3 font-display text-lg tracking-[0.12em] text-amber-100 transition-colors hover:border-amber-300/70 hover:bg-amber-400/20 hover:text-amber-50"
+            >
+              <FaRoute aria-hidden className="size-4" />
+              Get Directions
+            </a>
+          </div>
+
+          <div className="location-map min-h-[300px] overflow-hidden rounded-lg border border-amber-100/15 lg:min-h-0">
+            <Suspense
+              fallback={
+                <div className="flex size-full items-center justify-center text-sm text-stone-500">
+                  Loading map…
+                </div>
+              }
+            >
+              <LocationMap lat={GEO.lat} lng={GEO.lng} label="Alex Motors" />
+            </Suspense>
+          </div>
+        </div>
       </section>
 
       <script
@@ -249,7 +379,7 @@ function App() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
       />
 
-      {/* Coming next: address + map, opening hours, footer with language switcher */}
+      {/* Coming next: footer with language switcher (i18n) */}
     </main>
   )
 }
