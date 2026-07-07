@@ -48,32 +48,47 @@ export function useWheelPaging() {
       screens.forEach((screen, index) => {
         if (screen.getBoundingClientRect().top <= EPSILON) current = index
       })
-      const aligned =
-        Math.abs(screens[current].getBoundingClientRect().top) <= EPSILON
-      /* Down always pages to the next screen's top. Skipping the unseen
-         content of an over-tall screen is safe only because such a screen
-         is last — no next screen means the wheel stays native. A future
-         over-tall middle screen needs "page to its bottom edge first"
-         handling here. Up from inside a screen realigns to that screen's
-         own top; only an already-aligned viewport pages to the previous
-         screen. */
-      const target =
-        event.deltaY > 0
-          ? screens[current + 1]
-          : aligned
-            ? screens[current - 1]
-            : screens[current]
-      if (!target) return // past the edges: native scroll (and snap) rule
+      const rect = screens[current].getBoundingClientRect()
+      const aligned = Math.abs(rect.top) <= EPSILON
+      /* Any screen can be taller than the viewport (hero is on short
+         laptop viewports, services usually is), so paging must never skip
+         unseen content. Down steps through an over-tall screen at most one
+         viewport at a time, stopping at its bottom edge — a straight jump
+         to the edge would itself skip a band whenever the screen is taller
+         than two viewports. Only a fully-viewed screen advances to the
+         next screen's top. Up from inside a screen realigns to that
+         screen's own top; only an already-aligned viewport pages to the
+         previous screen. Every stop keeps the over-tall snap area covering
+         the viewport (the clamp never scrolls past the bottom edge), so
+         mandatory snap accepts each intermediate position. */
+      const unseenBelow = rect.bottom - window.innerHeight > EPSILON
+      let scroll: (() => void) | undefined
+      if (event.deltaY > 0) {
+        if (unseenBelow) {
+          const top =
+            window.scrollY +
+            Math.min(window.innerHeight, rect.bottom - window.innerHeight)
+          scroll = () => window.scrollTo({ top, behavior: 'auto' })
+        } else {
+          const next = screens[current + 1]
+          if (next) scroll = () => next.scrollIntoView({ behavior: 'auto' })
+        }
+      } else {
+        const target = aligned ? screens[current - 1] : screens[current]
+        if (target) scroll = () => target.scrollIntoView({ behavior: 'auto' })
+      }
+      if (!scroll) return // past the edges: native scroll (and snap) rule
       event.preventDefault()
       paging = true
       // Failsafe unlock for browsers without the scrollend event.
       timer = window.setTimeout(() => {
         paging = false
       }, 1200)
-      /* 'auto' resolves to the scroller's computed scroll-behavior: the base
-         html rule gives smooth, prefers-reduced-motion flips it to instant —
-         CSS stays the single owner of that decision. */
-      target.scrollIntoView({ behavior: 'auto' })
+      /* 'auto' (in both ScrollOptions and scrollIntoView) resolves to the
+         scroller's computed scroll-behavior: the base html rule gives
+         smooth, prefers-reduced-motion flips it to instant — CSS stays the
+         single owner of that decision. */
+      scroll()
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
