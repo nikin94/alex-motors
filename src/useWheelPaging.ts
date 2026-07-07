@@ -21,11 +21,26 @@ const EPSILON = 2
    second notch (or a firmer trackpad flick) completes the transition. */
 const FREE_PLAY = 120
 
+/* A gesture is a burst of wheel events; a longer gap starts a fresh one.
+   The anchor — the scroll position the gesture began from — is captured once
+   per gesture so a fast flick commits from where it STARTED, not from
+   wherever native elastic drift has carried the page by the time the drift
+   crosses FREE_PLAY. Without the anchor, a quick flick down an over-tall
+   screen (a short-viewport hero, or services) reads its already-drifted
+   geometry, finds no content left below the fold, and jumps to the next
+   screen — skipping the band (the hero contacts) a slow scroll would stop
+   on. Slow scrolling never drifts, so anchor == current and behaviour is
+   unchanged. */
+const GESTURE_GAP = 200
+
 export function useWheelPaging() {
   useEffect(() => {
     const snapViewport = window.matchMedia('(min-width: 768px)')
     let paging = false
     let timer = 0
+    let anchorY: number | null = null
+    let lastTs = 0
+    let lastDir = 0
 
     const settle = () => {
       window.clearTimeout(timer)
@@ -46,70 +61,93 @@ export function useWheelPaging() {
         event.preventDefault() // swallow the gesture's tail mid-glide
         return
       }
+
+      /* Capture the anchor before any native drift moves the page: the first
+         wheel of a burst, the first after a gap, or the first after the wheel
+         reverses direction. window.scrollY in a wheel handler still reflects
+         the pre-event position. Reversing is a new gesture from wherever the
+         drift left the page: without a recapture, a flick up after a small
+         down-drift would inherit the down-anchor, read no unseen content above
+         it, and page to the previous screen — overshooting the stop CSS snap
+         would have eased back to (the mirror of the drift bug this file
+         fixes). */
+      const dir = Math.sign(event.deltaY)
+      let anchor = anchorY
+      if (
+        anchor === null ||
+        event.timeStamp - lastTs > GESTURE_GAP ||
+        dir !== lastDir
+      ) {
+        anchor = window.scrollY
+        anchorY = anchor
+      }
+      lastTs = event.timeStamp
+      lastDir = dir
+
       const screens = document.querySelectorAll<HTMLElement>('.snap-screen')
       if (screens.length === 0) return
-      /* Screens can be taller than the viewport (services is), so an index
-         derived from innerHeight drifts inside them — locate the current
-         screen by real geometry instead: the last one whose top is at or
-         above the viewport top. */
-      let current = 0
-      let nearest = Infinity
-      screens.forEach((screen, index) => {
-        const top = screen.getBoundingClientRect().top
-        if (top <= EPSILON) current = index
-        nearest = Math.min(nearest, Math.abs(top))
-      })
-      /* Elastic zone: close to a snap point the wheel stays native — the
+
+      /* Commit TIMING comes from the current (drifted) position: while the
+         nearest snap point is within FREE_PLAY the wheel stays native so the
          page visibly gives, and CSS snap pulls it home if the gesture ends
-         here. Only once the drift exceeds FREE_PLAY does paging take over
-         and finish the transition. Intermediate stops inside an over-tall
-         screen sit far from every screen top, so stepping there is never
-         swallowed by the elastic zone. */
+         here. Intermediate stops inside an over-tall screen sit far from
+         every screen top, so stepping there is never swallowed by the zone. */
+      let nearest = Infinity
+      screens.forEach((screen) => {
+        nearest = Math.min(nearest, Math.abs(screen.getBoundingClientRect().top))
+      })
       if (nearest < FREE_PLAY) return
-      const rect = screens[current].getBoundingClientRect()
-      /* Any screen can be taller than the viewport (hero is on short
-         laptop viewports, services usually is), so paging must never skip
-         unseen content. Down steps through an over-tall screen at most one
-         viewport at a time, stopping at its bottom edge — a straight jump
-         to the edge would itself skip a band whenever the screen is taller
-         than two viewports. Only a fully-viewed screen advances to the
-         next screen's top. Every stop keeps the over-tall snap area
-         covering the viewport (the clamp never scrolls past the bottom
-         edge), so mandatory snap accepts each intermediate position.
-         Up completes to the top of the screen the viewport is in: past the
-         free-play zone below a screen top that screen is already the one
-         above, so a committed upward gesture lands on the previous screen;
-         from deep inside an over-tall screen it realigns to that screen's
-         own top. (An exactly-aligned viewport never reaches this code —
-         alignment implies nearest ≈ 0, inside the elastic zone.) */
-      const unseenBelow = rect.bottom - window.innerHeight > EPSILON
-      let scroll: (() => void) | undefined
+
+      /* Commit DESTINATION is computed from the anchor, never the drifted
+         position, so it is the stop a slow scroll from the same start would
+         have reached. Screen edges in document space are scroll-invariant:
+         scrollY + rect edge. */
+      const edges = Array.from(screens, (screen) => {
+        const r = screen.getBoundingClientRect()
+        return { top: window.scrollY + r.top, bottom: window.scrollY + r.bottom }
+      })
+      let a = 0
+      edges.forEach((e, i) => {
+        if (e.top <= anchor + EPSILON) a = i
+      })
+      const { top: screenTop, bottom: screenBottom } = edges[a]
+      const viewport = window.innerHeight
+
+      /* Over-tall screens (services always, hero on short laptops) must never
+         be skipped: a commit steps at most one viewport from the anchor,
+         clamped to the screen's own edge, and only a fully-seen screen hands
+         off to a neighbour. Down clamps to the bottom edge (the clamp keeps
+         the snap area covering the viewport, so mandatory snap accepts the
+         stop); up clamps to the top edge. */
+      let target: number | undefined
       if (event.deltaY > 0) {
+        const unseenBelow = screenBottom - (anchor + viewport) > EPSILON
         if (unseenBelow) {
-          const top =
-            window.scrollY +
-            Math.min(window.innerHeight, rect.bottom - window.innerHeight)
-          scroll = () => window.scrollTo({ top, behavior: 'auto' })
-        } else {
-          const next = screens[current + 1]
-          if (next) scroll = () => next.scrollIntoView({ behavior: 'auto' })
+          target = Math.min(anchor + viewport, screenBottom - viewport)
+        } else if (edges[a + 1]) {
+          target = edges[a + 1].top
         }
       } else {
-        const target = screens[current]
-        scroll = () => target.scrollIntoView({ behavior: 'auto' })
+        const unseenAbove = anchor - screenTop > EPSILON
+        if (unseenAbove) {
+          target = Math.max(anchor - viewport, screenTop)
+        } else if (edges[a - 1]) {
+          target = edges[a - 1].top
+        }
       }
-      if (!scroll) return // past the edges: native scroll (and snap) rule
+      if (target === undefined) return // past the edges: native scroll rules
+
       event.preventDefault()
       paging = true
+      anchorY = null // consumed; the next burst captures a fresh anchor
       // Failsafe unlock for browsers without the scrollend event.
       timer = window.setTimeout(() => {
         paging = false
       }, 1200)
-      /* 'auto' (in both ScrollOptions and scrollIntoView) resolves to the
-         scroller's computed scroll-behavior: the base html rule gives
-         smooth, prefers-reduced-motion flips it to instant — CSS stays the
-         single owner of that decision. */
-      scroll()
+      /* 'auto' resolves to the scroller's computed scroll-behavior: the base
+         html rule gives smooth, prefers-reduced-motion flips it to instant —
+         CSS stays the single owner of that decision. */
+      window.scrollTo({ top: target, behavior: 'auto' })
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
