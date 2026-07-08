@@ -148,6 +148,21 @@ html {
   mask-image: linear-gradient(to right, transparent 4%, black 55%);
 }
 
+/* Third screen (location): the same translucent shading as the services
+   screen, so the shared brick wall runs on unbroken beneath all three. */
+.location-shade {
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgb(255 143 40 / 0.05), transparent 70%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.66) 30%, rgb(0 0 0 / 0.66));
+}
+
+/* Leaflet chrome overrides (.leaflet-*) and the amber .location-pin glow live
+   in LocationMap.css, imported after leaflet/dist/leaflet.css so they win the
+   cascade inside the lazy chunk — see the note there. Keeping them here would
+   place them before Leaflet's own sheet and lose to its equal-specificity
+   defaults. Only .location-shade above is map-screen styling that belongs in
+   the global sheet. */
+
 /* Full-page snap between the hero and the services screen on desktop.
    Native CSS scroll snap instead of a scroll-hijack library: the browser
    keeps ownership of wheel/touch/keyboard scrolling, so accessibility and
@@ -155,9 +170,10 @@ html {
    the media query never turns snapping on — the page scrolls normally.
    Smooth scrolling is deliberately outside the media query: the chevron
    anchor jump should be smooth on every viewport, not only where snapping
-   is active. If a third, taller-than-viewport section is added later,
-   switch mandatory → proximity so long content cannot get trapped between
-   snap points. */
+   is active. Snap stays `mandatory` even with three screens: the location
+   screen fits a normal viewport, and useWheelPaging already steps through
+   any screen that is taller than the viewport one page at a time, so long
+   content is never trapped between snap points. */
 html {
   scroll-behavior: smooth;
 }
