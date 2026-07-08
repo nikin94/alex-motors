@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import type { IconType } from 'react-icons'
 import {
   FaCarBattery,
   FaChevronDown,
@@ -20,7 +21,10 @@ import {
 } from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { useWheelPaging } from './useWheelPaging'
+import { useI18n } from './i18n/context'
+import type { ServiceId } from './i18n/dictionary'
 
 // Leaflet pulls in ~40 kB; the map sits two screens below the fold, so it is
 // code-split out of the hero's critical path and streamed in on its own chunk.
@@ -41,48 +45,22 @@ const contactLinks = [
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
 ]
 
-const services = [
-  {
-    title: 'Car Servicing',
-    Icon: FaOilCan,
-    description:
-      'Full and interim services for all makes and models — oil and filters, fluids, and a health check that catches problems before they get expensive.',
-  },
-  {
-    title: 'Diagnostics',
-    Icon: FaGaugeHigh,
-    description:
-      'Dashboard warning light? We read fault codes with dealer-level tools, find the actual cause and explain your options before any work starts.',
-  },
-  {
-    title: 'Engine Repair',
-    Icon: FaGears,
-    description:
-      'From misfires and oil leaks to major engine work — honest assessment first, then a clear quote. Daily drivers, vans and sports cars alike.',
-  },
-  {
-    title: 'Timing Belt & Chain',
-    Icon: FaLink,
-    description:
-      'Belt and chain replacement at the right mileage — the job that protects your engine from the most expensive failure it can have.',
-  },
-  {
-    title: 'Brakes & Suspension',
-    Icon: FaScrewdriverWrench,
-    description:
-      'Pads, discs, shocks, springs and bushings — everything that keeps you stopping straight and riding smooth on Donegal roads.',
-  },
-  {
-    title: 'Battery & Electrics',
-    Icon: FaCarBattery,
-    description:
-      'Battery testing and replacement, alternators, starters and wiring faults — including the ones that only show up on cold mornings.',
-  },
+// Card icons and order live in code; the title/description text comes from the
+// dictionary keyed by id, so all three languages stay in one place.
+const services: { id: ServiceId; Icon: IconType }[] = [
+  { id: 'servicing', Icon: FaOilCan },
+  { id: 'diagnostics', Icon: FaGaugeHigh },
+  { id: 'engine', Icon: FaGears },
+  { id: 'timing', Icon: FaLink },
+  { id: 'brakes', Icon: FaScrewdriverWrench },
+  { id: 'electrics', Icon: FaCarBattery },
 ]
 
 // Killea is the physical townland; Letterkenny stays in meta/copy because that is
-// where the search demand is (F93 is the Letterkenny routing key).
+// where the search demand is (F93 is the Letterkenny routing key). Address is a
+// proper noun and stays untranslated; only the labels around it localise.
 const ADDRESS_LINES = ['Altaghaderry, Killea', 'Co. Donegal, F93 P768']
+const HOURS = { weekdays: '9:00–17:00', saturday: '9:00–13:00' }
 // Townland-level coordinate from OSM Nominatim geocoding of "Altaghaderry, Killea".
 // TODO: owner to confirm the pin sits on the actual workshop entrance.
 const GEO = { lat: 54.9878, lng: -7.409 }
@@ -99,6 +77,8 @@ const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
   MAP_QUERY,
 )}`
 
+// Schema.org is language-independent structured data, so it stays in English
+// regardless of the UI language.
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoRepair',
@@ -139,9 +119,12 @@ const localBusinessJsonLd = {
 
 function App() {
   useWheelPaging()
+  const { t } = useI18n()
 
   return (
     <main className="brick-wall">
+      <LanguageSwitcher />
+
       <section className="snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
         <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
@@ -176,11 +159,11 @@ function App() {
             />
           </h1>
           <p className="sign-tagline intro-rise font-display relative mt-8 flex flex-col items-center gap-2 text-center">
-            <span className="text-3xl tracking-[0.35em] sm:text-4xl sm:tracking-[0.4em]">
-              Motor Sport
+            <span lang="en" className="text-3xl tracking-[0.35em] sm:text-4xl sm:tracking-[0.4em]">
+              {t.tagline.top}
             </span>
             <span className="text-xl tracking-[0.3em] sm:text-2xl sm:tracking-[0.38em]">
-              Auto Repair &amp; Service
+              {t.tagline.bottom}
             </span>
           </p>
         </div>
@@ -211,7 +194,7 @@ function App() {
 
         <a
           href="#services"
-          aria-label="Scroll to services"
+          aria-label={t.a11y.scrollToServices}
           className="intro-rise-late absolute bottom-5 p-2 text-amber-100/50 transition-colors hover:text-amber-100"
         >
           <FaChevronDown className="size-5 motion-safe:animate-bounce" />
@@ -233,7 +216,7 @@ function App() {
         />
         <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-            Our Services
+            {t.services.heading}
           </h2>
         </header>
 
@@ -243,39 +226,40 @@ function App() {
               <FaClipboardCheck aria-hidden className="size-6 text-amber-300" />
             </span>
             <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
-              Pre-NCT Check &amp; Repairs
+              {t.services.preNct.title}
             </h3>
           </div>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            Failed the NCT — or worried you might? We do a full pre-NCT inspection covering
-            brakes, suspension, lights, emissions and tyres — and fix what needs fixing, so you
-            go into the test ready to pass. Retest checks too.
+            {t.services.preNct.body}
           </p>
         </div>
 
         <ul className="relative grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {services.map(({ title, Icon, description }) => (
-            <li
-              key={title}
-              className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
-            >
-              <div className="flex items-center gap-3">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
-                  <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
-                </span>
-                <h3 className="font-display text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
-                  {title}
-                </h3>
-              </div>
-              <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
-                {description}
-              </p>
-            </li>
-          ))}
+          {services.map(({ id, Icon }) => {
+            const item = t.services.items[id]
+            return (
+              <li
+                key={id}
+                className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
+                    <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
+                  </span>
+                  <h3 className="font-display text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
+                    {item.title}
+                  </h3>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
+                  {item.description}
+                </p>
+              </li>
+            )
+          })}
         </ul>
         <a
           href="#location"
-          aria-label="Scroll to location"
+          aria-label={t.a11y.scrollToLocation}
           className="absolute bottom-5 p-2 text-amber-100/40 transition-colors hover:text-amber-100"
         >
           <FaChevronDown className="size-5 motion-safe:animate-bounce" />
@@ -288,7 +272,7 @@ function App() {
       >
         <header className="text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-            Find Us
+            {t.location.heading}
           </h2>
         </header>
 
@@ -299,7 +283,9 @@ function App() {
                 <FaLocationDot aria-hidden className="size-5 text-amber-300" />
               </span>
               <div>
-                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">Workshop</h3>
+                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">
+                  {t.location.workshop}
+                </h3>
                 <p className="mt-1 text-sm leading-relaxed text-stone-300 sm:text-base">
                   {ADDRESS_LINES.map((line) => (
                     <span key={line} className="block">
@@ -316,20 +302,20 @@ function App() {
               </span>
               <div>
                 <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">
-                  Opening Hours
+                  {t.location.openingHours}
                 </h3>
                 <dl className="mt-1 space-y-0.5 text-sm text-stone-300 sm:text-base">
                   <div className="flex justify-between gap-6">
-                    <dt>Mon–Fri</dt>
-                    <dd>9:00–17:00</dd>
+                    <dt>{t.location.days.weekdays}</dt>
+                    <dd>{HOURS.weekdays}</dd>
                   </div>
                   <div className="flex justify-between gap-6">
-                    <dt>Saturday</dt>
-                    <dd>9:00–13:00</dd>
+                    <dt>{t.location.days.saturday}</dt>
+                    <dd>{HOURS.saturday}</dd>
                   </div>
                   <div className="flex justify-between gap-6 text-stone-500">
-                    <dt>Sunday</dt>
-                    <dd>Closed</dd>
+                    <dt>{t.location.days.sunday}</dt>
+                    <dd>{t.location.days.closed}</dd>
                   </div>
                 </dl>
               </div>
@@ -340,7 +326,9 @@ function App() {
                 <FaPhone aria-hidden className="size-5 text-amber-300" />
               </span>
               <div>
-                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">Call Us</h3>
+                <h3 className="font-display text-xl tracking-[0.08em] text-amber-50">
+                  {t.location.callUs}
+                </h3>
                 <a
                   href={`tel:${PHONE_E164}`}
                   className="mt-1 inline-block text-sm text-amber-50/90 transition-colors hover:text-amber-50 sm:text-base"
@@ -356,7 +344,7 @@ function App() {
               className="mt-1 inline-flex items-center justify-center gap-2 rounded-md border border-amber-300/40 bg-amber-400/10 px-5 py-3 font-display text-lg tracking-[0.12em] text-amber-100 transition-colors hover:border-amber-300/70 hover:bg-amber-400/20 hover:text-amber-50"
             >
               <FaRoute aria-hidden className="size-4" />
-              Get Directions
+              {t.location.getDirections}
             </a>
           </div>
 
@@ -364,11 +352,16 @@ function App() {
             <Suspense
               fallback={
                 <div className="flex size-full items-center justify-center text-sm text-stone-500">
-                  Loading map…
+                  {t.a11y.loadingMap}
                 </div>
               }
             >
-              <LocationMap lat={GEO.lat} lng={GEO.lng} label="Alex Motors" />
+              <LocationMap
+                lat={GEO.lat}
+                lng={GEO.lng}
+                markerTitle="Alex Motors"
+                ariaLabel={t.a11y.mapLabel}
+              />
             </Suspense>
           </div>
         </div>
@@ -378,8 +371,6 @@ function App() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
       />
-
-      {/* Coming next: footer with language switcher (i18n) */}
     </main>
   )
 }

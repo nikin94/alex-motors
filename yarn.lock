@@ -323,6 +323,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/oswald@npm:^5.2.8":
+  version: 5.2.8
+  resolution: "@fontsource/oswald@npm:5.2.8"
+  checksum: 10c0/3acd26bd428e0208bedc28816ba0508c9bb4f97ed268fb0d732e24ffd609bec532732c602e434d1749585bbae718f2023de191e6bee2d3b84cbea0c2589c5983
+  languageName: node
+  linkType: hard
+
 "@img/colour@npm:^1.0.0":
   version: 1.1.0
   resolution: "@img/colour@npm:1.1.0"
@@ -1169,6 +1176,7 @@ __metadata:
   dependencies:
     "@cloudflare/vite-plugin": "npm:^1.43.0"
     "@fontsource/bebas-neue": "npm:^5.2.7"
+    "@fontsource/oswald": "npm:^5.2.8"
     "@tailwindcss/vite": "npm:^4.3.2"
     "@types/leaflet": "npm:^1.9.21"
     "@types/node": "npm:^24.13.2"

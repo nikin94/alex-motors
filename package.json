@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fontsource/bebas-neue": "^5.2.7",
+    "@fontsource/oswald": "^5.2.8",
     "@tailwindcss/vite": "^4.3.2",
     "leaflet": "^1.9.4",
     "react": "^19.2.7",
