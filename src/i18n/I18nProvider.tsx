@@ -6,7 +6,7 @@ import { dictionaries, type Lang } from './dictionary'
 const STORAGE_KEY = 'alex-motors-lang'
 
 function isLang(value: string | null): value is Lang {
-  return value === 'en' || value === 'ru' || value === 'uk'
+  return value === 'en' || value === 'ga' || value === 'ru'
 }
 
 /* A stored choice wins; otherwise fall back to the browser's preferred
@@ -20,7 +20,7 @@ function detectInitialLang(): Lang {
     // localStorage can throw in private mode — fall through to detection.
   }
   const nav = navigator.language?.slice(0, 2).toLowerCase()
-  if (nav === 'uk' || nav === 'ru') return nav
+  if (nav === 'ga' || nav === 'ru') return nav
   return 'en'
 }
 

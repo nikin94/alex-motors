@@ -1,9 +1,9 @@
 /* Custom i18n instead of a library: the copy is a fixed, hand-authored set of
    strings across three languages, so a typed dictionary object plus a context
    hook is smaller and simpler than i18next (~15 kB gzip) and pulls in nothing.
-   Draft ru/uk are ours, pending a copy pass from the Content manager. */
+   Draft ga/ru are ours, pending a copy pass from the Content manager. */
 
-export type Lang = 'en' | 'ru' | 'uk'
+export type Lang = 'en' | 'ga' | 'ru'
 
 export type ServiceId =
   | 'servicing'
@@ -17,8 +17,8 @@ export type ServiceId =
    language so the control reads the same and never needs the Cyrillic face. */
 export const LANGS: { readonly code: Lang; readonly label: string }[] = [
   { code: 'en', label: 'EN' },
+  { code: 'ga', label: 'GA' },
   { code: 'ru', label: 'RU' },
-  { code: 'uk', label: 'UK' },
 ]
 
 type ServiceCopy = { title: string; description: string }
@@ -166,63 +166,63 @@ const ru: Dictionary = {
   },
 }
 
-const uk: Dictionary = {
-  htmlLang: 'uk',
-  tagline: { top: 'Motor Sport', bottom: 'Автосервіс і ремонт' },
+const ga: Dictionary = {
+  htmlLang: 'ga',
+  tagline: { top: 'Motor Sport', bottom: 'Deisiú & Seirbhís Gluaisteán' },
   services: {
-    heading: 'Наші послуги',
+    heading: 'Ár Seirbhísí',
     preNct: {
-      title: 'Підготовка до NCT та ремонт',
-      body: 'Не пройшли NCT або боїтеся не пройти? Проводимо повну передперевірку — гальма, підвіска, світло, викиди та шини — й усуваємо все потрібне, щоб ви приїхали на тест готовими. Перевірка перед перескладанням теж.',
+      title: 'Seiceáil Réamh-NCT & Deisiúcháin',
+      body: 'Theip ort san NCT — nó imníoch go dteipfeadh? Déanaimid iniúchadh iomlán réamh-NCT ar na coscáin, an crochadh, na soilse, na hastaíochtaí agus na boinn — agus deisímid a bhfuil le deisiú, ionas go mbeidh tú réidh le pasáil. Seiceálacha athtástála chomh maith.',
     },
     items: {
       servicing: {
-        title: 'Техобслуговування',
+        title: 'Seirbhísiú Gluaisteán',
         description:
-          'Повне та проміжне ТО для авто будь-яких марок — олива й фільтри, рідини та перевірка, яка виявляє проблеми, поки вони не стали дорогими.',
+          'Seirbhísí iomlána agus eatramhacha do gach déanamh agus múnla — ola agus scagairí, sreabháin, agus seiceáil sláinte a aimsíonn fadhbanna sula n-éiríonn siad costasach.',
       },
       diagnostics: {
-        title: 'Діагностика',
+        title: 'Diagnóisic',
         description:
-          'Світиться лампа на панелі? Зчитуємо коди помилок дилерським обладнанням, знаходимо справжню причину й пояснюємо варіанти до початку робіт.',
+          'Solas rabhaidh ar an bpainéal? Léimid cóid fabht le huirlisí ar leibhéal déileálaí, aimsímid an fíorchúis agus mínímid do roghanna sula dtosaíonn aon obair.',
       },
       engine: {
-        title: 'Ремонт двигуна',
+        title: 'Deisiú Innill',
         description:
-          'Від пропусків запалювання й течі оливи до капітального ремонту — спершу чесна оцінка, потім зрозумілий кошторис. Легкові, фургони та спорткари.',
+          'Ó mhí-adhaint agus sceitheadh ola go mórobair innill — measúnú macánta ar dtús, ansin luachan shoiléir. Gluaisteáin laethúla, veaineanna agus spórtcharranna araon.',
       },
       timing: {
-        title: 'Ремінь і ланцюг ГРМ',
+        title: 'Crios & Slabhra Ama',
         description:
-          'Заміна ременя й ланцюга ГРМ на потрібному пробігу — робота, що захищає двигун від найдорожчої поломки.',
+          'Athsholáthar creasa agus slabhra ag an mhíleáiste ceart — an jab a chosnaíonn d’inneall ón teip is costasaí is féidir a bheith air.',
       },
       brakes: {
-        title: 'Гальма та підвіска',
+        title: 'Coscáin & Crochadh',
         description:
-          'Колодки, диски, амортизатори, пружини та сайлентблоки — усе, що забезпечує впевнене гальмування й плавний хід на дорогах Донеголу.',
+          'Pillíní, dioscaí, turraingí, spriongaí agus muileataí — gach rud a choinníonn ag stopadh díreach agus ag taisteal go réidh thú ar bhóithre Dhún na nGall.',
       },
       electrics: {
-        title: 'Акумулятор та електрика',
+        title: 'Cadhnra & Leictreachas',
         description:
-          'Перевірка й заміна акумулятора, генератори, стартери та несправності проводки — зокрема ті, що з’являються лише холодного ранку.',
+          'Tástáil agus athsholáthar cadhnra, ailtéarnóirí, tosaitheoirí agus fabhtanna sreangaithe — na cinn nach dtaispeánann iad féin ach ar maidin fhuar san áireamh.',
       },
     },
   },
   location: {
-    heading: 'Як нас знайти',
-    workshop: 'Майстерня',
-    openingHours: 'Години роботи',
-    days: { weekdays: 'Пн–Пт', saturday: 'Субота', sunday: 'Неділя', closed: 'Вихідний' },
-    callUs: 'Зателефонуйте нам',
-    getDirections: 'Прокласти маршрут',
+    heading: 'Aimsigh Sinn',
+    workshop: 'Ceardlann',
+    openingHours: 'Uaireanta Oscailte',
+    days: { weekdays: 'Luan–Aoine', saturday: 'Satharn', sunday: 'Domhnach', closed: 'Dúnta' },
+    callUs: 'Glaoigh Orainn',
+    getDirections: 'Faigh Treoracha',
   },
   a11y: {
-    scrollToServices: 'Перейти до послуг',
-    scrollToLocation: 'Перейти до контактів',
-    selectLanguage: 'Вибрати мову',
-    mapLabel: 'Карта з розташуванням майстерні Alex Motors',
-    loadingMap: 'Завантаження карти…',
+    scrollToServices: 'Scrollaigh go dtí na seirbhísí',
+    scrollToLocation: 'Scrollaigh go dtí an suíomh',
+    selectLanguage: 'Roghnaigh teanga',
+    mapLabel: 'Léarscáil a thaispeánann ceardlann Alex Motors',
+    loadingMap: 'Léarscáil á lódáil…',
   },
 }
 
-export const dictionaries: Record<Lang, Dictionary> = { en, ru, uk }
+export const dictionaries: Record<Lang, Dictionary> = { en, ga, ru }

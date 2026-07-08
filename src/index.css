@@ -14,11 +14,11 @@
   src: url('@fontsource/bebas-neue/files/bebas-neue-latin-400-normal.woff2') format('woff2');
 }
 
-/* Bebas Neue ships no Cyrillic, so ru/uk display text needs a second face.
+/* Bebas Neue ships no Cyrillic, so Russian display text needs a second face.
    Oswald is the closest free match — tall and condensed like Bebas. Restricted
    to the Cyrillic range so its file only downloads once the user switches to
-   ru/uk, and listed after Bebas in --font-display: Latin glyphs still come from
-   Bebas (EN stays pixel-identical), only Cyrillic glyphs fall through to Oswald. */
+   Russian, and listed after Bebas in --font-display: Latin glyphs still come from
+   Bebas (EN and Irish stay on Bebas), only Cyrillic glyphs fall through to Oswald. */
 @font-face {
   font-family: 'Oswald';
   font-style: normal;

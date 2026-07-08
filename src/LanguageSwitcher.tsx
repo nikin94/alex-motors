@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { useI18n } from './i18n/context'
 import { LANGS } from './i18n/dictionary'
 
-/* A minimal EN · RU · UK control fixed in the top-right corner, floating over
+/* A minimal EN · GA · RU control fixed in the top-right corner, floating over
    the whole scene so a visitor can switch language from the first screen
    without a footer or scrolling — the site stays full-screen. It carries
    `intro-rise-late` so it fades in with the tagline/contacts rather than
