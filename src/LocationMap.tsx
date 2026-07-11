@@ -8,7 +8,10 @@ import './LocationMap.css'
 type Props = {
   lat: number
   lng: number
-  label: string
+  // Marker tooltip — the brand name, kept as-is in every language.
+  markerTitle: string
+  // Localised region label announced to screen readers.
+  ariaLabel: string
 }
 
 /* An amber teardrop pin drawn as a divIcon: it matches the sign palette and
@@ -31,7 +34,7 @@ const pinIcon = L.divIcon({
    on touch (dragging: !L.Browser.mobile) so a finger swiping down the
    full-width map pages the screen instead of getting trapped panning the map;
    pinch-zoom (touchZoom) still works. */
-export default function LocationMap({ lat, lng, label }: Props) {
+export default function LocationMap({ lat, lng, markerTitle, ariaLabel }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -53,19 +56,17 @@ export default function LocationMap({ lat, lng, label }: Props) {
       maxZoom: 19,
     }).addTo(map)
 
-    L.marker([lat, lng], { icon: pinIcon, title: label, keyboard: false }).addTo(map)
+    L.marker([lat, lng], { icon: pinIcon, title: markerTitle, keyboard: false }).addTo(map)
+
+    /* OSM/CARTO attribution is provider-mandated, not our copy — mark it
+       translate="no" so Chrome's full-page autotranslate leaves the legally
+       required text intact once <html lang> switches to a non-English locale. */
+    map.attributionControl.getContainer()?.setAttribute('translate', 'no')
 
     return () => {
       map.remove()
     }
-  }, [lat, lng, label])
+  }, [lat, lng, markerTitle])
 
-  return (
-    <div
-      ref={containerRef}
-      role="region"
-      aria-label={`Map showing ${label}`}
-      className="size-full"
-    />
-  )
+  return <div ref={containerRef} role="region" aria-label={ariaLabel} className="size-full" />
 }
