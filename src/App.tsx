@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import type { IconType } from 'react-icons'
 import {
+  FaCamera,
   FaCarBattery,
   FaChevronDown,
   FaClipboardCheck,
@@ -22,6 +23,7 @@ import {
 
 import logoCar from './assets/logo-car.webp'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { ServicesLift } from './ServicesLift'
 import { useWheelPaging } from './useWheelPaging'
 import { useI18n } from './i18n/context'
 import type { ServiceId } from './i18n/dictionary'
@@ -120,6 +122,20 @@ const localBusinessJsonLd = {
     .map(({ href }) => href),
 }
 
+// Reserved frame for a real workshop photo the owner will supply later. Purely
+// decorative until then, so it is hidden from assistive tech.
+function PhotoSlot() {
+  return (
+    <div
+      aria-hidden
+      className="flex aspect-[4/3] flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-amber-300/25 bg-black/25 text-amber-300/40"
+    >
+      <FaCamera className="size-5" />
+      <span className="font-display text-xs tracking-[0.25em]">PHOTO</span>
+    </div>
+  )
+}
+
 function App() {
   useWheelPaging()
   const { t } = useI18n()
@@ -206,60 +222,68 @@ function App() {
 
       <section
         id="services"
-        className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
+        className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
       >
-        <img
-          src={logoCar}
-          alt=""
-          aria-hidden
-          width={1280}
-          height={853}
-          loading="lazy"
-          className="services-watermark pointer-events-none absolute -right-[6%] bottom-[2%] w-[min(58vw,46rem)]"
-        />
         <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             {t.services.heading}
           </h2>
         </header>
 
-        <div className="relative w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/60 p-5 transition-colors hover:border-amber-300/60 sm:p-6">
-          <div className="flex items-center gap-3">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
-              <FaClipboardCheck aria-hidden className="size-6 text-amber-300" />
-            </span>
-            <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
-              {t.services.preNct.title}
-            </h3>
+        <div className="relative grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
+          {/* Left: the Pre-NCT hook plus a stripped-back service grid — icon and
+              title only, so the screen breathes instead of carrying a paragraph
+              per card. */}
+          <div className="flex flex-col gap-5">
+            <div className="rounded-lg border border-amber-300/35 bg-black/50 p-5 transition-colors hover:border-amber-300/60 sm:p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
+                  <FaClipboardCheck aria-hidden className="size-6 text-amber-300" />
+                </span>
+                <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
+                  {t.services.preNct.title}
+                </h3>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-stone-300">
+                {t.services.preNct.body}
+              </p>
+            </div>
+
+            <ul className="grid grid-cols-2 gap-3 sm:gap-4">
+              {services.map(({ id, Icon }) => {
+                const item = t.services.items[id]
+                return (
+                  <li
+                    key={id}
+                    className="flex items-center gap-3 rounded-lg border border-amber-100/15 bg-black/45 p-4 transition-colors hover:border-amber-100/40"
+                  >
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
+                      <Icon aria-hidden className="size-5 text-amber-300 sm:size-6" />
+                    </span>
+                    <h3 className="font-display text-base tracking-[0.06em] text-amber-50 sm:text-lg">
+                      {item.title}
+                    </h3>
+                    {/* Descriptions move off-screen rather than being deleted: the
+                        grid stays minimal, but the copy still reaches screen
+                        readers and search crawlers. */}
+                    <span className="sr-only">{item.description}</span>
+                  </li>
+                )
+              })}
+            </ul>
           </div>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            {t.services.preNct.body}
-          </p>
+
+          {/* Right: the neon car-lift hero — the signature image of the screen —
+              with reserved frames for the owner's real workshop photos below. */}
+          <div className="flex flex-col items-center gap-5">
+            <ServicesLift />
+            <div className="grid w-full max-w-sm grid-cols-2 gap-3">
+              <PhotoSlot />
+              <PhotoSlot />
+            </div>
+          </div>
         </div>
 
-        <ul className="relative grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {services.map(({ id, Icon }) => {
-            const item = t.services.items[id]
-            return (
-              <li
-                key={id}
-                className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
-                    <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
-                  </span>
-                  <h3 className="font-display text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
-                    {item.title}
-                  </h3>
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
-                  {item.description}
-                </p>
-              </li>
-            )
-          })}
-        </ul>
         <a
           href="#location"
           aria-label={t.a11y.scrollToLocation}
