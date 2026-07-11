@@ -114,13 +114,13 @@ const ru: Dictionary = {
     heading: 'Наши услуги',
     preNct: {
       title: 'Подготовка к NCT и ремонт',
-      body: 'Не прошли NCT или боитесь не пройти? Проводим полную предпроверку — тормоза, подвеска, свет, выхлоп и шины — и устраняем всё необходимое, чтобы вы приехали на тест готовыми. Проверка перед пересдачей тоже.',
+      body: 'Не прошли NCT или боитесь не пройти? Проводим полную проверку перед NCT — тормоза, подвеска, свет, выхлоп и шины — и устраняем всё необходимое, чтобы вы приехали на тест готовыми. Проверка перед пересдачей тоже.',
     },
     items: {
       servicing: {
         title: 'Техобслуживание',
         description:
-          'Полное и промежуточное ТО для авто любых марок — масло и фильтры, жидкости и диагностика, которая находит проблемы до того, как они станут дорогими.',
+          'Полное и промежуточное ТО для авто любых марок — масло и фильтры, жидкости и проверка состояния, которая находит проблемы до того, как они станут дорогими.',
       },
       diagnostics: {
         title: 'Диагностика',
@@ -140,7 +140,7 @@ const ru: Dictionary = {
       brakes: {
         title: 'Тормоза и подвеска',
         description:
-          'Колодки, диски, амортизаторы, пружины и сайлентблоки — всё, что держит уверенное торможение и плавный ход на дорогах Донегола.',
+          'Колодки, диски, амортизаторы, пружины и сайлентблоки — всё, что обеспечивает уверенное торможение и плавный ход на дорогах Донегола.',
       },
       electrics: {
         title: 'Аккумулятор и электрика',
@@ -173,7 +173,7 @@ const ga: Dictionary = {
     heading: 'Ár Seirbhísí',
     preNct: {
       title: 'Seiceáil Réamh-NCT & Deisiúcháin',
-      body: 'Theip ort san NCT — nó imníoch go dteipfeadh? Déanaimid iniúchadh iomlán réamh-NCT ar na coscáin, an crochadh, na soilse, na hastaíochtaí agus na boinn — agus deisímid a bhfuil le deisiú, ionas go mbeidh tú réidh le pasáil. Seiceálacha athtástála chomh maith.',
+      body: 'Theip ort san NCT — nó imníoch go dteipfeadh ort? Déanaimid iniúchadh iomlán réamh-NCT ar na coscáin, an crochadh, na soilse, na hastaíochtaí agus na boinn — agus deisímid a bhfuil le deisiú, ionas go mbeidh tú réidh le pasáil. Seiceálacha athtástála chomh maith.',
     },
     items: {
       servicing: {
