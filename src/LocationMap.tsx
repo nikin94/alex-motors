@@ -58,6 +58,11 @@ export default function LocationMap({ lat, lng, markerTitle, ariaLabel }: Props)
 
     L.marker([lat, lng], { icon: pinIcon, title: markerTitle, keyboard: false }).addTo(map)
 
+    /* OSM/CARTO attribution is provider-mandated, not our copy — mark it
+       translate="no" so Chrome's full-page autotranslate leaves the legally
+       required text intact once <html lang> switches to a non-English locale. */
+    map.attributionControl.getContainer()?.setAttribute('translate', 'no')
+
     return () => {
       map.remove()
     }

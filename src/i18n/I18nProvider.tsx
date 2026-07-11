@@ -19,9 +19,8 @@ function detectInitialLang(): Lang {
   } catch {
     // localStorage can throw in private mode — fall through to detection.
   }
-  const nav = navigator.language?.slice(0, 2).toLowerCase()
-  if (nav === 'ga' || nav === 'ru') return nav
-  return 'en'
+  const nav = navigator.language?.split('-')[0]?.toLowerCase() ?? null
+  return isLang(nav) ? nav : 'en'
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
