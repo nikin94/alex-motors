@@ -83,6 +83,9 @@ const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoRepair',
   name: 'Alex Motors',
+  // Planned production domain (see canonical/OG in index.html); one host to change if it ships elsewhere.
+  url: 'https://alex-motors.ie/',
+  image: 'https://alex-motors.ie/og-image.jpg',
   telephone: PHONE_E164,
   address: {
     '@type': 'PostalAddress',
