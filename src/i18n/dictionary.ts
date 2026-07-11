@@ -81,7 +81,7 @@ const en: Dictionary = {
       brakes: {
         title: 'Brakes & Suspension',
         description:
-          'Pads, discs, shocks, springs and bushings — everything that keeps you stopping straight and riding smooth on Donegal roads.',
+          'Pads, discs, shocks, springs and bushings — everything that keeps you stopping straight and riding smooth on Irish roads.',
       },
       electrics: {
         title: 'Battery & Electrics',
@@ -140,7 +140,7 @@ const ru: Dictionary = {
       brakes: {
         title: 'Тормоза и подвеска',
         description:
-          'Колодки, диски, амортизаторы, пружины и сайлентблоки — всё, что обеспечивает уверенное торможение и плавный ход на дорогах Донегола.',
+          'Колодки, диски, амортизаторы, пружины и сайлентблоки — всё, что обеспечивает уверенное торможение и плавный ход на ирландских дорогах.',
       },
       electrics: {
         title: 'Аккумулятор и электрика',
@@ -199,7 +199,7 @@ const ga: Dictionary = {
       brakes: {
         title: 'Coscáin & Crochadh',
         description:
-          'Pillíní, dioscaí, turraingí, spriongaí agus muileataí — gach rud a choinníonn ag stopadh díreach agus ag taisteal go réidh thú ar bhóithre Dhún na nGall.',
+          'Pillíní, dioscaí, turraingí, spriongaí agus muileataí — gach rud a choinníonn ag stopadh díreach agus ag taisteal go réidh thú ar bhóithre na hÉireann.',
       },
       electrics: {
         title: 'Cadhnra & Leictreachas',
