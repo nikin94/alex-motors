@@ -56,9 +56,9 @@ const services: { id: ServiceId; Icon: IconType }[] = [
   { id: 'electrics', Icon: FaCarBattery },
 ]
 
-// Killea is the physical townland; Letterkenny stays in meta/copy because that is
-// where the search demand is (F93 is the Letterkenny routing key). Address is a
-// proper noun and stays untranslated; only the labels around it localise.
+// Killea is the physical townland; the meta/copy targets Derry because the
+// workshop sits on the border minutes from Derry city, where the search demand
+// is. Address is a proper noun and stays untranslated; only the labels localise.
 const ADDRESS_LINES = ['Altaghaderry, Killea', 'Co. Donegal, F93 P768']
 const HOURS = { weekdays: '9:00–17:00', saturday: '9:00–13:00' }
 // Townland-level coordinate from OSM Nominatim geocoding of "Altaghaderry, Killea".
