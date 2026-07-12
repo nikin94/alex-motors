@@ -154,13 +154,14 @@ html {
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
-/* Faint car silhouette anchoring the services grid: the same artwork as
-   the sign, washed down to a ghost on the wall. Masked so it dissolves
-   toward the text instead of ending on a hard edge. */
-.services-watermark {
-  opacity: 0.06;
-  filter: grayscale(1) brightness(1.6);
-  mask-image: linear-gradient(to right, transparent 4%, black 55%);
+/* Neon glow for the per-service line illustrations (ServiceArt), matching the
+   sign's amber halo so the illustration in the active services panel reads as
+   another lit tube on the wall. The stroke colour is carried by currentColor. */
+.service-art {
+  color: #ffb347;
+  filter:
+    drop-shadow(0 0 3px rgb(255 179 71 / 0.7)) drop-shadow(0 0 10px rgb(255 143 40 / 0.45))
+    drop-shadow(0 0 26px rgb(255 110 20 / 0.28));
 }
 
 /* Third screen (location): the same translucent shading as the services

@@ -1,19 +1,11 @@
 import { lazy, Suspense } from 'react'
-import type { IconType } from 'react-icons'
 import {
-  FaCarBattery,
   FaChevronDown,
-  FaClipboardCheck,
   FaClock,
-  FaGaugeHigh,
-  FaGears,
   FaInstagram,
-  FaLink,
   FaLocationDot,
-  FaOilCan,
   FaPhone,
   FaRoute,
-  FaScrewdriverWrench,
   FaTelegram,
   FaTiktok,
   FaViber,
@@ -22,9 +14,9 @@ import {
 
 import logoCar from './assets/logo-car.webp'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { ServicesShowcase } from './ServicesShowcase'
 import { useWheelPaging } from './useWheelPaging'
 import { useI18n } from './i18n/context'
-import type { ServiceId } from './i18n/dictionary'
 
 // Leaflet pulls in ~40 kB; the map sits two screens below the fold, so it is
 // code-split out of the hero's critical path and streamed in on its own chunk.
@@ -43,17 +35,6 @@ const contactLinks = [
   { name: 'Telegram', href: 'https://t.me/Alex_Motors_ie', Icon: FaTelegram, ...newTab },
   { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', Icon: FaInstagram, ...newTab },
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', Icon: FaTiktok, ...newTab },
-]
-
-// Card icons and order live in code; the title/description text comes from the
-// dictionary keyed by id, so all three languages stay in one place.
-const services: { id: ServiceId; Icon: IconType }[] = [
-  { id: 'servicing', Icon: FaOilCan },
-  { id: 'diagnostics', Icon: FaGaugeHigh },
-  { id: 'engine', Icon: FaGears },
-  { id: 'timing', Icon: FaLink },
-  { id: 'brakes', Icon: FaScrewdriverWrench },
-  { id: 'electrics', Icon: FaCarBattery },
 ]
 
 // Killea is the physical townland; the meta/copy targets Derry because the
@@ -208,58 +189,7 @@ function App() {
         id="services"
         className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
       >
-        <img
-          src={logoCar}
-          alt=""
-          aria-hidden
-          width={1280}
-          height={853}
-          loading="lazy"
-          className="services-watermark pointer-events-none absolute -right-[6%] bottom-[2%] w-[min(58vw,46rem)]"
-        />
-        <header className="relative text-center">
-          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-            {t.services.heading}
-          </h2>
-        </header>
-
-        <div className="relative w-full max-w-5xl rounded-lg border border-amber-300/35 bg-black/60 p-5 transition-colors hover:border-amber-300/60 sm:p-6">
-          <div className="flex items-center gap-3">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
-              <FaClipboardCheck aria-hidden className="size-6 text-amber-300" />
-            </span>
-            <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
-              {t.services.preNct.title}
-            </h3>
-          </div>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-stone-300 sm:text-base">
-            {t.services.preNct.body}
-          </p>
-        </div>
-
-        <ul className="relative grid w-full max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          {services.map(({ id, Icon }) => {
-            const item = t.services.items[id]
-            return (
-              <li
-                key={id}
-                className="rounded-lg border border-amber-100/15 bg-black/55 p-4 transition-colors hover:border-amber-100/40 sm:p-5"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-amber-400/10 sm:size-11">
-                    <Icon aria-hidden className="size-5 text-amber-300/80 sm:size-6" />
-                  </span>
-                  <h3 className="font-display text-lg tracking-[0.08em] text-amber-50 sm:text-2xl">
-                    {item.title}
-                  </h3>
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-stone-400 sm:text-sm">
-                  {item.description}
-                </p>
-              </li>
-            )
-          })}
-        </ul>
+        <ServicesShowcase />
         <a
           href="#location"
           aria-label={t.a11y.scrollToLocation}
