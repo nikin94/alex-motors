@@ -43,8 +43,8 @@ export type Dictionary = {
     scrollToServices: string
     scrollToLocation: string
     selectLanguage: string
-    mapLabel: string
-    loadingMap: string
+    prevService: string
+    nextService: string
   }
 }
 
@@ -102,8 +102,8 @@ const en: Dictionary = {
     scrollToServices: 'Scroll to services',
     scrollToLocation: 'Scroll to location',
     selectLanguage: 'Select language',
-    mapLabel: 'Map showing the Alex Motors workshop',
-    loadingMap: 'Loading map…',
+    prevService: 'Previous service',
+    nextService: 'Next service',
   },
 }
 
@@ -161,8 +161,8 @@ const ru: Dictionary = {
     scrollToServices: 'Перейти к услугам',
     scrollToLocation: 'Перейти к контактам',
     selectLanguage: 'Выбрать язык',
-    mapLabel: 'Карта с расположением мастерской Alex Motors',
-    loadingMap: 'Загрузка карты…',
+    prevService: 'Предыдущая услуга',
+    nextService: 'Следующая услуга',
   },
 }
 
@@ -220,8 +220,8 @@ const ga: Dictionary = {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToLocation: 'Scrollaigh go dtí an suíomh',
     selectLanguage: 'Roghnaigh teanga',
-    mapLabel: 'Léarscáil a thaispeánann ceardlann Alex Motors',
-    loadingMap: 'Léarscáil á lódáil…',
+    prevService: 'Seirbhís roimhe seo',
+    nextService: 'An chéad seirbhís eile',
   },
 }
 

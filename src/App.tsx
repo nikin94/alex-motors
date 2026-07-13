@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react'
 import {
   FaChevronDown,
   FaClock,
@@ -17,10 +16,6 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 import { ServicesShowcase } from './ServicesShowcase'
 import { useWheelPaging } from './useWheelPaging'
 import { useI18n } from './i18n/context'
-
-// Leaflet pulls in ~40 kB; the map sits two screens below the fold, so it is
-// code-split out of the hero's critical path and streamed in on its own chunk.
-const LocationMap = lazy(() => import('./LocationMap'))
 
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
@@ -179,7 +174,7 @@ function App() {
         <a
           href="#services"
           aria-label={t.a11y.scrollToServices}
-          className="intro-rise-late absolute bottom-5 p-2 text-amber-100/50 transition-colors hover:text-amber-100"
+          className="intro-rise-late absolute bottom-5 hidden p-2 text-amber-100/50 transition-colors hover:text-amber-100 md:block"
         >
           <FaChevronDown className="size-5 motion-safe:animate-bounce" />
         </a>
@@ -193,7 +188,7 @@ function App() {
         <a
           href="#location"
           aria-label={t.a11y.scrollToLocation}
-          className="absolute bottom-5 p-2 text-amber-100/40 transition-colors hover:text-amber-100"
+          className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
         >
           <FaChevronDown className="size-5 motion-safe:animate-bounce" />
         </a>
@@ -209,8 +204,7 @@ function App() {
           </h2>
         </header>
 
-        <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-2 lg:items-stretch">
-          <div className="flex flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
+        <div className="flex w-full max-w-md flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
             <div className="flex items-start gap-3">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
                 <FaLocationDot aria-hidden className="size-5 text-amber-300" />
@@ -279,24 +273,12 @@ function App() {
               <FaRoute aria-hidden className="size-4" />
               {t.location.getDirections}
             </a>
-          </div>
+        </div>
 
-          <div className="location-map min-h-[300px] overflow-hidden rounded-lg border border-amber-100/15 lg:min-h-0">
-            <Suspense
-              fallback={
-                <div className="flex size-full items-center justify-center text-sm text-stone-500">
-                  {t.a11y.loadingMap}
-                </div>
-              }
-            >
-              <LocationMap
-                lat={GEO.lat}
-                lng={GEO.lng}
-                markerTitle="Alex Motors"
-                ariaLabel={t.a11y.mapLabel}
-              />
-            </Suspense>
-          </div>
+        {/* Language switcher lives in the top-right corner on desktop; on mobile
+            it moves to a centred footer here so the corner stays clear. */}
+        <div className="absolute inset-x-0 bottom-6">
+          <LanguageSwitcher variant="footer" />
         </div>
       </section>
 
