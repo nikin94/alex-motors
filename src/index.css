@@ -154,16 +154,6 @@ html {
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
-/* Neon glow for the per-service line illustrations (ServiceArt), matching the
-   sign's amber halo so the illustration in the active services panel reads as
-   another lit tube on the wall. The stroke colour is carried by currentColor. */
-.service-art {
-  color: #ffb347;
-  filter:
-    drop-shadow(0 0 3px rgb(255 179 71 / 0.7)) drop-shadow(0 0 10px rgb(255 143 40 / 0.45))
-    drop-shadow(0 0 26px rgb(255 110 20 / 0.28));
-}
-
 /* Third screen (location): the same translucent shading as the services
    screen, so the shared brick wall runs on unbroken beneath all three. */
 .location-shade {

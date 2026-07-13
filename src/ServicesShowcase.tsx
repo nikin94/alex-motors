@@ -1,35 +1,27 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
-import type { IconType } from 'react-icons'
-import {
-  FaCarBattery,
-  FaClipboardCheck,
-  FaGaugeHigh,
-  FaGears,
-  FaLink,
-  FaOilCan,
-  FaScrewdriverWrench,
-} from 'react-icons/fa6'
 
-import { ServiceArt, type ArtId } from './ServiceArt'
 import { useI18n } from './i18n/context'
+import type { ServiceId } from './i18n/dictionary'
 
-/* Interactive services: the grid of icon+title tiles is a tablist; selecting one
-   swaps the illustration and description in the single detail panel. Pre-NCT is
+import nctPhoto from './assets/services/nct.webp'
+import servicingPhoto from './assets/services/servicing.webp'
+import diagnosticsPhoto from './assets/services/diagnostics.webp'
+import enginePhoto from './assets/services/engine.webp'
+import timingPhoto from './assets/services/timing.webp'
+import brakesPhoto from './assets/services/brakes.webp'
+import electricsPhoto from './assets/services/electrics.webp'
+
+/* Interactive services: a list of title tiles is a tablist; selecting one swaps
+   the photo behind the single detail panel and its title/description. Pre-NCT is
    the first, default-selected tab so the local hook still leads. All panels stay
    in the DOM (inactive ones inert + aria-hidden) so every service description is
-   crawlable and the panel heights don't jump — a crossfade, not a reflow. */
+   crawlable and the panel height doesn't jump — a crossfade, not a reflow.
+   The copy sits on a dark scrim + blurred backing so it stays legible over any
+   photo, however bright. */
 
-const TAB_ICONS: Record<ArtId, IconType> = {
-  nct: FaClipboardCheck,
-  servicing: FaOilCan,
-  diagnostics: FaGaugeHigh,
-  engine: FaGears,
-  timing: FaLink,
-  brakes: FaScrewdriverWrench,
-  electrics: FaCarBattery,
-}
+type TabId = ServiceId | 'nct'
 
-const TAB_ORDER: ArtId[] = [
+const TAB_ORDER: TabId[] = [
   'nct',
   'servicing',
   'diagnostics',
@@ -39,13 +31,23 @@ const TAB_ORDER: ArtId[] = [
   'electrics',
 ]
 
+const PHOTOS: Record<TabId, string> = {
+  nct: nctPhoto,
+  servicing: servicingPhoto,
+  diagnostics: diagnosticsPhoto,
+  engine: enginePhoto,
+  timing: timingPhoto,
+  brakes: brakesPhoto,
+  electrics: electricsPhoto,
+}
+
 export function ServicesShowcase() {
   const { t } = useI18n()
-  const [active, setActive] = useState<ArtId>('nct')
-  const tabRefs = useRef<Partial<Record<ArtId, HTMLButtonElement | null>>>({})
+  const [active, setActive] = useState<TabId>('nct')
+  const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
 
   // 'nct' copy comes from the Pre-NCT highlight; the rest from the service items.
-  const copy = (id: ArtId) =>
+  const copy = (id: TabId) =>
     id === 'nct'
       ? { title: t.services.preNct.title, description: t.services.preNct.body }
       : t.services.items[id]
@@ -73,7 +75,7 @@ export function ServicesShowcase() {
         </h2>
       </header>
 
-      <div className="grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,17rem)_1fr] lg:items-stretch">
+      <div className="grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,16rem)_1fr] lg:items-stretch">
         <div
           role="tablist"
           aria-label={t.services.heading}
@@ -82,7 +84,6 @@ export function ServicesShowcase() {
           className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-1"
         >
           {TAB_ORDER.map((id) => {
-            const Icon = TAB_ICONS[id]
             const selected = id === active
             return (
               <button
@@ -97,29 +98,13 @@ export function ServicesShowcase() {
                 aria-controls={`service-panel-${id}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(id)}
-                className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-colors ${
+                className={`rounded-lg border px-4 py-3 text-left font-display text-base tracking-[0.06em] transition-colors sm:text-lg ${
                   selected
-                    ? 'border-amber-300/60 bg-amber-400/10'
-                    : 'border-amber-100/15 bg-black/40 hover:border-amber-100/40'
+                    ? 'border-amber-300/60 bg-amber-400/10 text-amber-50'
+                    : 'border-amber-100/15 bg-black/40 text-amber-50/70 hover:border-amber-100/40 hover:text-amber-50'
                 }`}
               >
-                <span
-                  className={`flex size-9 shrink-0 items-center justify-center rounded-md transition-colors ${
-                    selected ? 'bg-amber-400/20' : 'bg-amber-400/10'
-                  }`}
-                >
-                  <Icon
-                    aria-hidden
-                    className={`size-5 ${selected ? 'text-amber-200' : 'text-amber-300/70'}`}
-                  />
-                </span>
-                <span
-                  className={`font-display text-base tracking-[0.06em] sm:text-lg ${
-                    selected ? 'text-amber-50' : 'text-amber-50/70'
-                  }`}
-                >
-                  {copy(id).title}
-                </span>
+                {copy(id).title}
               </button>
             )
           })}
@@ -127,7 +112,7 @@ export function ServicesShowcase() {
 
         {/* All panels share one grid cell and crossfade; the tallest sets the
             height so switching never reflows the screen. */}
-        <div className="grid rounded-lg border border-amber-100/15 bg-black/50">
+        <div className="grid min-h-[18rem] overflow-hidden rounded-lg border border-amber-100/15 bg-black/50 sm:min-h-[24rem]">
           {TAB_ORDER.map((id) => {
             const selected = id === active
             const { title, description } = copy(id)
@@ -140,19 +125,25 @@ export function ServicesShowcase() {
                 aria-hidden={!selected}
                 inert={!selected}
                 tabIndex={selected ? 0 : undefined}
-                className={`col-start-1 row-start-1 flex flex-col items-center gap-5 p-6 motion-safe:transition-opacity motion-safe:duration-300 sm:flex-row sm:gap-8 sm:p-8 ${
+                className={`relative col-start-1 row-start-1 flex flex-col justify-end motion-safe:transition-opacity motion-safe:duration-300 ${
                   selected ? 'opacity-100' : 'pointer-events-none opacity-0'
                 }`}
               >
-                <ServiceArt
-                  id={id}
-                  className="service-art h-28 w-36 shrink-0 sm:h-36 sm:w-48"
+                <img
+                  src={PHOTOS[id]}
+                  alt=""
+                  loading="lazy"
+                  className="absolute inset-0 size-full object-cover"
                 />
-                <div className="text-center sm:text-left">
+                {/* Tone the photo into the dark scene, then darken hard toward the
+                    copy at the bottom so the text keeps its contrast. */}
+                <div className="pointer-events-none absolute inset-0 bg-black/25" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10" />
+                <div className="relative m-5 max-w-2xl rounded-md bg-black/40 p-4 backdrop-blur-sm sm:m-7 sm:p-5">
                   <h3 className="font-display text-2xl tracking-[0.08em] text-amber-50 sm:text-3xl">
                     {title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-stone-300 sm:text-base">
+                  <p className="mt-2 text-sm leading-relaxed text-stone-100 sm:text-base">
                     {description}
                   </p>
                 </div>
