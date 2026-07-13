@@ -147,21 +147,46 @@ html {
    at the same darkness the hero's vignette reaches at its bottom edge (no seam
    at the snap boundary), then relaxes far more so the lit brick shows through
    like the hero; a warm amber pool lifts the centre the way the hero's lamp
-   does, so the screen reads lit rather than a dark slab. */
+   does, so the screen reads lit rather than a dark slab. The first bottom-edge
+   layer sinks back to near-black at the very bottom so it meets the location
+   screen's dark top (0.9) without a seam when scrolling down. */
 .services-shade {
   background:
+    linear-gradient(to bottom, transparent 75%, rgb(0 0 0 / 0.72) 100%),
     radial-gradient(ellipse 80% 60% at 50% 42%, rgb(255 168 74 / 0.13), rgb(255 143 40 / 0.04) 46%, transparent 74%),
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
-/* Neon glow for the per-service line illustrations (ServiceArt), matching the
-   sign's amber halo so the illustration in the active services panel reads as
-   another lit tube on the wall. The stroke colour is carried by currentColor. */
-.service-art {
-  color: #ffb347;
-  filter:
-    drop-shadow(0 0 3px rgb(255 179 71 / 0.7)) drop-shadow(0 0 10px rgb(255 143 40 / 0.45))
-    drop-shadow(0 0 26px rgb(255 110 20 / 0.28));
+/* Service tabs reveal: the first time the services screen scrolls into view,
+   the tiles slide in from the left one after another (staggered inline delay).
+   Hidden until the group carries `.tiles-in` (set once by an IntersectionObserver),
+   and `backwards` fill keeps each tile out of sight until its own delay elapses,
+   so nothing flashes before its turn. Total run stays short (~0.35s + last stagger).
+   Under reduced motion the tiles are simply visible with no movement. */
+@keyframes tile-slide-in {
+  from {
+    opacity: 0;
+    translate: -1.5rem 0;
+  }
+}
+
+.tile-reveal {
+  opacity: 0;
+}
+
+.tiles-in .tile-reveal {
+  opacity: 1;
+  animation: tile-slide-in 0.35s ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-reveal {
+    opacity: 1;
+  }
+
+  .tiles-in .tile-reveal {
+    animation: none;
+  }
 }
 
 /* Third screen (location): the same translucent shading as the services
