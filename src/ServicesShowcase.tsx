@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { useI18n } from './i18n/context'
 import type { ServiceId } from './i18n/dictionary'
@@ -46,6 +46,28 @@ export function ServicesShowcase() {
   const [active, setActive] = useState<TabId>('nct')
   const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
 
+  // Play the staggered slide-in once, the first time the tablist scrolls into
+  // view (the services screen is below the fold on load). Adding `.tiles-in`
+  // triggers the CSS animation; we disconnect after the first hit so it never
+  // replays on scroll back.
+  const listRef = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState(false)
+  useEffect(() => {
+    const el = listRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setRevealed(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.25 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   // 'nct' copy comes from the Pre-NCT highlight; the rest from the service items.
   const copy = (id: TabId) =>
     id === 'nct'
@@ -77,13 +99,14 @@ export function ServicesShowcase() {
 
       <div className="grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,16rem)_1fr] lg:items-stretch">
         <div
+          ref={listRef}
           role="tablist"
           aria-label={t.services.heading}
           aria-orientation="vertical"
           onKeyDown={onKeyDown}
-          className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-1"
+          className={`grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-1 ${revealed ? 'tiles-in' : ''}`}
         >
-          {TAB_ORDER.map((id) => {
+          {TAB_ORDER.map((id, index) => {
             const selected = id === active
             return (
               <button
@@ -98,7 +121,8 @@ export function ServicesShowcase() {
                 aria-controls={`service-panel-${id}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(id)}
-                className={`rounded-lg border px-4 py-3 text-left font-display text-base tracking-[0.06em] transition-colors sm:text-lg ${
+                style={{ animationDelay: `${index * 55}ms` }}
+                className={`tile-reveal rounded-lg border px-4 py-3 text-left font-display text-base tracking-[0.06em] transition-colors sm:text-lg ${
                   selected
                     ? 'border-amber-300/60 bg-amber-400/10 text-amber-50'
                     : 'border-amber-100/15 bg-black/40 text-amber-50/70 hover:border-amber-100/40 hover:text-amber-50'
