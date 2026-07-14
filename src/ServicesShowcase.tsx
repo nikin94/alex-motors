@@ -87,6 +87,9 @@ export function ServicesShowcase() {
         <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
           {t.services.heading}
         </h2>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-stone-400 sm:text-base">
+          {t.services.subtitle}
+        </p>
       </header>
 
       {isDesktop ? (

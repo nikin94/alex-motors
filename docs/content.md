@@ -13,8 +13,15 @@ subtitle, not in a card.
 ## Facts
 
 - Address (published, footer + JSON-LD): Altaghaderry, Killea, Co. Donegal, F93 P768
-- Town in meta/copy stays Letterkenny — that is where the search demand is and
-  F93 is the Letterkenny routing key. Do not replace with Killea in copy.
+- Town in meta/copy is **Derry** ("near Derry") since PR #15 — the workshop sits
+  on the border minutes from Derry city, the largest population centre nearby.
+  The Services subtitle also names Donegal, so both markets are covered.
+  (Supersedes the earlier "stays Letterkenny" decision.)
+- Cross-border nuance (from the Content manager review, 2026-07-14): Derry is in
+  Northern Ireland, where cars take the **MOT**, not the NCT. NCT copy targets
+  Donegal (ROI) plates; a phrase like "NCT prep for Donegal cars, MOT &
+  servicing for cross-border drivers" would close both markets — final wording
+  to come from the Content manager with the trust-block package.
 - Hours: Mon–Fri 09:00–17:00, Sat 09:00–13:00, Sun closed
 - Footer line: `Mon–Fri 9:00–17:00 · Sat 9:00–13:00`
 - Call-outs available
@@ -44,7 +51,12 @@ photos stored as files in the repo so swapping a couple is a five-minute edit.
 
 ## Open items (not blocking)
 
-- Add `url` to the LocalBusiness JSON-LD once the production domain exists
-  (also needed to link the future Google Business Profile)
+- ~~Add `url` to the LocalBusiness JSON-LD~~ — done: `url`, `image` and
+  `public/og-image.jpg` shipped with the SEO pack (PR #14), keyed on the planned
+  `alex-motors.ie`. Remaining piece is buying the domain itself — until then the
+  absolute URLs (and link previews) do not resolve.
+- The About draft above and the alt-text template still say "Letterkenny" —
+  they predate the Derry retarget; the Content manager refreshes them with the
+  final trust-block texts.
 - Gallery package: 6–8 photos picked, then final alt texts from the Content
   manager
