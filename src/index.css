@@ -189,6 +189,15 @@ html {
   }
 }
 
+/* Cross-fade the mobile services slider photo when the category changes
+   (keyed remount replays it). motion-safe in the markup gates it off under
+   reduced motion. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Third screen (location): the same translucent shading as the services
    screen, so the shared brick wall runs on unbroken beneath all three. */
 .location-shade {
@@ -196,13 +205,6 @@ html {
     radial-gradient(ellipse 80% 60% at 50% 42%, rgb(255 168 74 / 0.13), rgb(255 143 40 / 0.04) 46%, transparent 74%),
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
-
-/* Leaflet chrome overrides (.leaflet-*) and the amber .location-pin glow live
-   in LocationMap.css, imported after leaflet/dist/leaflet.css so they win the
-   cascade inside the lazy chunk — see the note there. Keeping them here would
-   place them before Leaflet's own sheet and lose to its equal-specificity
-   defaults. Only .location-shade above is map-screen styling that belongs in
-   the global sheet. */
 
 /* Full-page snap between the hero and the services screen on desktop.
    Native CSS scroll snap instead of a scroll-hijack library: the browser
