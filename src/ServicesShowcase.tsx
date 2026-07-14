@@ -261,7 +261,7 @@ function MobileSlider({
   }
 
   const arrow =
-    'flex size-11 shrink-0 items-center justify-center text-amber-100/70 transition-colors hover:text-amber-100'
+    'text-amber-100/70 transition-colors hover:text-amber-100'
 
   return (
     <div className="w-full max-w-md">
