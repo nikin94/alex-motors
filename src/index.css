@@ -208,6 +208,16 @@ button:not(:disabled) {
   }
 }
 
+/* Neon glow for icons decorating the FAQ answers — the same amber halo the
+   sign carries (and the retired service line art used), so each icon reads
+   as another lit tube on the wall. */
+.neon-icon {
+  color: #ffb347;
+  filter:
+    drop-shadow(0 0 3px rgb(255 179 71 / 0.7)) drop-shadow(0 0 10px rgb(255 143 40 / 0.45))
+    drop-shadow(0 0 26px rgb(255 110 20 / 0.28));
+}
+
 /* Middle screens (reviews, FAQ): the same translucent shading as the services
    screen, so the shared brick wall runs on unbroken beneath all five. Each has
    another screen below it, so the same bottom-edge bridge sinks the lit centre
