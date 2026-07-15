@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
-import { useI18n } from './i18n/context'
-import type { ServiceId } from './i18n/dictionary'
+import { useI18n } from '../i18n/context'
+import type { ServiceId } from '../i18n/dictionary'
 
-import nctPhoto from './assets/services/nct.webp'
-import servicingPhoto from './assets/services/servicing.webp'
-import diagnosticsPhoto from './assets/services/diagnostics.webp'
-import enginePhoto from './assets/services/engine.webp'
-import timingPhoto from './assets/services/timing.webp'
-import brakesPhoto from './assets/services/brakes.webp'
-import electricsPhoto from './assets/services/electrics.webp'
+import nctPhoto from '../assets/services/nct.webp'
+import servicingPhoto from '../assets/services/servicing.webp'
+import diagnosticsPhoto from '../assets/services/diagnostics.webp'
+import enginePhoto from '../assets/services/engine.webp'
+import timingPhoto from '../assets/services/timing.webp'
+import brakesPhoto from '../assets/services/brakes.webp'
+import electricsPhoto from '../assets/services/electrics.webp'
 
 /* Interactive services.
    Desktop (>= 768px): a vertical list of title tiles is a tablist; selecting one

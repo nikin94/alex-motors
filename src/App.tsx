@@ -12,11 +12,12 @@ import {
 } from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
-import { ContactForm } from './ContactForm'
-import { LanguageSwitcher } from './LanguageSwitcher'
-import { ServicesShowcase } from './ServicesShowcase'
-import { StickyCall } from './StickyCall'
-import { useWheelPaging } from './useWheelPaging'
+import { ContactForm } from './components/ContactForm'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { ReviewsCarousel } from './components/ReviewsCarousel'
+import { ServicesShowcase } from './components/ServicesShowcase'
+import { StickyCall } from './components/StickyCall'
+import { useWheelPaging } from './hooks/useWheelPaging'
 import { useI18n } from './i18n/context'
 
 const PHONE_E164 = '+353852896539'
@@ -189,6 +190,29 @@ function App() {
         className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
       >
         <ServicesShowcase />
+        <a
+          href="#reviews"
+          aria-label={t.a11y.scrollToReviews}
+          className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
+        >
+          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
+        </a>
+      </section>
+
+      {/* Reviews get a screen of their own between the services and the
+          contact details. Quotes are in-house drafts until real ones land. */}
+      <section
+        id="reviews"
+        className="reviews-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
+      >
+        <header className="text-center">
+          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+            {t.reviews.heading}
+          </h2>
+        </header>
+
+        <ReviewsCarousel />
+
         <a
           href="#location"
           aria-label={t.a11y.scrollToLocation}
