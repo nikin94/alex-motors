@@ -39,9 +39,22 @@ export type Dictionary = {
     callUs: string
     getDirections: string
   }
+  contact: {
+    heading: string
+    subtitle: string
+    name: string
+    phone: string
+    email: string
+    message: string
+    submit: string
+    sending: string
+    success: string
+    error: string
+  }
   a11y: {
     scrollToServices: string
     scrollToLocation: string
+    scrollToContact: string
     selectLanguage: string
     prevService: string
     nextService: string
@@ -100,9 +113,22 @@ const en: Dictionary = {
     callUs: 'Call Us',
     getDirections: 'Get Directions',
   },
+  contact: {
+    heading: 'Get in Touch',
+    subtitle: "Tell us what's wrong — we'll call you back.",
+    name: 'Name',
+    phone: 'Phone',
+    email: 'Email (optional)',
+    message: 'Message',
+    submit: 'Send',
+    sending: 'Sending…',
+    success: "Thanks! We'll get back to you soon.",
+    error: 'Could not send — please call or WhatsApp us instead.',
+  },
   a11y: {
     scrollToServices: 'Scroll to services',
     scrollToLocation: 'Scroll to location',
+    scrollToContact: 'Scroll to contact form',
     selectLanguage: 'Select language',
     prevService: 'Previous service',
     nextService: 'Next service',
@@ -161,9 +187,22 @@ const ru: Dictionary = {
     callUs: 'Позвоните нам',
     getDirections: 'Построить маршрут',
   },
+  contact: {
+    heading: 'Напишите нам',
+    subtitle: 'Опишите проблему — мы перезвоним.',
+    name: 'Имя',
+    phone: 'Телефон',
+    email: 'Почта (необязательно)',
+    message: 'Сообщение',
+    submit: 'Отправить',
+    sending: 'Отправляем…',
+    success: 'Спасибо! Мы скоро свяжемся с вами.',
+    error: 'Не удалось отправить — позвоните или напишите в WhatsApp.',
+  },
   a11y: {
     scrollToServices: 'Перейти к услугам',
     scrollToLocation: 'Перейти к контактам',
+    scrollToContact: 'Перейти к форме обратной связи',
     selectLanguage: 'Выбрать язык',
     prevService: 'Предыдущая услуга',
     nextService: 'Следующая услуга',
@@ -222,9 +261,22 @@ const ga: Dictionary = {
     callUs: 'Glaoigh Orainn',
     getDirections: 'Faigh Treoracha',
   },
+  contact: {
+    heading: 'Déan Teagmháil Linn',
+    subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
+    name: 'Ainm',
+    phone: 'Guthán',
+    email: 'Ríomhphost (roghnach)',
+    message: 'Teachtaireacht',
+    submit: 'Seol',
+    sending: 'Á sheoladh…',
+    success: 'Go raibh maith agat! Beimid i dteagmháil leat go luath.',
+    error: 'Níorbh fhéidir é a sheoladh — glaoigh orainn nó úsáid WhatsApp.',
+  },
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToLocation: 'Scrollaigh go dtí an suíomh',
+    scrollToContact: 'Scrollaigh go dtí an fhoirm theagmhála',
     selectLanguage: 'Roghnaigh teanga',
     prevService: 'Seirbhís roimhe seo',
     nextService: 'An chéad seirbhís eile',

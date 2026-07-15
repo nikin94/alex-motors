@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
+import { ContactForm } from './ContactForm'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { ServicesShowcase } from './ServicesShowcase'
 import { StickyCall } from './StickyCall'
@@ -278,8 +279,33 @@ function App() {
             </a>
         </div>
 
+        <a
+          href="#contact"
+          aria-label={t.a11y.scrollToContact}
+          className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
+        >
+          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
+        </a>
+      </section>
+
+      <section
+        id="contact"
+        className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-12"
+      >
+        <header className="text-center">
+          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+            {t.contact.heading}
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-stone-400 sm:text-base">
+            {t.contact.subtitle}
+          </p>
+        </header>
+
+        <ContactForm />
+
         {/* Language switcher lives in the top-right corner on desktop; on mobile
-            it moves to a centred footer here so the corner stays clear. */}
+            it moves to a centred footer on the last screen so the corner stays
+            clear. */}
         <div className="absolute inset-x-0 bottom-6">
           <LanguageSwitcher variant="footer" />
         </div>
