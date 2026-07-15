@@ -47,7 +47,7 @@ export function StickyCall({
         href={`tel:${phoneE164}`}
         aria-label={t.location.callUs}
         title={t.location.callUs}
-        className="font-display flex size-12 items-center justify-center gap-2 rounded-full border border-amber-300/50 bg-black/70 text-base tracking-[0.1em] text-amber-100 backdrop-blur-sm transition-colors hover:border-amber-300/80 hover:bg-black/80 hover:text-amber-50 md:size-auto md:px-5 md:py-3"
+        className="font-display flex size-10 items-center justify-center gap-2 rounded-full border border-amber-300/50 bg-black/70 text-sm tracking-[0.1em] text-amber-100 backdrop-blur-sm transition-colors hover:border-amber-300/80 hover:bg-black/80 hover:text-amber-50 md:size-auto md:px-4 md:py-2.5"
       >
         <FaPhone aria-hidden className="size-3.5 shrink-0" />
         <span className="hidden md:inline">{t.location.callUs}</span>
@@ -58,7 +58,7 @@ export function StickyCall({
         rel="noopener noreferrer"
         aria-label="WhatsApp"
         title="WhatsApp"
-        className="flex size-12 items-center justify-center rounded-full border border-amber-300/50 bg-black/70 text-amber-100 backdrop-blur-sm transition-colors hover:border-amber-300/80 hover:bg-black/80 hover:text-amber-50"
+        className="flex size-10 items-center justify-center rounded-full border border-amber-300/50 bg-black/70 text-amber-100 backdrop-blur-sm transition-colors hover:border-amber-300/80 hover:bg-black/80 hover:text-amber-50"
       >
         <FaWhatsapp aria-hidden className="size-4" />
       </a>
