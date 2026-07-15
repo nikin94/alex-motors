@@ -14,6 +14,7 @@ import {
 import logoCar from './assets/logo-car.webp'
 import { Button } from './components/Button'
 import { ContactForm } from './components/ContactForm'
+import { Faq } from './components/Faq'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
 import { ServicesShowcase } from './components/ServicesShowcase'
@@ -213,6 +214,29 @@ function App() {
         </header>
 
         <ReviewsCarousel />
+
+        <a
+          href="#faq"
+          aria-label={t.a11y.scrollToFaq}
+          className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
+        >
+          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
+        </a>
+      </section>
+
+      {/* FAQ in the services screen's master-detail language; the Q&A copy is
+          an in-house draft built on owner-confirmed facts. */}
+      <section
+        id="faq"
+        className="faq-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
+      >
+        <header className="text-center">
+          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
+            {t.faq.heading}
+          </h2>
+        </header>
+
+        <Faq />
 
         <a
           href="#contact"

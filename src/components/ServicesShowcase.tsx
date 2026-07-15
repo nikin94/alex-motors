@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
+import { useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
 import { useIsDesktop } from '../hooks/useIsDesktop'
+import { useRevealOnView } from '../hooks/useRevealOnView'
 import { Button } from './Button'
 import { useI18n } from '../i18n/context'
 import type { ServiceId } from '../i18n/dictionary'
@@ -100,27 +101,8 @@ function DesktopTabs({
   const { t } = useI18n()
   const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
 
-  // Play the staggered slide-in once, the first time the tablist scrolls into
-  // view (the services screen is below the fold on load). Adding `.tiles-in`
-  // triggers the CSS animation; disconnect after the first hit so it never
-  // replays on scroll back.
-  const listRef = useRef<HTMLDivElement>(null)
-  const [revealed, setRevealed] = useState(false)
-  useEffect(() => {
-    const el = listRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setRevealed(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.25 },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+  // Staggered slide-in on first view; see useRevealOnView + index.css.
+  const { ref: listRef, revealed } = useRevealOnView<HTMLDivElement>()
 
   const onKeyDown = (event: KeyboardEvent) => {
     const i = TAB_ORDER.indexOf(active)

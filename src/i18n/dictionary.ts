@@ -46,6 +46,13 @@ export type Dictionary = {
        real or Google can flag the whole structured-data block. */
     items: { name: string; text: string }[]
   }
+  faq: {
+    heading: string
+    /* In-house draft Q&A built on owner-confirmed facts (services copy, hours,
+       call-outs, address). No FAQPage JSON-LD: Google restricted FAQ rich
+       results to government/health sites, so the markup would be dead weight. */
+    items: { q: string; a: string }[]
+  }
   contact: {
     heading: string
     subtitle: string
@@ -66,6 +73,7 @@ export type Dictionary = {
   a11y: {
     scrollToServices: string
     scrollToReviews: string
+    scrollToFaq: string
     scrollToContact: string
     selectLanguage: string
     prevService: string
@@ -167,6 +175,35 @@ const en: Dictionary = {
       },
     ],
   },
+  faq: {
+    heading: 'Common Questions',
+    items: [
+      {
+        q: 'Do you work on all makes?',
+        a: 'Yes — all makes and models: daily drivers, vans and sports cars alike.',
+      },
+      {
+        q: 'What does a pre-NCT check cover?',
+        a: 'Brakes, suspension, lights, emissions and tyres — and we fix what needs fixing before the test. Retest checks too.',
+      },
+      {
+        q: 'How do I book?',
+        a: "Just call or WhatsApp — no forms, no waiting list. We'll agree a time that suits you.",
+      },
+      {
+        q: 'How much will it cost?',
+        a: 'You get an honest assessment and a clear quote before any work starts — no surprises on the invoice.',
+      },
+      {
+        q: "My car won't start — can you come out?",
+        a: "Yes, we do call-outs across Donegal and the Derry border area. Call us and we'll get to you.",
+      },
+      {
+        q: 'Where exactly are you?',
+        a: 'Killea, Co. Donegal — minutes from Derry. Get Directions on the next screen opens the route in Google Maps.',
+      },
+    ],
+  },
   contact: {
     heading: 'Contact Us',
     subtitle: "Tell us what's wrong — we'll call you back.",
@@ -194,6 +231,7 @@ const en: Dictionary = {
   a11y: {
     scrollToServices: 'Scroll to services',
     scrollToReviews: 'Scroll to reviews',
+    scrollToFaq: 'Scroll to common questions',
     scrollToContact: 'Scroll to contact details',
     selectLanguage: 'Select language',
     prevService: 'Previous service',
@@ -295,6 +333,35 @@ const ru: Dictionary = {
       },
     ],
   },
+  faq: {
+    heading: 'Частые вопросы',
+    items: [
+      {
+        q: 'Берёте любые марки?',
+        a: 'Да — любые марки и модели: повседневные авто, фургоны и спорткары.',
+      },
+      {
+        q: 'Что входит в проверку перед NCT?',
+        a: 'Тормоза, подвеска, свет, выхлоп и шины — и устраняем всё, что нужно, до теста. Проверка перед пересдачей тоже.',
+      },
+      {
+        q: 'Как записаться?',
+        a: 'Просто позвоните или напишите в WhatsApp — без форм и очередей. Подберём удобное время.',
+      },
+      {
+        q: 'Сколько это будет стоить?',
+        a: 'Сначала честная диагностика и понятная смета — работы начинаются только после согласования, без сюрпризов в счёте.',
+      },
+      {
+        q: 'Машина не заводится — приедете?',
+        a: 'Да, выезжаем по Донеголу и приграничью Дерри. Позвоните — приедем.',
+      },
+      {
+        q: 'Где вы находитесь?',
+        a: 'Killea, графство Донегол — в нескольких минутах от Дерри. Кнопка «Построить маршрут» на следующем экране откроет путь в Google Maps.',
+      },
+    ],
+  },
   contact: {
     heading: 'Контакты',
     subtitle: 'Опишите проблему — мы перезвоним.',
@@ -322,6 +389,7 @@ const ru: Dictionary = {
   a11y: {
     scrollToServices: 'Перейти к услугам',
     scrollToReviews: 'Перейти к отзывам',
+    scrollToFaq: 'Перейти к частым вопросам',
     scrollToContact: 'Перейти к контактам',
     selectLanguage: 'Выбрать язык',
     prevService: 'Предыдущая услуга',
@@ -423,6 +491,35 @@ const ga: Dictionary = {
       },
     ],
   },
+  faq: {
+    heading: 'Ceisteanna Coitianta',
+    items: [
+      {
+        q: 'An oibríonn sibh ar gach déanamh?',
+        a: 'Oibrímid — gach déanamh agus múnla: gluaisteáin laethúla, veaineanna agus carranna spóirt.',
+      },
+      {
+        q: 'Cad a chlúdaíonn seiceáil réamh-NCT?',
+        a: 'Coscáin, crochadh, soilse, astaíochtaí agus boinn — agus deisímid a bhfuil le deisiú roimh an tástáil. Seiceálacha atástála freisin.',
+      },
+      {
+        q: 'Conas a chuirim in áirithe?',
+        a: 'Glaoigh orainn nó seol WhatsApp — gan foirmeacha, gan liosta feithimh. Socróimid am a fheileann duit.',
+      },
+      {
+        q: 'Cé mhéad a chosnóidh sé?',
+        a: 'Gheobhaidh tú measúnú macánta agus luachan shoiléir sula dtosaíonn aon obair — gan aon iontas ar an sonrasc.',
+      },
+      {
+        q: 'Ní thosaíonn mo charr — an dtiocfaidh sibh amach?',
+        a: 'Tiocfaimid — déanaimid cuairteanna ar fud Dhún na nGall agus cheantar teorann Dhoire. Glaoigh orainn.',
+      },
+      {
+        q: 'Cá bhfuil sibh go díreach?',
+        a: 'Killea, Co. Dhún na nGall — cúpla nóiméad ó Dhoire. Osclaíonn "Faigh Treoracha" ar an gcéad scáileán eile an bealach in Google Maps.',
+      },
+    ],
+  },
   contact: {
     heading: 'Déan Teagmháil Linn',
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
@@ -450,6 +547,7 @@ const ga: Dictionary = {
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToReviews: 'Scrollaigh go dtí na léirmheasanna',
+    scrollToFaq: 'Scrollaigh go dtí na ceisteanna coitianta',
     scrollToContact: 'Scrollaigh go dtí na sonraí teagmhála',
     selectLanguage: 'Roghnaigh teanga',
     prevService: 'Seirbhís roimhe seo',
