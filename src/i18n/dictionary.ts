@@ -39,6 +39,14 @@ export type Dictionary = {
     callUs: string
     getDirections: string
   }
+  reviews: {
+    heading: string
+    /* Draft quotes written in-house (owner to swap in real ones); names are
+       proper nouns and stay identical across languages. Kept out of the
+       LocalBusiness JSON-LD on purpose: schema.org reviews must be verifiably
+       real or Google can flag the whole structured-data block. */
+    items: { name: string; text: string }[]
+  }
   contact: {
     heading: string
     subtitle: string
@@ -58,6 +66,8 @@ export type Dictionary = {
     selectLanguage: string
     prevService: string
     nextService: string
+    prevReview: string
+    nextReview: string
   }
 }
 
@@ -113,6 +123,31 @@ const en: Dictionary = {
     callUs: 'Call Us',
     getDirections: 'Get Directions',
   },
+  reviews: {
+    heading: 'What Customers Say',
+    items: [
+      {
+        name: 'Seán O’Doherty',
+        text: 'Failed the NCT on brakes and a headlight. Alex had it sorted in a day and it flew through the retest. Fair price, no messing.',
+      },
+      {
+        name: 'Niamh Gallagher',
+        text: 'Had a warning light two other garages couldn’t figure out. Alex found a wiring fault within the hour and explained everything before touching a thing.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Timing belt done on my Passat. Kept me posted the whole way and the price matched the quote to the cent. Highly recommend.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Car wouldn’t start on a Monday morning and Alex came out to me. Genuinely sound, and honest about what actually needed doing.',
+      },
+      {
+        name: 'Pádraig Sweeney',
+        text: 'Been to plenty of garages around Derry over the years — this is the first one I actually trust. No invented extras, just did the job.',
+      },
+    ],
+  },
   contact: {
     heading: 'Get in Touch',
     subtitle: "Tell us what's wrong — we'll call you back.",
@@ -132,6 +167,8 @@ const en: Dictionary = {
     selectLanguage: 'Select language',
     prevService: 'Previous service',
     nextService: 'Next service',
+    prevReview: 'Previous review',
+    nextReview: 'Next review',
   },
 }
 
@@ -187,6 +224,31 @@ const ru: Dictionary = {
     callUs: 'Позвоните нам',
     getDirections: 'Построить маршрут',
   },
+  reviews: {
+    heading: 'Отзывы клиентов',
+    items: [
+      {
+        name: 'Seán O’Doherty',
+        text: 'Не прошёл NCT из-за тормозов и фары. Alex всё исправил за день, и пересдачу машина прошла влёгкую. Цена честная, без фокусов.',
+      },
+      {
+        name: 'Niamh Gallagher',
+        text: 'Горела лампа, с которой не разобрались два других сервиса. Alex за час нашёл неисправность в проводке и всё объяснил до начала работ.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Менял ремень ГРМ на Passat. Держал в курсе на каждом шаге, а цена совпала со сметой до цента. Очень рекомендую.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Машина не завелась в понедельник утром — Alex приехал сам. Порядочный человек, честно говорит, что действительно нужно делать.',
+      },
+      {
+        name: 'Pádraig Sweeney',
+        text: 'За годы объездил немало сервисов вокруг Дерри — это первый, которому по-настоящему доверяю. Никаких выдуманных доплат, просто сделал работу.',
+      },
+    ],
+  },
   contact: {
     heading: 'Напишите нам',
     subtitle: 'Опишите проблему — мы перезвоним.',
@@ -206,6 +268,8 @@ const ru: Dictionary = {
     selectLanguage: 'Выбрать язык',
     prevService: 'Предыдущая услуга',
     nextService: 'Следующая услуга',
+    prevReview: 'Предыдущий отзыв',
+    nextReview: 'Следующий отзыв',
   },
 }
 
@@ -261,6 +325,31 @@ const ga: Dictionary = {
     callUs: 'Glaoigh Orainn',
     getDirections: 'Faigh Treoracha',
   },
+  reviews: {
+    heading: 'A Deir Custaiméirí',
+    items: [
+      {
+        name: 'Seán O’Doherty',
+        text: 'Theip orm san NCT mar gheall ar na coscáin agus ceannsolas. Bhí sé curtha ina cheart ag Alex in aon lá amháin agus d’éirigh go breá leis an atástáil. Praghas cothrom, gan aon chur i gcéill.',
+      },
+      {
+        name: 'Niamh Gallagher',
+        text: 'Bhí solas rabhaidh ann nach raibh dhá gharáiste eile in ann a dhéanamh amach. D’aimsigh Alex locht sreangaithe laistigh d’uair an chloig agus mhínigh sé gach rud sula ndearna sé tada.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Crios ama déanta ar mo Passat. Choinnigh sé ar an eolas mé an bealach ar fad agus bhí an praghas díreach mar a gealladh. Mholfainn go mór é.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Ní thosódh an carr maidin Dé Luain agus tháinig Alex amach chugam. Fear ionraic, macánta faoina raibh le déanamh i ndáiríre.',
+      },
+      {
+        name: 'Pádraig Sweeney',
+        text: 'Bhí mé i neart garáistí thart ar Dhoire thar na blianta — seo an chéad cheann a bhfuil muinín agam as i ndáiríre. Gan aon bhreiseáin chumtha, rinneadh an jab.',
+      },
+    ],
+  },
   contact: {
     heading: 'Déan Teagmháil Linn',
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
@@ -280,6 +369,8 @@ const ga: Dictionary = {
     selectLanguage: 'Roghnaigh teanga',
     prevService: 'Seirbhís roimhe seo',
     nextService: 'An chéad seirbhís eile',
+    prevReview: 'An léirmheas roimhe seo',
+    nextReview: 'An chéad léirmheas eile',
   },
 }
 

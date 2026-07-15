@@ -14,6 +14,7 @@ import {
 import logoCar from './assets/logo-car.webp'
 import { ContactForm } from './ContactForm'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { ReviewsCarousel } from './ReviewsCarousel'
 import { ServicesShowcase } from './ServicesShowcase'
 import { StickyCall } from './StickyCall'
 import { useWheelPaging } from './useWheelPaging'
@@ -208,7 +209,8 @@ function App() {
           </h2>
         </header>
 
-        <div className="flex w-full max-w-md flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
+        <div className="grid w-full max-w-md justify-items-center gap-6 lg:max-w-5xl lg:grid-cols-2 lg:items-center">
+          <div className="flex w-full flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
             <div className="flex items-start gap-3">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
                 <FaLocationDot aria-hidden className="size-5 text-amber-300" />
@@ -277,6 +279,11 @@ function App() {
               <FaRoute aria-hidden className="size-4" />
               {t.location.getDirections}
             </a>
+          </div>
+
+          {/* Reviews live where the map used to be: trust and the call-to-action
+              share one screen. Quotes are in-house drafts until real ones land. */}
+          <ReviewsCarousel />
         </div>
 
         <a
