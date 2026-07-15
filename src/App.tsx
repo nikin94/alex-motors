@@ -310,7 +310,7 @@ function App() {
             <FaRoute aria-hidden className="size-4" />
             {t.location.getDirections}
           </Button>
-          <p aria-hidden className="mt-4 hidden min-h-5 lg:block" />
+          <p aria-hidden className="mt-2 hidden min-h-4 lg:block" />
         </div>
 
         <ContactForm />

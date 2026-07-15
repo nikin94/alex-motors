@@ -34,7 +34,6 @@ const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
 function RequiredMark() {
   return (
     <span aria-hidden className="text-amber-300">
-      {' '}
       *
     </span>
   )
@@ -66,6 +65,15 @@ export function ContactForm() {
     'aria-describedby': errors[field] ? `contact-${field}-error` : undefined,
     onInput: () => clearError(field),
   })
+
+  /* type="tel" does not restrict input, so letters are stripped as they are
+     typed; validation still guards paste-arounds and too-few digits. */
+  const sanitizePhone = (event: FormEvent<HTMLInputElement>) => {
+    const el = event.currentTarget
+    const clean = el.value.replace(/[^\d\s()./+-]/g, '')
+    if (el.value !== clean) el.value = clean
+    clearError('phone')
+  }
 
   const errorFor = (field: Field) =>
     errors[field] ? (
@@ -142,6 +150,7 @@ export function ContactForm() {
             placeholder={t.contact.placeholders.phone}
             className={inputClass}
             {...ariaFor('phone')}
+            onInput={sanitizePhone}
           />
           {errorFor('phone')}
         </div>
@@ -197,10 +206,12 @@ export function ContactForm() {
         {status === 'sending' ? t.contact.sending : t.contact.submit}
       </Button>
 
-      {/* One line at the card's very bottom: the required-fields note gives
-          way to the submit outcome. Its height is mirrored under Get
-          Directions in the other column so both CTA buttons sit level. */}
-      <p role="status" className="min-h-5 text-center text-xs text-stone-500 sm:text-sm">
+      {/* One small line at the card's very bottom: the required-fields note
+          gives way to the submit outcome. The negative margin pulls it in
+          under the button (the form's gap-4 is too roomy for a footnote); its
+          box (-mt-2 + min-h-4) is mirrored under Get Directions in the other
+          column so both CTA buttons sit level. */}
+      <p role="status" className="-mt-2 min-h-4 text-left text-xs text-stone-500">
         {status === 'sent' ? (
           <span className="text-amber-200">{t.contact.success}</span>
         ) : status === 'error' ? (
