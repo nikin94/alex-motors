@@ -2,13 +2,27 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "alex-motors",
   "compatibility_date": "2026-07-06",
+  "main": "worker/index.ts",
   "observability": {
     "enabled": true
   },
   "assets": {
     "not_found_handling": "single-page-application"
   },
+  // Only API calls invoke the Worker script; every other request keeps the
+  // plain static-asset/SPA behaviour the site had before the contact form.
+  "run_worker_first": ["/api/*"],
   "compatibility_flags": [
     "nodejs_compat"
   ]
+  // Contact-form delivery rides Cloudflare Email Routing (free, no third-party
+  // service) — it needs the production domain on Cloudflare. To activate:
+  //   1. Add the alex-motors.ie zone, enable Email Routing on it, and verify
+  //      the owner's inbox as a destination address.
+  //   2. Uncomment the two blocks below with the real addresses (CONTACT_FROM
+  //      must be an address on the Email Routing domain).
+  // Until then POST /api/contact answers 503 and the form shows its
+  // call/WhatsApp fallback line.
+  // ,"send_email": [{ "name": "CONTACT_EMAIL", "destination_address": "OWNER_INBOX@example.com" }]
+  // ,"vars": { "CONTACT_FROM": "contact@alex-motors.ie", "CONTACT_TO": "OWNER_INBOX@example.com" }
 }

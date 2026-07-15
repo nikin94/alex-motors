@@ -57,6 +57,8 @@ export function useWheelPaging() {
 
     const onWheel = (event: WheelEvent) => {
       if (!snapViewport.matches || event.ctrlKey || event.deltaY === 0) return
+      // A textarea (contact form) scrolls its own overflow — never page over it.
+      if (event.target instanceof Element && event.target.closest('textarea')) return
       if (paging) {
         event.preventDefault() // swallow the gesture's tail mid-glide
         return
