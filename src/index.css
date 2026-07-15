@@ -18,13 +18,16 @@
    Oswald is the closest free match — tall and condensed like Bebas. Restricted
    to the Cyrillic range so its file only downloads once the user switches to
    Russian, and listed after Bebas in --font-display: Latin glyphs still come from
-   Bebas (EN and Irish stay on Bebas), only Cyrillic glyphs fall through to Oswald. */
+   Bebas (EN and Irish stay on Bebas), only Cyrillic glyphs fall through to Oswald.
+   The declaration says 400 but the file is Oswald's 500: at its regular weight
+   Oswald reads noticeably thinner than Bebas next to it, so the medium cut is
+   served wherever the layout asks for the normal-weight display face. */
 @font-face {
   font-family: 'Oswald';
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url('@fontsource/oswald/files/oswald-cyrillic-400-normal.woff2') format('woff2');
+  src: url('@fontsource/oswald/files/oswald-cyrillic-500-normal.woff2') format('woff2');
   unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
@@ -38,6 +41,13 @@
 html {
   background-color: #0e0a08;
   color-scheme: dark;
+}
+
+/* Tailwind v4 resets <button> to cursor: default; every enabled button on
+   this site is interactive (service tabs, slider chevrons, the language
+   switcher, form submit), so restore the pointer globally. */
+button:not(:disabled) {
+  cursor: pointer;
 }
 
 /* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
@@ -198,21 +208,20 @@ html {
   }
 }
 
-/* Middle screens (reviews, location): the same translucent shading as the
-   services screen, so the shared brick wall runs on unbroken beneath all
-   five. Each has another screen below it, so the same bottom-edge bridge
-   sinks the lit centre back to the darkness the next screen's top starts
-   at — no seam at the snap boundaries. */
-.reviews-shade,
-.location-shade {
+/* Third screen (reviews): the same translucent shading as the services
+   screen, so the shared brick wall runs on unbroken beneath all four. The
+   contact screen sits below it, so the same bottom-edge bridge sinks the
+   lit centre back to the darkness the next screen's top starts at — no
+   seam at the snap boundary. */
+.reviews-shade {
   background:
     linear-gradient(to bottom, transparent 75%, rgb(0 0 0 / 0.72) 100%),
     radial-gradient(ellipse 80% 60% at 50% 42%, rgb(255 168 74 / 0.13), rgb(255 143 40 / 0.04) 46%, transparent 74%),
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
-/* Fourth screen (contact form): last screen, so no bottom bridge — overscroll
-   below it lands on the page background, which is already this dark. */
+/* Fourth screen (contact details + form): last screen, so no bottom bridge —
+   overscroll below it lands on the page background, which is already this dark. */
 .contact-shade {
   background:
     radial-gradient(ellipse 80% 60% at 50% 42%, rgb(255 168 74 / 0.13), rgb(255 143 40 / 0.04) 46%, transparent 74%),

@@ -32,7 +32,6 @@ export type Dictionary = {
     items: Record<ServiceId, ServiceCopy>
   }
   location: {
-    heading: string
     workshop: string
     openingHours: string
     days: { weekdays: string; saturday: string; sunday: string; closed: string }
@@ -54,6 +53,11 @@ export type Dictionary = {
     phone: string
     email: string
     message: string
+    placeholders: { name: string; phone: string; email: string; message: string }
+    /* Sits at the card's very bottom; * marks the required labels. */
+    requiredNote: string
+    /* Client-side validation messages (`error` below is the send failure). */
+    validation: { required: string; phone: string; email: string }
     submit: string
     sending: string
     success: string
@@ -62,7 +66,6 @@ export type Dictionary = {
   a11y: {
     scrollToServices: string
     scrollToReviews: string
-    scrollToLocation: string
     scrollToContact: string
     selectLanguage: string
     prevService: string
@@ -117,7 +120,6 @@ const en: Dictionary = {
     },
   },
   location: {
-    heading: 'Find Us',
     workshop: 'Workshop',
     openingHours: 'Opening Hours',
     days: { weekdays: 'Mon–Fri', saturday: 'Saturday', sunday: 'Sunday', closed: 'Closed' },
@@ -132,7 +134,7 @@ const en: Dictionary = {
         text: 'Failed the NCT on brakes and a headlight. Alex had it sorted in a day and it flew through the retest. Fair price, no messing.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Had a warning light two other garages couldn’t figure out. Alex found a wiring fault within the hour and explained everything before touching a thing.',
       },
       {
@@ -144,18 +146,46 @@ const en: Dictionary = {
         text: 'Car wouldn’t start on a Monday morning and Alex came out to me. Genuinely sound, and honest about what actually needed doing.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'Been to plenty of garages around Derry over the years — this is the first one I actually trust. No invented extras, just did the job.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Booked in for a full service before a long run down to Dublin. He spotted a worn belt that would have left me stranded and sorted it there and then.',
+      },
+      {
+        name: 'Emma',
+        text: 'Clutch started slipping on the way to work. Dropped the car in on Tuesday, had it back Thursday — and the bill came in under what I had braced myself for.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Brakes were squealing something awful. He showed me the worn pads, said the discs were still grand, and only charged for what was actually needed.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Battery kept dying on cold mornings. Turned out to be the alternator — found and fixed the same day. Great to deal with, explains everything as he goes.',
       },
     ],
   },
   contact: {
-    heading: 'Get in Touch',
+    heading: 'Contact Us',
     subtitle: "Tell us what's wrong — we'll call you back.",
     name: 'Name',
     phone: 'Phone',
-    email: 'Email (optional)',
+    email: 'Email',
     message: 'Message',
+    placeholders: {
+      name: 'John Murphy',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'e.g. Warning light is on — need a diagnostic',
+    },
+    requiredNote: 'Fields marked * are required.',
+    validation: {
+      required: 'This field is required.',
+      phone: 'Enter a valid phone number.',
+      email: 'Enter a valid email address.',
+    },
     submit: 'Send',
     sending: 'Sending…',
     success: "Thanks! We'll get back to you soon.",
@@ -164,8 +194,7 @@ const en: Dictionary = {
   a11y: {
     scrollToServices: 'Scroll to services',
     scrollToReviews: 'Scroll to reviews',
-    scrollToLocation: 'Scroll to location',
-    scrollToContact: 'Scroll to contact form',
+    scrollToContact: 'Scroll to contact details',
     selectLanguage: 'Select language',
     prevService: 'Previous service',
     nextService: 'Next service',
@@ -219,7 +248,6 @@ const ru: Dictionary = {
     },
   },
   location: {
-    heading: 'Как нас найти',
     workshop: 'Мастерская',
     openingHours: 'Часы работы',
     days: { weekdays: 'Пн–Пт', saturday: 'Суббота', sunday: 'Воскресенье', closed: 'Выходной' },
@@ -234,7 +262,7 @@ const ru: Dictionary = {
         text: 'Не прошёл NCT из-за тормозов и фары. Alex всё исправил за день, и пересдачу машина прошла влёгкую. Цена честная, без фокусов.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Горела лампа, с которой не разобрались два других сервиса. Alex за час нашёл неисправность в проводке и всё объяснил до начала работ.',
       },
       {
@@ -246,18 +274,46 @@ const ru: Dictionary = {
         text: 'Машина не завелась в понедельник утром — Alex приехал сам. Порядочный человек, честно говорит, что действительно нужно делать.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'За годы объездил немало сервисов вокруг Дерри — это первый, которому по-настоящему доверяю. Никаких выдуманных доплат, просто сделал работу.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Записался на полное ТО перед дальней поездкой в Дублин. Он заметил изношенный ремень, из-за которого я бы застрял на трассе, и заменил его сразу же.',
+      },
+      {
+        name: 'Emma',
+        text: 'По дороге на работу начало буксовать сцепление. Отдала машину во вторник, в четверг забрала — и счёт вышел меньше, чем я готовилась заплатить.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Тормоза скрипели ужасно. Он показал мне стёртые колодки, сказал, что диски ещё в порядке, и взял только за то, что действительно было нужно.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Аккумулятор садился каждое холодное утро. Оказалось, дело в генераторе — нашёл и починил в тот же день. Приятно иметь дело: объясняет всё по ходу.',
       },
     ],
   },
   contact: {
-    heading: 'Напишите нам',
+    heading: 'Контакты',
     subtitle: 'Опишите проблему — мы перезвоним.',
     name: 'Имя',
     phone: 'Телефон',
-    email: 'Почта (необязательно)',
+    email: 'Почта',
     message: 'Сообщение',
+    placeholders: {
+      name: 'Иван Петров',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'напр. Горит лампа на панели — нужна диагностика',
+    },
+    requiredNote: 'Поля, отмеченные *, обязательны для заполнения.',
+    validation: {
+      required: 'Обязательное поле.',
+      phone: 'Введите корректный номер телефона.',
+      email: 'Введите корректный адрес почты.',
+    },
     submit: 'Отправить',
     sending: 'Отправляем…',
     success: 'Спасибо! Мы скоро свяжемся с вами.',
@@ -266,8 +322,7 @@ const ru: Dictionary = {
   a11y: {
     scrollToServices: 'Перейти к услугам',
     scrollToReviews: 'Перейти к отзывам',
-    scrollToLocation: 'Перейти к контактам',
-    scrollToContact: 'Перейти к форме обратной связи',
+    scrollToContact: 'Перейти к контактам',
     selectLanguage: 'Выбрать язык',
     prevService: 'Предыдущая услуга',
     nextService: 'Следующая услуга',
@@ -321,7 +376,6 @@ const ga: Dictionary = {
     },
   },
   location: {
-    heading: 'Aimsigh Sinn',
     workshop: 'Ceardlann',
     openingHours: 'Uaireanta Oscailte',
     days: { weekdays: 'Luan–Aoine', saturday: 'Satharn', sunday: 'Domhnach', closed: 'Dúnta' },
@@ -336,7 +390,7 @@ const ga: Dictionary = {
         text: 'Theip orm san NCT mar gheall ar na coscáin agus ceannsolas. Bhí sé curtha ina cheart ag Alex in aon lá amháin agus d’éirigh go breá leis an atástáil. Praghas cothrom, gan aon chur i gcéill.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Bhí solas rabhaidh ann nach raibh dhá gharáiste eile in ann a dhéanamh amach. D’aimsigh Alex locht sreangaithe laistigh d’uair an chloig agus mhínigh sé gach rud sula ndearna sé tada.',
       },
       {
@@ -348,8 +402,24 @@ const ga: Dictionary = {
         text: 'Ní thosódh an carr maidin Dé Luain agus tháinig Alex amach chugam. Fear ionraic, macánta faoina raibh le déanamh i ndáiríre.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'Bhí mé i neart garáistí thart ar Dhoire thar na blianta — seo an chéad cheann a bhfuil muinín agam as i ndáiríre. Gan aon bhreiseáin chumtha, rinneadh an jab.',
+      },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Chuir mé isteach é le haghaidh seirbhís iomlán roimh thuras fada go Baile Átha Cliath. Thug sé faoi deara crios caite a d’fhágfadh sáinnithe mé, agus dheisigh sé láithreach é.',
+      },
+      {
+        name: 'Emma',
+        text: 'Thosaigh an crág ag sleamhnú ar an mbealach chun na hoibre. D’fhág mé isteach Dé Máirt é agus bhí sé ar ais agam Déardaoin — agus bhí an bille níos lú ná mar a raibh súil agam leis.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Bhí na coscáin ag díoscán go huafásach. Thaispeáin sé na pillíní caite dom, dúirt sé go raibh na dioscaí fós ceart go leor, agus níor ghearr sé ach as an méid a bhí ag teastáil.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Bhí an ceallra ag fáil bháis gach maidin fhuar. Ba é an t-ailtéarnóir ba chúis leis — aimsíodh agus deisíodh é an lá céanna. Iontach le déileáil leis, míníonn sé gach rud.',
       },
     ],
   },
@@ -358,8 +428,20 @@ const ga: Dictionary = {
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
     name: 'Ainm',
     phone: 'Guthán',
-    email: 'Ríomhphost (roghnach)',
+    email: 'Ríomhphost',
     message: 'Teachtaireacht',
+    placeholders: {
+      name: 'Seán Ó Murchú',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'm.sh. Tá solas rabhaidh ar lasadh — teastaíonn diagnóisic',
+    },
+    requiredNote: 'Tá réimsí atá marcáilte le * riachtanach.',
+    validation: {
+      required: 'Tá an réimse seo riachtanach.',
+      phone: 'Cuir isteach uimhir ghutháin bhailí.',
+      email: 'Cuir isteach seoladh ríomhphoist bailí.',
+    },
     submit: 'Seol',
     sending: 'Á sheoladh…',
     success: 'Go raibh maith agat! Beimid i dteagmháil leat go luath.',
@@ -368,8 +450,7 @@ const ga: Dictionary = {
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToReviews: 'Scrollaigh go dtí na léirmheasanna',
-    scrollToLocation: 'Scrollaigh go dtí an suíomh',
-    scrollToContact: 'Scrollaigh go dtí an fhoirm theagmhála',
+    scrollToContact: 'Scrollaigh go dtí na sonraí teagmhála',
     selectLanguage: 'Roghnaigh teanga',
     prevService: 'Seirbhís roimhe seo',
     nextService: 'An chéad seirbhís eile',
