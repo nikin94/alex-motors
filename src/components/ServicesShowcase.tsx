@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
 import { useIsDesktop } from '../hooks/useIsDesktop'
+import { Button } from './Button'
 import { useI18n } from '../i18n/context'
 import type { ServiceId } from '../i18n/dictionary'
 
@@ -149,12 +150,13 @@ function DesktopTabs({
         {TAB_ORDER.map((id, index) => {
           const selected = id === active
           return (
-            <button
+            <Button
               key={id}
               ref={(el) => {
                 tabRefs.current[id] = el
               }}
-              type="button"
+              variant="tile"
+              active={selected}
               role="tab"
               id={`service-tab-${id}`}
               aria-selected={selected}
@@ -162,14 +164,10 @@ function DesktopTabs({
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(id)}
               style={{ animationDelay: `${index * 55}ms` }}
-              className={`tile-reveal rounded-lg border px-4 py-3 text-left font-display text-base tracking-[0.06em] transition-colors sm:text-lg ${
-                selected
-                  ? 'border-amber-300/60 bg-amber-400/10 text-amber-50'
-                  : 'border-amber-100/15 bg-black/40 text-amber-50/70 hover:border-amber-100/40 hover:text-amber-50'
-              }`}
+              className="tile-reveal"
             >
               {copy(id).title}
-            </button>
+            </Button>
           )
         })}
       </div>

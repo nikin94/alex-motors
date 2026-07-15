@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa6'
 
 import logoCar from './assets/logo-car.webp'
+import { Button } from './components/Button'
 import { ContactForm } from './components/ContactForm'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
@@ -239,7 +240,8 @@ function App() {
         </header>
 
         <div className="grid w-full max-w-4xl justify-items-center gap-6 lg:grid-cols-2 lg:items-stretch lg:justify-items-stretch">
-        <div className="flex w-full max-w-md flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none">
+        <div className="flex w-full max-w-md flex-col rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none">
+          <div className="my-auto flex flex-col gap-6">
             <div className="flex items-start gap-3">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
                 <FaLocationDot aria-hidden className="size-5 text-amber-300" />
@@ -300,14 +302,15 @@ function App() {
               </div>
             </div>
 
-            <a
-              href={DIRECTIONS_URL}
-              {...newTab}
-              className="mt-1 inline-flex items-center justify-center gap-2 rounded-md border border-amber-300/40 bg-amber-400/10 px-5 py-3 font-display text-lg tracking-[0.12em] text-amber-100 transition-colors hover:border-amber-300/70 hover:bg-amber-400/20 hover:text-amber-50"
-            >
-              <FaRoute aria-hidden className="size-4" />
-              {t.location.getDirections}
-            </a>
+          </div>
+
+          {/* Bottom-pinned, with a spacer mirroring the form's note line so
+              this button and the form's Send sit at the same level. */}
+          <Button href={DIRECTIONS_URL} {...newTab} className="mt-6">
+            <FaRoute aria-hidden className="size-4" />
+            {t.location.getDirections}
+          </Button>
+          <p aria-hidden className="mt-4 hidden min-h-5 lg:block" />
         </div>
 
         <ContactForm />

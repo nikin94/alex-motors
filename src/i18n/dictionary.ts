@@ -53,6 +53,11 @@ export type Dictionary = {
     phone: string
     email: string
     message: string
+    placeholders: { name: string; phone: string; email: string; message: string }
+    /* Sits at the card's very bottom; * marks the required labels. */
+    requiredNote: string
+    /* Client-side validation messages (`error` below is the send failure). */
+    validation: { required: string; phone: string; email: string }
     submit: string
     sending: string
     success: string
@@ -129,7 +134,7 @@ const en: Dictionary = {
         text: 'Failed the NCT on brakes and a headlight. Alex had it sorted in a day and it flew through the retest. Fair price, no messing.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Had a warning light two other garages couldn’t figure out. Alex found a wiring fault within the hour and explained everything before touching a thing.',
       },
       {
@@ -141,7 +146,7 @@ const en: Dictionary = {
         text: 'Car wouldn’t start on a Monday morning and Alex came out to me. Genuinely sound, and honest about what actually needed doing.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'Been to plenty of garages around Derry over the years — this is the first one I actually trust. No invented extras, just did the job.',
       },
       {
@@ -149,7 +154,7 @@ const en: Dictionary = {
         text: 'Booked in for a full service before a long run down to Dublin. He spotted a worn belt that would have left me stranded and sorted it there and then.',
       },
       {
-        name: 'Emma Ward',
+        name: 'Emma',
         text: 'Clutch started slipping on the way to work. Dropped the car in on Tuesday, had it back Thursday — and the bill came in under what I had braced myself for.',
       },
       {
@@ -167,8 +172,20 @@ const en: Dictionary = {
     subtitle: "Tell us what's wrong — we'll call you back.",
     name: 'Name',
     phone: 'Phone',
-    email: 'Email (optional)',
+    email: 'Email',
     message: 'Message',
+    placeholders: {
+      name: 'John Murphy',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'e.g. Warning light is on — need a diagnostic',
+    },
+    requiredNote: 'Fields marked * are required.',
+    validation: {
+      required: 'This field is required.',
+      phone: 'Enter a valid phone number.',
+      email: 'Enter a valid email address.',
+    },
     submit: 'Send',
     sending: 'Sending…',
     success: "Thanks! We'll get back to you soon.",
@@ -245,7 +262,7 @@ const ru: Dictionary = {
         text: 'Не прошёл NCT из-за тормозов и фары. Alex всё исправил за день, и пересдачу машина прошла влёгкую. Цена честная, без фокусов.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Горела лампа, с которой не разобрались два других сервиса. Alex за час нашёл неисправность в проводке и всё объяснил до начала работ.',
       },
       {
@@ -257,7 +274,7 @@ const ru: Dictionary = {
         text: 'Машина не завелась в понедельник утром — Alex приехал сам. Порядочный человек, честно говорит, что действительно нужно делать.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'За годы объездил немало сервисов вокруг Дерри — это первый, которому по-настоящему доверяю. Никаких выдуманных доплат, просто сделал работу.',
       },
       {
@@ -265,7 +282,7 @@ const ru: Dictionary = {
         text: 'Записался на полное ТО перед дальней поездкой в Дублин. Он заметил изношенный ремень, из-за которого я бы застрял на трассе, и заменил его сразу же.',
       },
       {
-        name: 'Emma Ward',
+        name: 'Emma',
         text: 'По дороге на работу начало буксовать сцепление. Отдала машину во вторник, в четверг забрала — и счёт вышел меньше, чем я готовилась заплатить.',
       },
       {
@@ -283,8 +300,20 @@ const ru: Dictionary = {
     subtitle: 'Опишите проблему — мы перезвоним.',
     name: 'Имя',
     phone: 'Телефон',
-    email: 'Почта (необязательно)',
+    email: 'Почта',
     message: 'Сообщение',
+    placeholders: {
+      name: 'Иван Петров',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'напр. Горит лампа на панели — нужна диагностика',
+    },
+    requiredNote: 'Поля, отмеченные *, обязательны для заполнения.',
+    validation: {
+      required: 'Обязательное поле.',
+      phone: 'Введите корректный номер телефона.',
+      email: 'Введите корректный адрес почты.',
+    },
     submit: 'Отправить',
     sending: 'Отправляем…',
     success: 'Спасибо! Мы скоро свяжемся с вами.',
@@ -361,7 +390,7 @@ const ga: Dictionary = {
         text: 'Theip orm san NCT mar gheall ar na coscáin agus ceannsolas. Bhí sé curtha ina cheart ag Alex in aon lá amháin agus d’éirigh go breá leis an atástáil. Praghas cothrom, gan aon chur i gcéill.',
       },
       {
-        name: 'Niamh Gallagher',
+        name: 'Niamh',
         text: 'Bhí solas rabhaidh ann nach raibh dhá gharáiste eile in ann a dhéanamh amach. D’aimsigh Alex locht sreangaithe laistigh d’uair an chloig agus mhínigh sé gach rud sula ndearna sé tada.',
       },
       {
@@ -373,7 +402,7 @@ const ga: Dictionary = {
         text: 'Ní thosódh an carr maidin Dé Luain agus tháinig Alex amach chugam. Fear ionraic, macánta faoina raibh le déanamh i ndáiríre.',
       },
       {
-        name: 'John Kelly',
+        name: 'John',
         text: 'Bhí mé i neart garáistí thart ar Dhoire thar na blianta — seo an chéad cheann a bhfuil muinín agam as i ndáiríre. Gan aon bhreiseáin chumtha, rinneadh an jab.',
       },
       {
@@ -381,7 +410,7 @@ const ga: Dictionary = {
         text: 'Chuir mé isteach é le haghaidh seirbhís iomlán roimh thuras fada go Baile Átha Cliath. Thug sé faoi deara crios caite a d’fhágfadh sáinnithe mé, agus dheisigh sé láithreach é.',
       },
       {
-        name: 'Emma Ward',
+        name: 'Emma',
         text: 'Thosaigh an crág ag sleamhnú ar an mbealach chun na hoibre. D’fhág mé isteach Dé Máirt é agus bhí sé ar ais agam Déardaoin — agus bhí an bille níos lú ná mar a raibh súil agam leis.',
       },
       {
@@ -399,8 +428,20 @@ const ga: Dictionary = {
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
     name: 'Ainm',
     phone: 'Guthán',
-    email: 'Ríomhphost (roghnach)',
+    email: 'Ríomhphost',
     message: 'Teachtaireacht',
+    placeholders: {
+      name: 'Seán Ó Murchú',
+      phone: '+353 85 123 4567',
+      email: 'you@example.com',
+      message: 'm.sh. Tá solas rabhaidh ar lasadh — teastaíonn diagnóisic',
+    },
+    requiredNote: 'Tá réimsí atá marcáilte le * riachtanach.',
+    validation: {
+      required: 'Tá an réimse seo riachtanach.',
+      phone: 'Cuir isteach uimhir ghutháin bhailí.',
+      email: 'Cuir isteach seoladh ríomhphoist bailí.',
+    },
     submit: 'Seol',
     sending: 'Á sheoladh…',
     success: 'Go raibh maith agat! Beimid i dteagmháil leat go luath.',

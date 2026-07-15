@@ -40,6 +40,13 @@ html {
   color-scheme: dark;
 }
 
+/* Tailwind v4 resets <button> to cursor: default; every enabled button on
+   this site is interactive (service tabs, slider chevrons, the language
+   switcher, form submit), so restore the pointer globally. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Dark brick wall drawn as a repeating SVG tile: two offset rows of bricks
    with slight color variation on a mortar background. */
 .brick-wall {
