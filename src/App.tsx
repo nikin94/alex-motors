@@ -290,7 +290,7 @@ function App() {
 
       <section
         id="contact"
-        className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-12"
+        className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 pt-12 pb-20"
       >
         <header className="text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
