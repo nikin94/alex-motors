@@ -61,6 +61,7 @@ export type Dictionary = {
   }
   a11y: {
     scrollToServices: string
+    scrollToReviews: string
     scrollToLocation: string
     scrollToContact: string
     selectLanguage: string
@@ -135,15 +136,15 @@ const en: Dictionary = {
         text: 'Had a warning light two other garages couldn’t figure out. Alex found a wiring fault within the hour and explained everything before touching a thing.',
       },
       {
-        name: 'Ciarán McLaughlin',
+        name: 'Patrick Doyle',
         text: 'Timing belt done on my Passat. Kept me posted the whole way and the price matched the quote to the cent. Highly recommend.',
       },
       {
-        name: 'Aoife Doherty',
+        name: 'Mary Brennan',
         text: 'Car wouldn’t start on a Monday morning and Alex came out to me. Genuinely sound, and honest about what actually needed doing.',
       },
       {
-        name: 'Pádraig Sweeney',
+        name: 'John Kelly',
         text: 'Been to plenty of garages around Derry over the years — this is the first one I actually trust. No invented extras, just did the job.',
       },
     ],
@@ -162,6 +163,7 @@ const en: Dictionary = {
   },
   a11y: {
     scrollToServices: 'Scroll to services',
+    scrollToReviews: 'Scroll to reviews',
     scrollToLocation: 'Scroll to location',
     scrollToContact: 'Scroll to contact form',
     selectLanguage: 'Select language',
@@ -225,7 +227,7 @@ const ru: Dictionary = {
     getDirections: 'Построить маршрут',
   },
   reviews: {
-    heading: 'Отзывы клиентов',
+    heading: 'Что говорят клиенты',
     items: [
       {
         name: 'Seán O’Doherty',
@@ -236,15 +238,15 @@ const ru: Dictionary = {
         text: 'Горела лампа, с которой не разобрались два других сервиса. Alex за час нашёл неисправность в проводке и всё объяснил до начала работ.',
       },
       {
-        name: 'Ciarán McLaughlin',
+        name: 'Patrick Doyle',
         text: 'Менял ремень ГРМ на Passat. Держал в курсе на каждом шаге, а цена совпала со сметой до цента. Очень рекомендую.',
       },
       {
-        name: 'Aoife Doherty',
+        name: 'Mary Brennan',
         text: 'Машина не завелась в понедельник утром — Alex приехал сам. Порядочный человек, честно говорит, что действительно нужно делать.',
       },
       {
-        name: 'Pádraig Sweeney',
+        name: 'John Kelly',
         text: 'За годы объездил немало сервисов вокруг Дерри — это первый, которому по-настоящему доверяю. Никаких выдуманных доплат, просто сделал работу.',
       },
     ],
@@ -263,6 +265,7 @@ const ru: Dictionary = {
   },
   a11y: {
     scrollToServices: 'Перейти к услугам',
+    scrollToReviews: 'Перейти к отзывам',
     scrollToLocation: 'Перейти к контактам',
     scrollToContact: 'Перейти к форме обратной связи',
     selectLanguage: 'Выбрать язык',
@@ -326,7 +329,7 @@ const ga: Dictionary = {
     getDirections: 'Faigh Treoracha',
   },
   reviews: {
-    heading: 'A Deir Custaiméirí',
+    heading: 'Céard a Deir Custaiméirí',
     items: [
       {
         name: 'Seán O’Doherty',
@@ -337,15 +340,15 @@ const ga: Dictionary = {
         text: 'Bhí solas rabhaidh ann nach raibh dhá gharáiste eile in ann a dhéanamh amach. D’aimsigh Alex locht sreangaithe laistigh d’uair an chloig agus mhínigh sé gach rud sula ndearna sé tada.',
       },
       {
-        name: 'Ciarán McLaughlin',
+        name: 'Patrick Doyle',
         text: 'Crios ama déanta ar mo Passat. Choinnigh sé ar an eolas mé an bealach ar fad agus bhí an praghas díreach mar a gealladh. Mholfainn go mór é.',
       },
       {
-        name: 'Aoife Doherty',
+        name: 'Mary Brennan',
         text: 'Ní thosódh an carr maidin Dé Luain agus tháinig Alex amach chugam. Fear ionraic, macánta faoina raibh le déanamh i ndáiríre.',
       },
       {
-        name: 'Pádraig Sweeney',
+        name: 'John Kelly',
         text: 'Bhí mé i neart garáistí thart ar Dhoire thar na blianta — seo an chéad cheann a bhfuil muinín agam as i ndáiríre. Gan aon bhreiseáin chumtha, rinneadh an jab.',
       },
     ],
@@ -364,6 +367,7 @@ const ga: Dictionary = {
   },
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
+    scrollToReviews: 'Scrollaigh go dtí na léirmheasanna',
     scrollToLocation: 'Scrollaigh go dtí an suíomh',
     scrollToContact: 'Scrollaigh go dtí an fhoirm theagmhála',
     selectLanguage: 'Roghnaigh teanga',

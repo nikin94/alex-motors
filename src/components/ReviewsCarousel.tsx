@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type TouchEvent } from 'react'
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from 'react-icons/fa6'
 
-import { useI18n } from './i18n/context'
+import { useI18n } from '../i18n/context'
 
 /* Customer reviews as an infinite carousel: one quote card at a time, chevrons
    and horizontal swipe step through the five quotes and wrap around at both
@@ -53,16 +53,12 @@ export function ReviewsCarousel() {
 
   return (
     <div
-      className="flex w-full max-w-md flex-col justify-center gap-4 lg:max-w-none"
+      className="flex w-full max-w-2xl flex-col justify-center gap-4"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <h3 className="font-display text-center text-xl tracking-[0.15em] text-amber-50 lg:text-left">
-        {t.reviews.heading}
-      </h3>
-
       <div className="flex items-center gap-2 sm:gap-3">
         <button
           type="button"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FaPhone, FaWhatsapp } from 'react-icons/fa6'
 
-import { useI18n } from './i18n/context'
+import { useI18n } from '../i18n/context'
 
 /* Persistent call/WhatsApp CTA, hidden while the hero is on screen — the hero
    already leads with the phone number and its entrance sequence stays clean,

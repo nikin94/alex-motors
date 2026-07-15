@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 
-import { useI18n } from './i18n/context'
+import { useI18n } from '../i18n/context'
 
 /* Contact form posting to the site's own Worker endpoint (worker/index.ts).
    Delivery rides Cloudflare Email Routing, which needs the production domain

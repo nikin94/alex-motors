@@ -198,11 +198,12 @@ html {
   }
 }
 
-/* Third screen (location): the same translucent shading as the services
-   screen, so the shared brick wall runs on unbroken beneath all four. With
-   the contact screen now below it, the same bottom-edge bridge sinks the
-   lit centre back to the darkness the next screen's top starts at — no
-   seam at the snap boundary. */
+/* Middle screens (reviews, location): the same translucent shading as the
+   services screen, so the shared brick wall runs on unbroken beneath all
+   five. Each has another screen below it, so the same bottom-edge bridge
+   sinks the lit centre back to the darkness the next screen's top starts
+   at — no seam at the snap boundaries. */
+.reviews-shade,
 .location-shade {
   background:
     linear-gradient(to bottom, transparent 75%, rgb(0 0 0 / 0.72) 100%),

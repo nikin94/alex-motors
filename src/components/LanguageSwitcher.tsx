@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
-import { useI18n } from './i18n/context'
-import { LANGS } from './i18n/dictionary'
+import { useI18n } from '../i18n/context'
+import { LANGS } from '../i18n/dictionary'
 
 /* The EN · GA · RU control renders in two places by viewport:
    - `floating`: fixed top-right, over the whole scene, on desktop (>= 768px)
