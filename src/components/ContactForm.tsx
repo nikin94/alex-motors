@@ -43,7 +43,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex w-full max-w-md flex-col gap-4 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8"
+      className="flex w-full max-w-md flex-col gap-4 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none"
     >
       <div>
         <label htmlFor="contact-name" className={labelClass}>

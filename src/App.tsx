@@ -214,25 +214,32 @@ function App() {
         <ReviewsCarousel />
 
         <a
-          href="#location"
-          aria-label={t.a11y.scrollToLocation}
+          href="#contact"
+          aria-label={t.a11y.scrollToContact}
           className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
         >
           <FaChevronDown className="size-5 motion-safe:animate-bounce" />
         </a>
       </section>
 
+      {/* Contact details and the enquiry form share the last screen: the
+          address/hours/phone card and the form are two halves of the same
+          question — how to reach us. */}
       <section
-        id="location"
-        className="location-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
+        id="contact"
+        className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 pt-12 pb-20"
       >
         <header className="text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-            {t.location.heading}
+            {t.contact.heading}
           </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-stone-400 sm:text-base">
+            {t.contact.subtitle}
+          </p>
         </header>
 
-        <div className="flex w-full max-w-md flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8">
+        <div className="grid w-full max-w-4xl justify-items-center gap-6 lg:grid-cols-2 lg:items-stretch lg:justify-items-stretch">
+        <div className="flex w-full max-w-md flex-col justify-center gap-6 rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none">
             <div className="flex items-start gap-3">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-amber-400/10">
                 <FaLocationDot aria-hidden className="size-5 text-amber-300" />
@@ -303,29 +310,8 @@ function App() {
             </a>
         </div>
 
-        <a
-          href="#contact"
-          aria-label={t.a11y.scrollToContact}
-          className="absolute bottom-5 hidden p-2 text-amber-100/40 transition-colors hover:text-amber-100 md:block"
-        >
-          <FaChevronDown className="size-5 motion-safe:animate-bounce" />
-        </a>
-      </section>
-
-      <section
-        id="contact"
-        className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 pt-12 pb-20"
-      >
-        <header className="text-center">
-          <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
-            {t.contact.heading}
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-stone-400 sm:text-base">
-            {t.contact.subtitle}
-          </p>
-        </header>
-
         <ContactForm />
+        </div>
 
         {/* Language switcher lives in the top-right corner on desktop; on mobile
             it moves to a centred footer on the last screen so the corner stays

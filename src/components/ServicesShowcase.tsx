@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
+import { useIsDesktop } from '../hooks/useIsDesktop'
 import { useI18n } from '../i18n/context'
 import type { ServiceId } from '../i18n/dictionary'
 
@@ -44,23 +45,6 @@ const PHOTOS: Record<TabId, string> = {
   timing: timingPhoto,
   brakes: brakesPhoto,
   electrics: electricsPhoto,
-}
-
-// 768px is the project's desktop boundary (matches the snap/wheel-paging media
-// query). Below it the services screen shows the mobile slider, at and above it
-// the tablist.
-function useIsDesktop() {
-  const query = '(min-width: 768px)'
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia(query).matches : true,
-  )
-  useEffect(() => {
-    const mql = window.matchMedia(query)
-    const onChange = () => setIsDesktop(mql.matches)
-    mql.addEventListener('change', onChange)
-    return () => mql.removeEventListener('change', onChange)
-  }, [])
-  return isDesktop
 }
 
 const SWIPE_THRESHOLD = 40

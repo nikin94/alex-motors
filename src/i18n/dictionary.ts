@@ -32,7 +32,6 @@ export type Dictionary = {
     items: Record<ServiceId, ServiceCopy>
   }
   location: {
-    heading: string
     workshop: string
     openingHours: string
     days: { weekdays: string; saturday: string; sunday: string; closed: string }
@@ -62,7 +61,6 @@ export type Dictionary = {
   a11y: {
     scrollToServices: string
     scrollToReviews: string
-    scrollToLocation: string
     scrollToContact: string
     selectLanguage: string
     prevService: string
@@ -117,7 +115,6 @@ const en: Dictionary = {
     },
   },
   location: {
-    heading: 'Find Us',
     workshop: 'Workshop',
     openingHours: 'Opening Hours',
     days: { weekdays: 'Mon–Fri', saturday: 'Saturday', sunday: 'Sunday', closed: 'Closed' },
@@ -147,10 +144,26 @@ const en: Dictionary = {
         name: 'John Kelly',
         text: 'Been to plenty of garages around Derry over the years — this is the first one I actually trust. No invented extras, just did the job.',
       },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Booked in for a full service before a long run down to Dublin. He spotted a worn belt that would have left me stranded and sorted it there and then.',
+      },
+      {
+        name: 'Emma Ward',
+        text: 'Clutch started slipping on the way to work. Dropped the car in on Tuesday, had it back Thursday — and the bill came in under what I had braced myself for.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Brakes were squealing something awful. He showed me the worn pads, said the discs were still grand, and only charged for what was actually needed.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Battery kept dying on cold mornings. Turned out to be the alternator — found and fixed the same day. Great to deal with, explains everything as he goes.',
+      },
     ],
   },
   contact: {
-    heading: 'Get in Touch',
+    heading: 'Contact Us',
     subtitle: "Tell us what's wrong — we'll call you back.",
     name: 'Name',
     phone: 'Phone',
@@ -164,8 +177,7 @@ const en: Dictionary = {
   a11y: {
     scrollToServices: 'Scroll to services',
     scrollToReviews: 'Scroll to reviews',
-    scrollToLocation: 'Scroll to location',
-    scrollToContact: 'Scroll to contact form',
+    scrollToContact: 'Scroll to contact details',
     selectLanguage: 'Select language',
     prevService: 'Previous service',
     nextService: 'Next service',
@@ -219,7 +231,6 @@ const ru: Dictionary = {
     },
   },
   location: {
-    heading: 'Как нас найти',
     workshop: 'Мастерская',
     openingHours: 'Часы работы',
     days: { weekdays: 'Пн–Пт', saturday: 'Суббота', sunday: 'Воскресенье', closed: 'Выходной' },
@@ -249,10 +260,26 @@ const ru: Dictionary = {
         name: 'John Kelly',
         text: 'За годы объездил немало сервисов вокруг Дерри — это первый, которому по-настоящему доверяю. Никаких выдуманных доплат, просто сделал работу.',
       },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Записался на полное ТО перед дальней поездкой в Дублин. Он заметил изношенный ремень, из-за которого я бы застрял на трассе, и заменил его сразу же.',
+      },
+      {
+        name: 'Emma Ward',
+        text: 'По дороге на работу начало буксовать сцепление. Отдала машину во вторник, в четверг забрала — и счёт вышел меньше, чем я готовилась заплатить.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Тормоза скрипели ужасно. Он показал мне стёртые колодки, сказал, что диски ещё в порядке, и взял только за то, что действительно было нужно.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Аккумулятор садился каждое холодное утро. Оказалось, дело в генераторе — нашёл и починил в тот же день. Приятно иметь дело: объясняет всё по ходу.',
+      },
     ],
   },
   contact: {
-    heading: 'Напишите нам',
+    heading: 'Контакты',
     subtitle: 'Опишите проблему — мы перезвоним.',
     name: 'Имя',
     phone: 'Телефон',
@@ -266,8 +293,7 @@ const ru: Dictionary = {
   a11y: {
     scrollToServices: 'Перейти к услугам',
     scrollToReviews: 'Перейти к отзывам',
-    scrollToLocation: 'Перейти к контактам',
-    scrollToContact: 'Перейти к форме обратной связи',
+    scrollToContact: 'Перейти к контактам',
     selectLanguage: 'Выбрать язык',
     prevService: 'Предыдущая услуга',
     nextService: 'Следующая услуга',
@@ -321,7 +347,6 @@ const ga: Dictionary = {
     },
   },
   location: {
-    heading: 'Aimsigh Sinn',
     workshop: 'Ceardlann',
     openingHours: 'Uaireanta Oscailte',
     days: { weekdays: 'Luan–Aoine', saturday: 'Satharn', sunday: 'Domhnach', closed: 'Dúnta' },
@@ -351,6 +376,22 @@ const ga: Dictionary = {
         name: 'John Kelly',
         text: 'Bhí mé i neart garáistí thart ar Dhoire thar na blianta — seo an chéad cheann a bhfuil muinín agam as i ndáiríre. Gan aon bhreiseáin chumtha, rinneadh an jab.',
       },
+      {
+        name: 'Ciarán McLaughlin',
+        text: 'Chuir mé isteach é le haghaidh seirbhís iomlán roimh thuras fada go Baile Átha Cliath. Thug sé faoi deara crios caite a d’fhágfadh sáinnithe mé, agus dheisigh sé láithreach é.',
+      },
+      {
+        name: 'Emma Ward',
+        text: 'Thosaigh an crág ag sleamhnú ar an mbealach chun na hoibre. D’fhág mé isteach Dé Máirt é agus bhí sé ar ais agam Déardaoin — agus bhí an bille níos lú ná mar a raibh súil agam leis.',
+      },
+      {
+        name: 'Michael Harkin',
+        text: 'Bhí na coscáin ag díoscán go huafásach. Thaispeáin sé na pillíní caite dom, dúirt sé go raibh na dioscaí fós ceart go leor, agus níor ghearr sé ach as an méid a bhí ag teastáil.',
+      },
+      {
+        name: 'Aoife Doherty',
+        text: 'Bhí an ceallra ag fáil bháis gach maidin fhuar. Ba é an t-ailtéarnóir ba chúis leis — aimsíodh agus deisíodh é an lá céanna. Iontach le déileáil leis, míníonn sé gach rud.',
+      },
     ],
   },
   contact: {
@@ -368,8 +409,7 @@ const ga: Dictionary = {
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToReviews: 'Scrollaigh go dtí na léirmheasanna',
-    scrollToLocation: 'Scrollaigh go dtí an suíomh',
-    scrollToContact: 'Scrollaigh go dtí an fhoirm theagmhála',
+    scrollToContact: 'Scrollaigh go dtí na sonraí teagmhála',
     selectLanguage: 'Roghnaigh teanga',
     prevService: 'Seirbhís roimhe seo',
     nextService: 'An chéad seirbhís eile',
