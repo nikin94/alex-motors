@@ -33,6 +33,16 @@ const FREE_PLAY = 120
    unchanged. */
 const GESTURE_GAP = 200
 
+/* Inside the post-glide lock a wheel event is read as a NEW gesture — not the
+   old one's momentum tail — when it reverses direction, or when its magnitude
+   jumps to at least double the smallest tail event seen so far: momentum only
+   ever decays, so a rising delta is the user flicking again. RISE_FLOOR keeps
+   the 1–3px noise at a tail's very end from qualifying. Without this escape
+   the debounce starves — a tail merging straight into fresh input re-arms the
+   quiet window forever, and scrolling goes dead (both directions) until the
+   trackpad falls completely silent. */
+const RISE_FLOOR = 20
+
 export function useWheelPaging() {
   useEffect(() => {
     const snapViewport = window.matchMedia('(min-width: 768px)')
@@ -42,6 +52,8 @@ export function useWheelPaging() {
     let anchorY: number | null = null
     let lastTs = 0
     let lastDir = 0
+    let tailDir = 0 // direction of the gesture that committed the page turn
+    let tailMag = Infinity // smallest |deltaY| the tail has decayed to so far
 
     /* The lock lifts only once the wheel has been QUIET for this long after
        the glide ended — a debounce, not a fixed delay. A trackpad's momentum
@@ -71,11 +83,26 @@ export function useWheelPaging() {
       // A textarea (contact form) scrolls its own overflow — never page over it.
       if (event.target instanceof Element && event.target.closest('textarea')) return
       if (paging) {
-        event.preventDefault() // swallow the gesture's tail mid-glide
-        // Past the glide the tail keeps the lock alive: every swallowed
-        // event re-arms the quiet window, so unlock waits for real silence.
-        if (glided) settle()
-        return
+        const mag = Math.abs(event.deltaY)
+        /* Once the glide is over, a reversed or clearly rising delta is the
+           user again (momentum only decays) — release the lock and let this
+           very event page. During the glide everything is swallowed: geometry
+           is mid-flight and the glide itself lasts a fraction of a second. */
+        const fresh =
+          glided &&
+          (Math.sign(event.deltaY) !== tailDir || (mag > tailMag * 2 && mag >= RISE_FLOOR))
+        if (!fresh) {
+          event.preventDefault() // swallow the gesture's tail mid-glide
+          tailMag = Math.min(tailMag, mag)
+          // Past the glide the tail keeps the lock alive: every swallowed
+          // event re-arms the quiet window, so unlock waits for real
+          // silence — or for the new-gesture escape above.
+          if (glided) settle()
+          return
+        }
+        window.clearTimeout(timer)
+        paging = false
+        glided = false
       }
 
       /* Capture the anchor before any native drift moves the page: the first
@@ -155,6 +182,9 @@ export function useWheelPaging() {
 
       event.preventDefault()
       paging = true
+      glided = false
+      tailDir = dir
+      tailMag = Infinity // the first tail event never reads as rising
       anchorY = null // consumed; the next burst captures a fresh anchor
       // Failsafe unlock for browsers without the scrollend event.
       timer = window.setTimeout(() => {
