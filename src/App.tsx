@@ -14,18 +14,20 @@ import {
 import logoCar from './assets/logo-car.webp'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { ServicesShowcase } from './ServicesShowcase'
+import { StickyCall } from './StickyCall'
 import { useWheelPaging } from './useWheelPaging'
 import { useI18n } from './i18n/context'
 
 const PHONE_E164 = '+353852896539'
 const PHONE_DISPLAY = '+353 85 289 6539'
+const WHATSAPP_URL = `https://wa.me/${PHONE_E164.slice(1)}`
 
 const newTab = { target: '_blank', rel: 'noopener noreferrer' }
 
 // Viber deep link intentionally has no target: with `_blank`, desktops
 // without Viber installed would open a dead empty tab.
 const contactLinks = [
-  { name: 'WhatsApp', href: `https://wa.me/${PHONE_E164.slice(1)}`, Icon: FaWhatsapp, ...newTab },
+  { name: 'WhatsApp', href: WHATSAPP_URL, Icon: FaWhatsapp, ...newTab },
   { name: 'Viber', href: `viber://chat?number=${encodeURIComponent(PHONE_E164)}`, Icon: FaViber },
   { name: 'Telegram', href: 'https://t.me/Alex_Motors_ie', Icon: FaTelegram, ...newTab },
   { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', Icon: FaInstagram, ...newTab },
@@ -103,6 +105,7 @@ function App() {
   return (
     <main className="brick-wall">
       <LanguageSwitcher />
+      <StickyCall phoneE164={PHONE_E164} whatsappUrl={WHATSAPP_URL} />
 
       <section className="snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
         <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
