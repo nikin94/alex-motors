@@ -37,10 +37,15 @@ const GESTURE_GAP = 200
    old one's momentum tail — when it reverses direction, or when its magnitude
    jumps to at least double the smallest tail event seen so far: momentum only
    ever decays, so a rising delta is the user flicking again. RISE_FLOOR keeps
-   the 1–3px noise at a tail's very end from qualifying. Without this escape
-   the debounce starves — a tail merging straight into fresh input re-arms the
-   quiet window forever, and scrolling goes dead (both directions) until the
-   trackpad falls completely silent. */
+   the 1–3px noise at a tail's very end from qualifying — and it gates the
+   REVERSAL branch too: trackpad tails jitter with tiny opposite-sign events,
+   and at an intermediate stop inside an over-tall screen (no elastic zone
+   there) an ungated 3px reversal pages straight back — the page visibly
+   bounces one screen up and then down again off one gesture. A deliberate
+   reverse flick is tens of px, so the floor costs it nothing. Without this
+   escape the debounce starves — a tail merging straight into fresh input
+   re-arms the quiet window forever, and scrolling goes dead (both
+   directions) until the trackpad falls completely silent. */
 const RISE_FLOOR = 20
 
 export function useWheelPaging() {
@@ -90,7 +95,8 @@ export function useWheelPaging() {
            is mid-flight and the glide itself lasts a fraction of a second. */
         const fresh =
           glided &&
-          (Math.sign(event.deltaY) !== tailDir || (mag > tailMag * 2 && mag >= RISE_FLOOR))
+          mag >= RISE_FLOOR &&
+          (Math.sign(event.deltaY) !== tailDir || mag > tailMag * 2)
         if (!fresh) {
           event.preventDefault() // swallow the gesture's tail mid-glide
           tailMag = Math.min(tailMag, mag)
