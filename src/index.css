@@ -208,12 +208,13 @@ button:not(:disabled) {
   }
 }
 
-/* Third screen (reviews): the same translucent shading as the services
-   screen, so the shared brick wall runs on unbroken beneath all four. The
-   contact screen sits below it, so the same bottom-edge bridge sinks the
-   lit centre back to the darkness the next screen's top starts at — no
-   seam at the snap boundary. */
-.reviews-shade {
+/* Middle screens (reviews, FAQ): the same translucent shading as the services
+   screen, so the shared brick wall runs on unbroken beneath all five. Each has
+   another screen below it, so the same bottom-edge bridge sinks the lit centre
+   back to the darkness the next screen's top starts at — no seam at the snap
+   boundaries. */
+.reviews-shade,
+.faq-shade {
   background:
     linear-gradient(to bottom, transparent 75%, rgb(0 0 0 / 0.72) 100%),
     radial-gradient(ellipse 80% 60% at 50% 42%, rgb(255 168 74 / 0.13), rgb(255 143 40 / 0.04) 46%, transparent 74%),
