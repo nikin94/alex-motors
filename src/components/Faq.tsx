@@ -10,6 +10,7 @@ import {
 import type { IconType } from 'react-icons'
 
 import { Button } from './Button'
+import { tileShell } from './tile'
 import { useIsDesktop } from '../hooks/useIsDesktop'
 import { useRevealOnView } from '../hooks/useRevealOnView'
 import { useI18n } from '../i18n/context'
@@ -22,8 +23,11 @@ import { useI18n } from '../i18n/context'
    so the text is crawlable and the tallest answer fixes the panel height —
    switching never reflows the screen.
    Mobile: a single-open accordion — the most compact Q&A shape on a phone, and
-   question + answer stay together so there is no scrolling between them.
-   Closed answers stay in the DOM (hidden) for the same crawlability.
+   question + answer live inside ONE tile (question row with its neon icon on
+   the right, answer folding open beneath), so opening reads as the tile
+   expanding rather than text appearing outside it. The fold animates via the
+   grid-rows trick in index.css (.faq-collapse) — smooth open AND close with
+   no JS height measuring. Closed answers stay in the DOM for crawlability.
    The tiles enter with the same staggered slide-in as the services tablist
    (useRevealOnView + .tile-reveal), and each answer carries a neon-glow icon
    in the sign's amber — the decorative role the old service line art played. */
@@ -76,27 +80,33 @@ export function Faq() {
           const open = i === active
           const Icon = iconFor(i)
           return (
-            <div key={q} className="tile-reveal" style={{ animationDelay: `${i * 55}ms` }}>
-              <Button
-                variant="tile"
-                active={open}
+            <div
+              key={q}
+              className={`tile-reveal ${tileShell(open)}`}
+              style={{ animationDelay: `${i * 55}ms` }}
+            >
+              <button
+                type="button"
                 id={`faq-question-${i}`}
                 aria-expanded={open}
                 aria-controls={`faq-answer-${i}`}
                 onClick={() => setActive(open ? -1 : i)}
-                className="w-full text-base sm:text-base"
+                className="font-display flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-base tracking-[0.06em]"
               >
                 {q}
-              </Button>
+                <Icon aria-hidden className="neon-icon size-5 shrink-0" />
+              </button>
               <div
                 id={`faq-answer-${i}`}
                 role="region"
                 aria-labelledby={`faq-question-${i}`}
-                hidden={!open}
-                className="flex items-start gap-3 px-4 pt-2 pb-1"
+                aria-hidden={!open}
+                inert={!open}
+                className={`faq-collapse ${open ? 'faq-collapse-open' : ''}`}
               >
-                <Icon aria-hidden className="neon-icon mt-0.5 size-6 shrink-0" />
-                <p className="text-sm leading-relaxed text-stone-300">{a}</p>
+                <div className="overflow-hidden">
+                  <p className="px-4 pb-3 text-sm leading-relaxed text-stone-300">{a}</p>
+                </div>
               </div>
             </div>
           )

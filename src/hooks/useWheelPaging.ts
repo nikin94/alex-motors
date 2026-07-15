@@ -37,22 +37,33 @@ export function useWheelPaging() {
   useEffect(() => {
     const snapViewport = window.matchMedia('(min-width: 768px)')
     let paging = false
+    let glided = false // scrollend seen for the current page turn
     let timer = 0
     let anchorY: number | null = null
     let lastTs = 0
     let lastDir = 0
 
+    /* The lock lifts only once the wheel has been QUIET for this long after
+       the glide ended — a debounce, not a fixed delay. A trackpad's momentum
+       tail (or an eager second flick) keeps re-arming it from onWheel, so one
+       physical gesture pages exactly one stop no matter how long its tail is.
+       The old fixed 150ms unlocked inside longer tails and let quick
+       successive flicks stack several page turns. */
+    const QUIET_MS = 250
+
     const settle = () => {
       window.clearTimeout(timer)
-      // Cooldown so the trailing momentum of the same gesture cannot
-      // immediately page a second screen.
       timer = window.setTimeout(() => {
         paging = false
-      }, 150)
+        glided = false
+      }, QUIET_MS)
     }
 
     const onScrollEnd = () => {
-      if (paging) settle()
+      if (paging) {
+        glided = true
+        settle()
+      }
     }
 
     const onWheel = (event: WheelEvent) => {
@@ -61,6 +72,9 @@ export function useWheelPaging() {
       if (event.target instanceof Element && event.target.closest('textarea')) return
       if (paging) {
         event.preventDefault() // swallow the gesture's tail mid-glide
+        // Past the glide the tail keeps the lock alive: every swallowed
+        // event re-arms the quiet window, so unlock waits for real silence.
+        if (glided) settle()
         return
       }
 

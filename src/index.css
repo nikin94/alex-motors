@@ -208,6 +208,26 @@ button:not(:disabled) {
   }
 }
 
+/* Mobile FAQ answers fold open and closed smoothly via the grid-rows trick:
+   animating 0fr → 1fr resizes to the content's real height with no JS
+   measuring, and it animates both directions. The inner wrapper's
+   overflow-hidden clips the text while the row is mid-fold. Under reduced
+   motion the rows still switch — just without the transition. */
+.faq-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+}
+
+.faq-collapse-open {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq-collapse {
+    transition: grid-template-rows 0.3s ease;
+  }
+}
+
 /* Neon glow for icons decorating the FAQ answers — the same amber halo the
    sign carries (and the retired service line art used), so each icon reads
    as another lit tube on the wall. */
