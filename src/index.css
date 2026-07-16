@@ -266,10 +266,11 @@ button:not(:disabled) {
    the media query never turns snapping on — the page scrolls normally.
    Smooth scrolling is deliberately outside the media query: the chevron
    anchor jump should be smooth on every viewport, not only where snapping
-   is active. Snap stays `mandatory` even with three screens: the location
-   screen fits a normal viewport, and useWheelPaging already steps through
-   any screen that is taller than the viewport one page at a time, so long
-   content is never trapped between snap points. */
+   is active. Snap stays `mandatory` even with a screen taller than the
+   viewport: a snap area larger than the snapport scrolls freely within
+   itself per spec, and useWheelPaging keeps the wheel native inside such a
+   screen until its far edge is in view, so long content is never trapped
+   between snap points. */
 html {
   scroll-behavior: smooth;
 }

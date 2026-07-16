@@ -1,228 +1,107 @@
 import { useEffect } from 'react'
 
-/* Native CSS scroll snap only settles once a gesture ends, and it snaps to
-   the NEAREST screen — a wheel gesture has to cross the midpoint between
-   screens before it pages. On the snap viewports (>= 768px, matching the
-   media query in index.css) the wheel should feel like a full-page site
-   instead, but with a little give: within FREE_PLAY px of a snap point the
-   wheel scrolls natively (and CSS snap eases the page back if the gesture
-   ends there); once the page drifts past that, the transition completes on
-   its own — no long drag to the midpoint, no dead-stiff hijack either.
+/* Full-page wheel paging on the snap viewports (>= 768px, matching the media
+   query in index.css): one wheel gesture turns exactly one screen.
+   This is deliberately the simplest possible model. The previous version kept
+   an elastic free-play zone, per-gesture scroll anchors and momentum-tail
+   heuristics — each patch over trackpad inertia bred the next edge case
+   (stacked turns, dead scroll, backward teleports). Now a wheel tick is
+   either swallowed while a turn is in flight, or turns one screen from
+   wherever the page currently is, strictly in the tick's own direction —
+   a backward jump is impossible by construction, and there is no gesture
+   state left to go stale.
    The handler owns wheel only: keyboard, scrollbar, touch and anchor
    scrolling stay native (and still snap via CSS). Ctrl+wheel is left
-   alone — that's pinch-zoom on most platforms. */
+   alone — that's pinch-zoom on most platforms. A textarea (contact form)
+   scrolls its own overflow. A screen taller than the viewport (short
+   laptops) scrolls natively until its far edge is in view, then the next
+   tick pages on. */
 
 /* Fractional scroll positions on HiDPI screens land within a pixel or two
    of a snap point — treat that as aligned. */
 const EPSILON = 2
 
-/* The give before a wheel gesture commits to paging: roughly one mouse-wheel
-   notch (~100px in Chrome) stays in the elastic zone and snaps back, a
-   second notch (or a firmer trackpad flick) completes the transition. */
-const FREE_PLAY = 120
+/* Ticks smaller than this stay native: the 1–4px dust of a trackpad's
+   momentum tail must not turn a whole screen, while a deliberate flick is
+   tens to hundreds of px. Firefox reports line-mode deltas (~3 lines per
+   notch), so those convert to px first. */
+const INTENT_PX = 8
+const LINE_PX = 16
 
-/* A gesture is a burst of wheel events; a longer gap starts a fresh one.
-   The anchor — the scroll position the gesture began from — is captured once
-   per gesture so a fast flick commits from where it STARTED, not from
-   wherever native elastic drift has carried the page by the time the drift
-   crosses FREE_PLAY. Without the anchor, a quick flick down an over-tall
-   screen (a short-viewport hero, or services) reads its already-drifted
-   geometry, finds no content left below the fold, and jumps to the next
-   screen — skipping the band (the hero contacts) a slow scroll would stop
-   on. Slow scrolling never drifts, so anchor == current and behaviour is
-   unchanged. */
-const GESTURE_GAP = 200
+/* The lock lifts this long after the glide ends — a fixed cooldown, not a
+   re-arming debounce. A very long momentum tail can outlive it and turn one
+   extra screen, but that turn is a clean single step in the tail's own
+   direction; the debounce variants that tried to outsmart tails are what
+   produced dead scroll and backward jumps. */
+const COOLDOWN_MS = 500
 
-/* Inside the post-glide lock a wheel event is read as a NEW gesture — not the
-   old one's momentum tail — when it reverses direction, or when its magnitude
-   jumps to at least double the smallest tail event seen so far: momentum only
-   ever decays, so a rising delta is the user flicking again. RISE_FLOOR keeps
-   the 1–3px noise at a tail's very end from qualifying — and it gates the
-   REVERSAL branch too: trackpad tails jitter with tiny opposite-sign events,
-   and at an intermediate stop inside an over-tall screen (no elastic zone
-   there) an ungated 3px reversal pages straight back — the page visibly
-   bounces one screen up and then down again off one gesture. A deliberate
-   reverse flick is tens of px, so the floor costs it nothing. Without this
-   escape the debounce starves — a tail merging straight into fresh input
-   re-arms the quiet window forever, and scrolling goes dead (both
-   directions) until the trackpad falls completely silent. */
-const RISE_FLOOR = 20
+/* Failsafe unlock for browsers without the scrollend event. */
+const FAILSAFE_MS = 1500
 
 export function useWheelPaging() {
   useEffect(() => {
     const snapViewport = window.matchMedia('(min-width: 768px)')
-    let paging = false
-    let glided = false // scrollend seen for the current page turn
+    let locked = false
     let timer = 0
-    let anchorY: number | null = null
-    let lastTs = 0
-    let lastDir = 0
-    let tailDir = 0 // direction of the gesture that committed the page turn
-    let tailMag = Infinity // smallest |deltaY| the tail has decayed to so far
-
-    /* The lock lifts only once the wheel has been QUIET for this long after
-       the glide ended — a debounce, not a fixed delay. A trackpad's momentum
-       tail (or an eager second flick) keeps re-arming it from onWheel, so one
-       physical gesture pages exactly one stop no matter how long its tail is.
-       The old fixed 150ms unlocked inside longer tails and let quick
-       successive flicks stack several page turns. */
-    const QUIET_MS = 250
-
-    const settle = () => {
-      window.clearTimeout(timer)
-      timer = window.setTimeout(() => {
-        paging = false
-        glided = false
-      }, QUIET_MS)
-    }
 
     const onScrollEnd = () => {
-      if (paging) {
-        glided = true
-        settle()
-      }
+      if (!locked) return
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        locked = false
+      }, COOLDOWN_MS)
     }
 
     const onWheel = (event: WheelEvent) => {
-      if (!snapViewport.matches || event.ctrlKey || event.deltaY === 0) return
+      if (!snapViewport.matches || event.ctrlKey) return
       // A textarea (contact form) scrolls its own overflow — never page over it.
       if (event.target instanceof Element && event.target.closest('textarea')) return
-      if (paging) {
-        const mag = Math.abs(event.deltaY)
-        /* Once the glide is over, a reversed or clearly rising delta is the
-           user again (momentum only decays) — release the lock and let this
-           very event page. During the glide everything is swallowed: geometry
-           is mid-flight and the glide itself lasts a fraction of a second. */
-        const fresh =
-          glided &&
-          mag >= RISE_FLOOR &&
-          (Math.sign(event.deltaY) !== tailDir || mag > tailMag * 2)
-        if (!fresh) {
-          event.preventDefault() // swallow the gesture's tail mid-glide
-          tailMag = Math.min(tailMag, mag)
-          // Past the glide the tail keeps the lock alive: every swallowed
-          // event re-arms the quiet window, so unlock waits for real
-          // silence — or for the new-gesture escape above.
-          if (glided) settle()
-          return
-        }
-        window.clearTimeout(timer)
-        paging = false
-        glided = false
+      if (locked) {
+        event.preventDefault() // swallow the glide's tail and the cooldown
+        return
       }
+
+      const px =
+        event.deltaMode === WheelEvent.DOM_DELTA_LINE ? event.deltaY * LINE_PX : event.deltaY
+      if (Math.abs(px) < INTENT_PX) return // jitter: native scroll, CSS snap holds the page
+      const dir = px > 0 ? 1 : -1
 
       const screens = document.querySelectorAll<HTMLElement>('.snap-screen')
       if (screens.length === 0) return
 
-      /* Screen edges in document space are scroll-invariant (scrollY + rect
-         edge); computed once per event and shared by the anchor capture, the
-         free-play check and the commit math below. */
-      const y = window.scrollY
-      const edges = Array.from(screens, (screen) => {
-        const r = screen.getBoundingClientRect()
-        return { top: y + r.top, bottom: y + r.bottom }
-      })
-
-      /* Capture the anchor before any native drift moves the page: the first
-         wheel of a burst, the first after a gap, or the first after the wheel
-         reverses direction. window.scrollY in a wheel handler still reflects
-         the pre-event position. Reversing is a new gesture from wherever the
-         drift left the page: without a recapture, a flick up after a small
-         down-drift would inherit the down-anchor, read no unseen content above
-         it, and page to the previous screen.
-         The anchor QUANTIZES to a screen top when captured inside that stop's
-         elastic zone: an up-down wiggle (or a tail that settled a few px shy
-         of the snap point) otherwise hands the gesture an anchor just across
-         a screen boundary — the commit then indexes the WRONG screen and
-         sends the page backward, or to the stop it already sits on, which
-         reads as a teleport to the previous screen on the next flick. */
-      const dir = Math.sign(event.deltaY)
-      let anchor = anchorY
-      if (
-        anchor === null ||
-        event.timeStamp - lastTs > GESTURE_GAP ||
-        dir !== lastDir
-      ) {
-        const home = edges.find((e) => Math.abs(e.top - y) < FREE_PLAY)
-        anchor = home ? home.top : y
-        anchorY = anchor
-      }
-      lastTs = event.timeStamp
-      lastDir = dir
-
-      /* Commit TIMING comes from the current (drifted) position: while the
-         nearest snap point is within FREE_PLAY the wheel stays native so the
-         page visibly gives, and CSS snap pulls it home if the gesture ends
-         here. Intermediate stops inside an over-tall screen sit far from
-         every screen top, so stepping there is never swallowed by the zone. */
+      // The screen the page is on = the one whose top is nearest the viewport top.
+      let current = 0
       let nearest = Infinity
-      edges.forEach((e) => {
-        nearest = Math.min(nearest, Math.abs(e.top - y))
-      })
-      if (nearest < FREE_PLAY) return
-
-      /* Commit DESTINATION is computed from the anchor, never the drifted
-         position, so it is the stop a slow scroll from the same start would
-         have reached. */
-      let a = 0
-      edges.forEach((e, i) => {
-        if (e.top <= anchor + EPSILON) a = i
-      })
-      const { top: screenTop, bottom: screenBottom } = edges[a]
-      const viewport = window.innerHeight
-
-      /* Over-tall screens (services always, hero on short laptops) must never
-         be skipped: a commit steps at most one viewport from the anchor,
-         clamped to the screen's own edge, and only a fully-seen screen hands
-         off to a neighbour. Down clamps to the bottom edge (the clamp keeps
-         the snap area covering the viewport, so mandatory snap accepts the
-         stop); up clamps to the top edge. */
-      let target: number | undefined
-      if (event.deltaY > 0) {
-        const unseenBelow = screenBottom - (anchor + viewport) > EPSILON
-        if (unseenBelow) {
-          target = Math.min(anchor + viewport, screenBottom - viewport)
-        } else if (edges[a + 1]) {
-          target = edges[a + 1].top
+      screens.forEach((screen, i) => {
+        const distance = Math.abs(screen.getBoundingClientRect().top)
+        if (distance < nearest) {
+          nearest = distance
+          current = i
         }
-      } else {
-        const unseenAbove = anchor - screenTop > EPSILON
-        if (unseenAbove) {
-          target = Math.max(anchor - viewport, screenTop)
-        } else if (edges[a - 1]) {
-          /* Enter an over-tall neighbour at its BOTTOM stop, not its top —
-             the mirror of entering downward at the top and stepping through.
-             Targeting the top here skips the neighbour's whole interior
-             ladder (789 → 0 past the 189 stop on a short viewport). For
-             screens that fit the viewport, bottom − viewport IS the top. */
-          target = Math.max(edges[a - 1].top, edges[a - 1].bottom - viewport)
-        }
-      }
-      if (target === undefined) return // past the edges: native scroll rules
+      })
 
-      /* Invariant: a commit only ever moves WITH the wheel. A target at or
-         behind the current position means the anchor went stale in some way
-         quantization did not cover — drop it and stay native (CSS snap still
-         settles the page) rather than teleport against the gesture. */
-      if (dir > 0 ? target <= y : target >= y) {
-        anchorY = null
-        return
-      }
+      /* An over-tall screen with unseen content in the tick's direction keeps
+         scrolling natively until that content has been seen — only then does
+         the wheel hand off to the neighbour. */
+      const rect = screens[current].getBoundingClientRect()
+      if (dir > 0 && rect.bottom > window.innerHeight + EPSILON) return
+      if (dir < 0 && rect.top < -EPSILON) return
 
       event.preventDefault()
-      paging = true
-      glided = false
-      tailDir = dir
-      tailMag = Infinity // the first tail event never reads as rising
-      anchorY = null // consumed; the next burst captures a fresh anchor
-      // Failsafe unlock for browsers without the scrollend event.
+      const next = current + dir
+      if (next < 0 || next >= screens.length) return // past the edges: nothing to turn to
+
+      locked = true
       timer = window.setTimeout(() => {
-        paging = false
-      }, 1200)
+        locked = false
+      }, FAILSAFE_MS)
       /* 'auto' resolves to the scroller's computed scroll-behavior: the base
          html rule gives smooth, prefers-reduced-motion flips it to instant —
          CSS stays the single owner of that decision. */
-      window.scrollTo({ top: target, behavior: 'auto' })
+      window.scrollTo({
+        top: window.scrollY + screens[next].getBoundingClientRect().top,
+        behavior: 'auto',
+      })
     }
 
     window.addEventListener('wheel', onWheel, { passive: false })
