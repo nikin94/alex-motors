@@ -56,6 +56,9 @@ export type Dictionary = {
   contact: {
     heading: string
     subtitle: string
+    /* Micro-CTA under the phone number: names the free assessment to defuse
+       the "what will this cost me" fear right where the call decision happens. */
+    freeQuote: string
     name: string
     phone: string
     email: string
@@ -207,6 +210,7 @@ const en: Dictionary = {
   contact: {
     heading: 'Contact Us',
     subtitle: "Tell us what's wrong — we'll call you back.",
+    freeQuote: 'Free assessment — just give us a call.',
     name: 'Name',
     phone: 'Phone',
     email: 'Email',
@@ -365,6 +369,7 @@ const ru: Dictionary = {
   contact: {
     heading: 'Контакты',
     subtitle: 'Опишите проблему — мы перезвоним.',
+    freeQuote: 'Бесплатная оценка — просто позвоните.',
     name: 'Имя',
     phone: 'Телефон',
     email: 'Почта',
@@ -523,6 +528,7 @@ const ga: Dictionary = {
   contact: {
     heading: 'Déan Teagmháil Linn',
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
+    freeQuote: 'Measúnú saor in aisce — níl le déanamh ach glaoch orainn.',
     name: 'Ainm',
     phone: 'Guthán',
     email: 'Ríomhphost',

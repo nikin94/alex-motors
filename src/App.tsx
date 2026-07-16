@@ -321,6 +321,9 @@ function App() {
                 >
                   {PHONE_DISPLAY}
                 </a>
+                <p className="mt-1 text-xs text-amber-200/80 sm:text-sm">
+                  {t.contact.freeQuote}
+                </p>
               </div>
             </div>
 
