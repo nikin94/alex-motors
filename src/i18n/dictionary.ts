@@ -92,7 +92,7 @@ const en: Dictionary = {
   services: {
     heading: 'Our Services',
     subtitle:
-      'All makes and models — from daily drivers to sports cars. Call-outs across Donegal & Derry.',
+      'All makes and models — from daily drivers to sports cars.\nCall-outs across Donegal & Derry.',
     preNct: {
       title: 'Pre-NCT Check & Repairs',
       body: 'Failed the NCT — or worried you might? We do a full pre-NCT inspection covering brakes, suspension, lights, emissions and tyres — and fix what needs fixing, so you go into the test ready to pass. Retest checks too.',
@@ -251,7 +251,7 @@ const ru: Dictionary = {
   services: {
     heading: 'Наши услуги',
     subtitle:
-      'Все марки и модели — от повседневных авто до спорткаров. Выезд по Донеголу и Дерри.',
+      'Все марки и модели — от повседневных авто до спорткаров.\nВыезд по Донеголу и Дерри.',
     preNct: {
       title: 'Подготовка к NCT и ремонт',
       body: 'Не прошли NCT или боитесь не пройти? Проводим полную проверку перед NCT — тормоза, подвеска, свет, выхлоп и шины — и устраняем всё необходимое, чтобы вы приехали на тест готовыми. Проверка перед пересдачей тоже.',
@@ -410,7 +410,7 @@ const ga: Dictionary = {
   services: {
     heading: 'Ár Seirbhísí',
     subtitle:
-      'Gach déanamh agus múnla — ó ghluaisteáin laethúla go spórtcharranna. Glaonna amach ar fud Dhún na nGall agus Dhoire.',
+      'Gach déanamh agus múnla — ó ghluaisteáin laethúla go spórtcharranna.\nGlaonna amach ar fud Dhún na nGall agus Dhoire.',
     preNct: {
       title: 'Seiceáil Réamh-NCT & Deisiúcháin',
       body: 'Theip ort san NCT — nó imníoch go dteipfeadh ort? Déanaimid iniúchadh iomlán réamh-NCT ar na coscáin, an crochadh, na soilse, na hastaíochtaí agus na boinn — agus deisímid a bhfuil le deisiú, ionas go mbeidh tú réidh le pasáil. Seiceálacha athtástála chomh maith.',
