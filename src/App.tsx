@@ -19,7 +19,6 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
 import { ServicesShowcase } from './components/ServicesShowcase'
 import { StickyCall } from './components/StickyCall'
-import { useWheelPaging } from './hooks/useWheelPaging'
 import { useI18n } from './i18n/context'
 
 const PHONE_E164 = '+353852896539'
@@ -103,7 +102,6 @@ const localBusinessJsonLd = {
 }
 
 function App() {
-  useWheelPaging()
   const { t } = useI18n()
 
   return (

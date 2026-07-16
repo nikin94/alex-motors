@@ -24,7 +24,7 @@ export function StickyCall({
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // The hero is the first snap screen (same lookup as useWheelPaging).
+    // The hero is the first snap screen.
     const hero = document.querySelector('.snap-screen')
     if (!hero) return
     const observer = new IntersectionObserver(
