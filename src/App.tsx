@@ -4,6 +4,7 @@ import {
   FaInstagram,
   FaLocationDot,
   FaPhone,
+  FaQuoteLeft,
   FaRoute,
   FaTelegram,
   FaTiktok,
@@ -14,6 +15,7 @@ import {
 import logoCar from './assets/logo-car.webp'
 import { Button } from './components/Button'
 import { ContactForm } from './components/ContactForm'
+import { WallStencil } from './components/WallStencil'
 import { Faq } from './components/Faq'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
@@ -189,6 +191,11 @@ function App() {
         id="services"
         className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
       >
+        {/* The sign's car artwork, back on the wall as faded paint — the
+            watermark this screen carried before the photo redesign. */}
+        <WallStencil className="-right-[5%] top-[4%] w-[min(42vw,36rem)]">
+          <img src={logoCar} alt="" width={1280} height={853} loading="lazy" />
+        </WallStencil>
         <ServicesShowcase />
         <a
           href="#reviews"
@@ -205,7 +212,10 @@ function App() {
         id="reviews"
         className="reviews-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
       >
-        <header className="text-center">
+        <WallStencil className="left-[3%] top-[10%] -rotate-6">
+          <FaQuoteLeft className="size-56" />
+        </WallStencil>
+        <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             {t.reviews.heading}
           </h2>
@@ -228,7 +238,12 @@ function App() {
         id="faq"
         className="faq-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-8 overflow-hidden px-4 py-12"
       >
-        <header className="text-center">
+        {/* The question mark is a glyph from the display face, so the stencil
+            reads as the same "hand" that painted the sign lettering. */}
+        <WallStencil className="right-[5%] top-[2%] rotate-6">
+          <span className="font-display text-[24rem] leading-none">?</span>
+        </WallStencil>
+        <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             {t.faq.heading}
           </h2>
@@ -252,7 +267,10 @@ function App() {
         id="contact"
         className="contact-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 pt-12 pb-20"
       >
-        <header className="text-center">
+        <WallStencil className="bottom-[8%] left-[3%] rotate-6">
+          <FaPhone className="size-52" />
+        </WallStencil>
+        <header className="relative text-center">
           <h2 className="font-display text-4xl tracking-[0.3em] text-amber-50 sm:text-5xl">
             {t.contact.heading}
           </h2>
@@ -261,7 +279,7 @@ function App() {
           </p>
         </header>
 
-        <div className="grid w-full max-w-4xl justify-items-center gap-6 lg:grid-cols-2 lg:items-stretch lg:justify-items-stretch">
+        <div className="relative grid w-full max-w-4xl justify-items-center gap-6 lg:grid-cols-2 lg:items-stretch lg:justify-items-stretch">
         <div className="flex w-full max-w-md flex-col rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none">
           <div className="my-auto flex flex-col gap-6">
             <div className="flex items-start gap-3">
