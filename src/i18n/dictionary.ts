@@ -56,6 +56,9 @@ export type Dictionary = {
   contact: {
     heading: string
     subtitle: string
+    /* Micro-CTA under the phone number: names the free assessment to defuse
+       the "what will this cost me" fear right where the call decision happens. */
+    freeQuote: string
     name: string
     phone: string
     email: string
@@ -89,7 +92,7 @@ const en: Dictionary = {
   services: {
     heading: 'Our Services',
     subtitle:
-      'All makes and models — from daily drivers to sports cars. Call-outs across Donegal & Derry.',
+      'All makes and models — from daily drivers to sports cars.\nCall-outs across Donegal & Derry.',
     preNct: {
       title: 'Pre-NCT Check & Repairs',
       body: 'Failed the NCT — or worried you might? We do a full pre-NCT inspection covering brakes, suspension, lights, emissions and tyres — and fix what needs fixing, so you go into the test ready to pass. Retest checks too.',
@@ -207,6 +210,7 @@ const en: Dictionary = {
   contact: {
     heading: 'Contact Us',
     subtitle: "Tell us what's wrong — we'll call you back.",
+    freeQuote: 'Free assessment — just give us a call.',
     name: 'Name',
     phone: 'Phone',
     email: 'Email',
@@ -247,7 +251,7 @@ const ru: Dictionary = {
   services: {
     heading: 'Наши услуги',
     subtitle:
-      'Все марки и модели — от повседневных авто до спорткаров. Выезд по Донеголу и Дерри.',
+      'Все марки и модели — от повседневных авто до спорткаров.\nВыезд по Донеголу и Дерри.',
     preNct: {
       title: 'Подготовка к NCT и ремонт',
       body: 'Не прошли NCT или боитесь не пройти? Проводим полную проверку перед NCT — тормоза, подвеска, свет, выхлоп и шины — и устраняем всё необходимое, чтобы вы приехали на тест готовыми. Проверка перед пересдачей тоже.',
@@ -365,6 +369,7 @@ const ru: Dictionary = {
   contact: {
     heading: 'Контакты',
     subtitle: 'Опишите проблему — мы перезвоним.',
+    freeQuote: 'Бесплатная оценка — просто позвоните.',
     name: 'Имя',
     phone: 'Телефон',
     email: 'Почта',
@@ -405,7 +410,7 @@ const ga: Dictionary = {
   services: {
     heading: 'Ár Seirbhísí',
     subtitle:
-      'Gach déanamh agus múnla — ó ghluaisteáin laethúla go spórtcharranna. Glaonna amach ar fud Dhún na nGall agus Dhoire.',
+      'Gach déanamh agus múnla — ó ghluaisteáin laethúla go spórtcharranna.\nGlaonna amach ar fud Dhún na nGall agus Dhoire.',
     preNct: {
       title: 'Seiceáil Réamh-NCT & Deisiúcháin',
       body: 'Theip ort san NCT — nó imníoch go dteipfeadh ort? Déanaimid iniúchadh iomlán réamh-NCT ar na coscáin, an crochadh, na soilse, na hastaíochtaí agus na boinn — agus deisímid a bhfuil le deisiú, ionas go mbeidh tú réidh le pasáil. Seiceálacha athtástála chomh maith.',
@@ -523,6 +528,7 @@ const ga: Dictionary = {
   contact: {
     heading: 'Déan Teagmháil Linn',
     subtitle: 'Inis dúinn cad atá cearr — glaofaimid ar ais ort.',
+    freeQuote: 'Measúnú saor in aisce — níl le déanamh ach glaoch orainn.',
     name: 'Ainm',
     phone: 'Guthán',
     email: 'Ríomhphost',
