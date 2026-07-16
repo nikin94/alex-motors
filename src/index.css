@@ -259,6 +259,19 @@ button:not(:disabled) {
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
+/* Wall stencils: one theme mark per screen, washed down to old paint on the
+   brick — the exact treatment the retired services watermark used (ghost
+   opacity + desaturation). The radial mask dissolves every mark toward its
+   edges so it never ends on a hard line, the way real faded paint blurs out.
+   Color is white before the filter so glyph icons and the display-font glyph
+   read as the same chalky pigment as the logo artwork. */
+.wall-stencil {
+  opacity: 0.055;
+  color: #fff;
+  filter: grayscale(1) brightness(1.6);
+  mask-image: radial-gradient(ellipse 62% 62% at 50% 50%, black 42%, transparent 80%);
+}
+
 /* Full-page snap on desktop, owned ENTIRELY by native CSS — no JS wheel
    handling. Browsers implement directional snapping for mandatory snap
    (a wheel tick or flick pages to the next stop in the scroll direction),

@@ -63,7 +63,7 @@ export function ReviewsCarousel() {
 
   return (
     <div
-      className="flex w-full max-w-md flex-col justify-center gap-4 md:max-w-5xl"
+      className="relative flex w-full max-w-md flex-col justify-center gap-4 md:max-w-5xl"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}

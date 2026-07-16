@@ -122,7 +122,7 @@ function DesktopTabs({
   }
 
   return (
-    <div className="grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,16rem)_1fr] lg:items-stretch">
+    <div className="relative grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,16rem)_1fr] lg:items-stretch">
       <div
         ref={listRef}
         role="tablist"
