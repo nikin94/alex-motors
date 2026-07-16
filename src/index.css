@@ -259,17 +259,19 @@ button:not(:disabled) {
     linear-gradient(to bottom, rgb(0 0 0 / 0.9), rgb(0 0 0 / 0.44) 30%, rgb(0 0 0 / 0.5));
 }
 
-/* Full-page snap between the hero and the services screen on desktop.
-   Native CSS scroll snap instead of a scroll-hijack library: the browser
-   keeps ownership of wheel/touch/keyboard scrolling, so accessibility and
-   momentum feel stay intact. Below 768px (mobile per project convention)
+/* Full-page snap on desktop, owned ENTIRELY by native CSS — no JS wheel
+   handling. Browsers implement directional snapping for mandatory snap
+   (a wheel tick or flick pages to the next stop in the scroll direction),
+   and because the browser owns all the gesture state there is no momentum
+   tail, debounce or anchor bookkeeping to get wrong — the JS wheel-paging
+   hook that used to live here was four bug-fix iterations of exactly that
+   and is deliberately gone. Below 768px (mobile per project convention)
    the media query never turns snapping on — the page scrolls normally.
    Smooth scrolling is deliberately outside the media query: the chevron
    anchor jump should be smooth on every viewport, not only where snapping
-   is active. Snap stays `mandatory` even with three screens: the location
-   screen fits a normal viewport, and useWheelPaging already steps through
-   any screen that is taller than the viewport one page at a time, so long
-   content is never trapped between snap points. */
+   is active. Snap stays `mandatory` even with over-tall screens: per the
+   CSS spec, a snap area larger than the viewport scrolls freely inside
+   itself, so long content is never trapped between snap points. */
 html {
   scroll-behavior: smooth;
 }
