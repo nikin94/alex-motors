@@ -192,8 +192,10 @@ function App() {
         className="services-shade snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-6 overflow-hidden px-4 py-10"
       >
         {/* The sign's car artwork, back on the wall as faded paint — the
-            watermark this screen carried before the photo redesign. */}
-        <WallStencil className="-right-[5%] top-[4%] w-[min(42vw,36rem)]">
+            watermark this screen carried before the photo redesign. Tucked
+            into the bottom-right corner, nosing under the showcase panel
+            (which paints above it via `relative`). */}
+        <WallStencil className="-right-[1%] bottom-[3%] w-[min(42vw,36rem)]">
           <img src={logoCar} alt="" width={1280} height={853} loading="lazy" />
         </WallStencil>
         <ServicesShowcase />
