@@ -111,15 +111,31 @@ export function useWheelPaging() {
         glided = false
       }
 
+      const screens = document.querySelectorAll<HTMLElement>('.snap-screen')
+      if (screens.length === 0) return
+
+      /* Screen edges in document space are scroll-invariant (scrollY + rect
+         edge); computed once per event and shared by the anchor capture, the
+         free-play check and the commit math below. */
+      const y = window.scrollY
+      const edges = Array.from(screens, (screen) => {
+        const r = screen.getBoundingClientRect()
+        return { top: y + r.top, bottom: y + r.bottom }
+      })
+
       /* Capture the anchor before any native drift moves the page: the first
          wheel of a burst, the first after a gap, or the first after the wheel
          reverses direction. window.scrollY in a wheel handler still reflects
          the pre-event position. Reversing is a new gesture from wherever the
          drift left the page: without a recapture, a flick up after a small
          down-drift would inherit the down-anchor, read no unseen content above
-         it, and page to the previous screen — overshooting the stop CSS snap
-         would have eased back to (the mirror of the drift bug this file
-         fixes). */
+         it, and page to the previous screen.
+         The anchor QUANTIZES to a screen top when captured inside that stop's
+         elastic zone: an up-down wiggle (or a tail that settled a few px shy
+         of the snap point) otherwise hands the gesture an anchor just across
+         a screen boundary — the commit then indexes the WRONG screen and
+         sends the page backward, or to the stop it already sits on, which
+         reads as a teleport to the previous screen on the next flick. */
       const dir = Math.sign(event.deltaY)
       let anchor = anchorY
       if (
@@ -127,14 +143,12 @@ export function useWheelPaging() {
         event.timeStamp - lastTs > GESTURE_GAP ||
         dir !== lastDir
       ) {
-        anchor = window.scrollY
+        const home = edges.find((e) => Math.abs(e.top - y) < FREE_PLAY)
+        anchor = home ? home.top : y
         anchorY = anchor
       }
       lastTs = event.timeStamp
       lastDir = dir
-
-      const screens = document.querySelectorAll<HTMLElement>('.snap-screen')
-      if (screens.length === 0) return
 
       /* Commit TIMING comes from the current (drifted) position: while the
          nearest snap point is within FREE_PLAY the wheel stays native so the
@@ -142,19 +156,14 @@ export function useWheelPaging() {
          here. Intermediate stops inside an over-tall screen sit far from
          every screen top, so stepping there is never swallowed by the zone. */
       let nearest = Infinity
-      screens.forEach((screen) => {
-        nearest = Math.min(nearest, Math.abs(screen.getBoundingClientRect().top))
+      edges.forEach((e) => {
+        nearest = Math.min(nearest, Math.abs(e.top - y))
       })
       if (nearest < FREE_PLAY) return
 
       /* Commit DESTINATION is computed from the anchor, never the drifted
          position, so it is the stop a slow scroll from the same start would
-         have reached. Screen edges in document space are scroll-invariant:
-         scrollY + rect edge. */
-      const edges = Array.from(screens, (screen) => {
-        const r = screen.getBoundingClientRect()
-        return { top: window.scrollY + r.top, bottom: window.scrollY + r.bottom }
-      })
+         have reached. */
       let a = 0
       edges.forEach((e, i) => {
         if (e.top <= anchor + EPSILON) a = i
@@ -181,10 +190,24 @@ export function useWheelPaging() {
         if (unseenAbove) {
           target = Math.max(anchor - viewport, screenTop)
         } else if (edges[a - 1]) {
-          target = edges[a - 1].top
+          /* Enter an over-tall neighbour at its BOTTOM stop, not its top —
+             the mirror of entering downward at the top and stepping through.
+             Targeting the top here skips the neighbour's whole interior
+             ladder (789 → 0 past the 189 stop on a short viewport). For
+             screens that fit the viewport, bottom − viewport IS the top. */
+          target = Math.max(edges[a - 1].top, edges[a - 1].bottom - viewport)
         }
       }
       if (target === undefined) return // past the edges: native scroll rules
+
+      /* Invariant: a commit only ever moves WITH the wheel. A target at or
+         behind the current position means the anchor went stale in some way
+         quantization did not cover — drop it and stay native (CSS snap still
+         settles the page) rather than teleport against the gesture. */
+      if (dir > 0 ? target <= y : target >= y) {
+        anchorY = null
+        return
+      }
 
       event.preventDefault()
       paging = true
