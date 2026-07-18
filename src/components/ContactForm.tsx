@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 
+import { CONTACT_LIMITS, isEmail, isPhone } from '../../shared/contact'
 import { Button } from './Button'
 import { useI18n } from '../i18n/context'
 
@@ -24,12 +25,6 @@ const inputClass =
   'w-full rounded-md border border-amber-100/20 bg-black/40 px-3 py-2.5 text-sm text-stone-100 placeholder:text-stone-500 transition-colors focus:border-amber-300/60 focus:outline-none sm:text-base'
 
 const labelClass = 'mb-1.5 block text-xs tracking-[0.08em] text-amber-100/70 sm:text-sm'
-
-/* Loose on purpose: reject prose, not unusual-but-valid numbers — any mix of
-   digits and the usual separators, with at least 7 digits in it. */
-const isPhone = (value: string) =>
-  /^\+?[\d\s()./-]+$/.test(value) && (value.match(/\d/g)?.length ?? 0) >= 7
-const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
 
 function RequiredMark() {
   return (
@@ -100,6 +95,10 @@ export function ContactForm() {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(data),
+        // A hung request (flaky mobile network) must not pin the form on
+        // "Sending…" forever — after this it falls into the error state,
+        // whose copy already points at call/WhatsApp.
+        signal: AbortSignal.timeout(10_000),
       })
       if (!res.ok) throw new Error(String(res.status))
       form.reset()
@@ -125,7 +124,7 @@ export function ContactForm() {
           name="name"
           type="text"
           required
-          maxLength={100}
+          maxLength={CONTACT_LIMITS.name}
           autoComplete="name"
           placeholder={t.contact.placeholders.name}
           className={inputClass}
@@ -145,7 +144,7 @@ export function ContactForm() {
             name="phone"
             type="tel"
             required
-            maxLength={40}
+            maxLength={CONTACT_LIMITS.phone}
             autoComplete="tel"
             placeholder={t.contact.placeholders.phone}
             className={inputClass}
@@ -162,7 +161,7 @@ export function ContactForm() {
             id="contact-email"
             name="email"
             type="email"
-            maxLength={200}
+            maxLength={CONTACT_LIMITS.email}
             autoComplete="email"
             placeholder={t.contact.placeholders.email}
             className={inputClass}
@@ -183,7 +182,7 @@ export function ContactForm() {
           id="contact-message"
           name="message"
           required
-          maxLength={2000}
+          maxLength={CONTACT_LIMITS.message}
           rows={4}
           placeholder={t.contact.placeholders.message}
           className={`${inputClass} flex-1 resize-none`}

@@ -1,5 +1,7 @@
 import { EmailMessage } from 'cloudflare:email'
 
+import { CONTACT_LIMITS, isEmail } from '../shared/contact'
+
 /* Contact-form endpoint. Only /api/* requests ever reach this Worker
    (run_worker_first in wrangler.jsonc); every other URL keeps the plain
    static-asset/SPA behaviour the site always had.
@@ -21,8 +23,6 @@ interface Env {
   CONTACT_FROM?: string
   CONTACT_TO?: string
 }
-
-const LIMITS = { name: 100, phone: 40, email: 200, message: 2000 }
 
 function json(status: number, ok: boolean): Response {
   return new Response(JSON.stringify({ ok }), {
@@ -67,12 +67,12 @@ export default {
       return json(200, true)
     }
 
-    const name = field(data.name, LIMITS.name)
-    const phone = field(data.phone, LIMITS.phone)
-    const email = field(data.email, LIMITS.email) ?? ''
-    const message = field(data.message, LIMITS.message)
+    const name = field(data.name, CONTACT_LIMITS.name)
+    const phone = field(data.phone, CONTACT_LIMITS.phone)
+    const email = field(data.email, CONTACT_LIMITS.email) ?? ''
+    const message = field(data.message, CONTACT_LIMITS.message)
     if (!name || !phone || !message) return json(400, false)
-    if (email !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(400, false)
+    if (email !== '' && !isEmail(email)) return json(400, false)
 
     if (!env.CONTACT_EMAIL || !env.CONTACT_FROM || !env.CONTACT_TO) {
       // Email Routing is not wired up yet (waiting on the production domain).

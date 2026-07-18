@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type TouchEvent } from 'react'
+import { useEffect, useState } from 'react'
 import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from 'react-icons/fa6'
 
 import { useIsDesktop } from '../hooks/useIsDesktop'
+import { useSwipe } from '../hooks/useSwipe'
 import { useI18n } from '../i18n/context'
 
 /* Customer reviews as an infinite carousel. Desktop shows a page of three
@@ -15,7 +16,6 @@ import { useI18n } from '../i18n/context'
    height — switching is a crossfade, not a reflow. */
 
 const AUTO_ADVANCE_MS = 6000
-const SWIPE_THRESHOLD = 40
 
 export function ReviewsCarousel() {
   const { t } = useI18n()
@@ -29,7 +29,6 @@ export function ReviewsCarousel() {
 
   const [page, setPage] = useState(0)
   const [paused, setPaused] = useState(false)
-  const touchStartX = useRef<number | null>(null)
   // Manual steps restart the interval by bumping this key, so the next
   // auto-advance always happens a full period after the last interaction.
   const [timerKey, setTimerKey] = useState(0)
@@ -43,23 +42,14 @@ export function ReviewsCarousel() {
     setTimerKey((k) => k + 1)
   }
 
+  const { onTouchStart, onTouchEnd } = useSwipe(step)
+
   useEffect(() => {
     if (paused) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = window.setInterval(() => setPage((p) => (p + 1) % pageCount), AUTO_ADVANCE_MS)
     return () => window.clearInterval(id)
   }, [paused, pageCount, timerKey])
-
-  const onTouchStart = (event: TouchEvent) => {
-    touchStartX.current = event.touches[0].clientX
-  }
-  const onTouchEnd = (event: TouchEvent) => {
-    if (touchStartX.current === null) return
-    const dx = event.changedTouches[0].clientX - touchStartX.current
-    touchStartX.current = null
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return
-    step(dx < 0 ? 1 : -1)
-  }
 
   return (
     <div
@@ -80,20 +70,22 @@ export function ReviewsCarousel() {
         </button>
 
         <div className="grid min-w-0 flex-1" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+          {/* Pages and cards key by position: quotes are anonymous visitor
+              text, so names can repeat once the real reviews land. */}
           {pages.map((quotes, p) => {
             const selected = p === page
             return (
               <div
-                key={quotes[0].name}
+                key={p}
                 aria-hidden={!selected}
                 inert={!selected}
                 className={`col-start-1 row-start-1 grid gap-4 md:grid-cols-3 motion-safe:transition-opacity motion-safe:duration-300 ${
                   selected ? 'opacity-100' : 'pointer-events-none opacity-0'
                 }`}
               >
-                {quotes.map(({ name, text }) => (
+                {quotes.map(({ name, text }, i) => (
                   <figure
-                    key={name}
+                    key={i}
                     className="flex flex-col justify-between gap-4 rounded-lg border border-amber-100/15 bg-black/55 p-5 sm:p-6"
                   >
                     <blockquote className="text-sm leading-relaxed text-stone-300 sm:text-base">
@@ -121,9 +113,9 @@ export function ReviewsCarousel() {
       </div>
 
       <div aria-hidden className="flex justify-center gap-1.5">
-        {pages.map((quotes, p) => (
+        {pages.map((_, p) => (
           <span
-            key={quotes[0].name}
+            key={p}
             className={`size-1.5 rounded-full transition-colors ${
               p === page ? 'bg-amber-300/80' : 'bg-amber-100/20'
             }`}

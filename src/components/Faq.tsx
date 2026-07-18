@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useState } from 'react'
 import {
   FaCalendarCheck,
   FaCarSide,
@@ -13,6 +13,7 @@ import { Button } from './Button'
 import { tileShell } from './tile'
 import { useIsDesktop } from '../hooks/useIsDesktop'
 import { useRevealOnView } from '../hooks/useRevealOnView'
+import { useTablist } from '../hooks/useTablist'
 import { useI18n } from '../i18n/context'
 
 /* FAQ in the services screen's master-detail language, so the two screens read
@@ -33,9 +34,9 @@ import { useI18n } from '../i18n/context'
    in the sign's amber — the decorative role the old service line art played. */
 
 /* One icon per question, by position — the dictionary keeps the items in the
-   same order across languages, so index is the stable key here. Adding a
-   question means adding its icon, which this length-checked tuple enforces
-   at the call site (ICONS[i] falls back to the first icon if lists drift). */
+   same order across languages, so index is the stable key here. Nothing
+   enforces the lengths match: a question added without its icon falls back
+   to the first icon via `iconFor` below. */
 const ICONS: IconType[] = [
   FaCarSide, // all makes and models
   FaClipboardCheck, // pre-NCT check coverage
@@ -50,25 +51,21 @@ export function Faq() {
   const isDesktop = useIsDesktop()
   const items = t.faq.items
   const [active, setActive] = useState(0)
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+
+  /* The mobile accordion allows "all collapsed" (active = -1), but the desktop
+     tablist must always have a selected tab — with none, the answer panel is
+     empty and every tab sits at tabIndex -1, unreachable by keyboard. Crossing
+     the 768px boundary (tablet rotation, window resize) therefore restores the
+     default selection — the same boundary-reset the reviews carousel does. */
+  useEffect(() => setActive(0), [isDesktop])
 
   // Staggered slide-in on first view; see useRevealOnView + index.css.
   const { ref: listRef, revealed } = useRevealOnView<HTMLDivElement>()
 
-  const iconFor = (i: number) => ICONS[i] ?? ICONS[0]
+  // Shared roving-tabindex keyboard navigation; see useTablist.
+  const { onKeyDown, refFor } = useTablist(items.length, active, setActive)
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    let next = active
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (active + 1) % items.length
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp')
-      next = (active - 1 + items.length) % items.length
-    else if (event.key === 'Home') next = 0
-    else if (event.key === 'End') next = items.length - 1
-    else return
-    event.preventDefault()
-    setActive(next)
-    tabRefs.current[next]?.focus()
-  }
+  const iconFor = (i: number) => ICONS[i] ?? ICONS[0]
 
   if (!isDesktop) {
     return (
@@ -130,9 +127,7 @@ export function Faq() {
             key={q}
             variant="tile"
             active={i === active}
-            ref={(el) => {
-              tabRefs.current[i] = el
-            }}
+            ref={refFor(i)}
             role="tab"
             id={`faq-tab-${i}`}
             aria-selected={i === active}
