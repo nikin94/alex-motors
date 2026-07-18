@@ -111,7 +111,10 @@ function App() {
       <LanguageSwitcher />
       <StickyCall phoneE164={PHONE_E164} whatsappUrl={WHATSAPP_URL} />
 
-      <section className="snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12">
+      <section
+        id="hero"
+        className="snap-screen relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-4 py-12"
+      >
         <div className="lamp-glow flicker intro-ignite pointer-events-none absolute inset-0" />
         <div className="vignette pointer-events-none absolute inset-0" />
         <div className="intro-veil pointer-events-none absolute inset-0" />

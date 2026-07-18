@@ -24,8 +24,9 @@ export function StickyCall({
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // The hero is the first snap screen.
-    const hero = document.querySelector('.snap-screen')
+    // The hero is addressed by id: relying on "first .snap-screen" would break
+    // silently if a screen were ever added above it.
+    const hero = document.getElementById('hero')
     if (!hero) return
     const observer = new IntersectionObserver(
       ([entry]) => setShow(entry.intersectionRatio < SHOW_BELOW_HERO_RATIO),

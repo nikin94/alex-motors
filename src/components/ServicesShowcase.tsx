@@ -1,8 +1,10 @@
-import { useRef, useState, type KeyboardEvent, type TouchEvent } from 'react'
+import { useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
 import { useIsDesktop } from '../hooks/useIsDesktop'
 import { useRevealOnView } from '../hooks/useRevealOnView'
+import { useSwipe } from '../hooks/useSwipe'
+import { useTablist } from '../hooks/useTablist'
 import { Button } from './Button'
 import { useI18n } from '../i18n/context'
 import type { ServiceId } from '../i18n/dictionary'
@@ -48,8 +50,6 @@ const PHOTOS: Record<TabId, string> = {
   brakes: brakesPhoto,
   electrics: electricsPhoto,
 }
-
-const SWIPE_THRESHOLD = 40
 
 export function ServicesShowcase() {
   const { t } = useI18n()
@@ -101,25 +101,14 @@ function DesktopTabs({
   copy: (id: TabId) => PanelCopy
 }) {
   const { t } = useI18n()
-  const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({})
 
   // Staggered slide-in on first view; see useRevealOnView + index.css.
   const { ref: listRef, revealed } = useRevealOnView<HTMLDivElement>()
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    const i = TAB_ORDER.indexOf(active)
-    let next = i
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (i + 1) % TAB_ORDER.length
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp')
-      next = (i - 1 + TAB_ORDER.length) % TAB_ORDER.length
-    else if (event.key === 'Home') next = 0
-    else if (event.key === 'End') next = TAB_ORDER.length - 1
-    else return
-    event.preventDefault()
-    const id = TAB_ORDER[next]
-    setActive(id)
-    tabRefs.current[id]?.focus()
-  }
+  // Shared roving-tabindex keyboard navigation; see useTablist.
+  const { onKeyDown, refFor } = useTablist(TAB_ORDER.length, TAB_ORDER.indexOf(active), (i) =>
+    setActive(TAB_ORDER[i]),
+  )
 
   return (
     <div className="relative grid w-full max-w-5xl gap-4 sm:gap-6 lg:grid-cols-[minmax(0,16rem)_1fr] lg:items-stretch">
@@ -136,9 +125,7 @@ function DesktopTabs({
           return (
             <Button
               key={id}
-              ref={(el) => {
-                tabRefs.current[id] = el
-              }}
+              ref={refFor(index)}
               variant="tile"
               active={selected}
               role="tab"
@@ -212,19 +199,7 @@ function MobileSlider({
 }) {
   const { t } = useI18n()
   const { title, description } = copy(active)
-  const touchX = useRef<number | null>(null)
-
-  const onTouchStart = (e: TouchEvent) => {
-    touchX.current = e.changedTouches[0].clientX
-  }
-  const onTouchEnd = (e: TouchEvent) => {
-    if (touchX.current === null) return
-    const dx = e.changedTouches[0].clientX - touchX.current
-    touchX.current = null
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return
-    // Swipe left → next, swipe right → previous.
-    step(dx < 0 ? 1 : -1)
-  }
+  const { onTouchStart, onTouchEnd } = useSwipe(step)
 
   const arrow =
     'text-amber-100/70 transition-colors hover:text-amber-100'
