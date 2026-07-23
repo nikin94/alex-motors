@@ -69,9 +69,13 @@ export default {
 
     const name = field(data.name, CONTACT_LIMITS.name)
     const phone = field(data.phone, CONTACT_LIMITS.phone)
-    const email = field(data.email, CONTACT_LIMITS.email) ?? ''
     const message = field(data.message, CONTACT_LIMITS.message)
     if (!name || !phone || !message) return json(400, false)
+    // Email is the one optional field: absent is fine (''), but if it WAS
+    // sent it must pass the same null-means-reject contract as the others —
+    // an over-limit or non-string email is a 400, never silently dropped.
+    const email = data.email === undefined ? '' : field(data.email, CONTACT_LIMITS.email)
+    if (email === null) return json(400, false)
     if (email !== '' && !isEmail(email)) return json(400, false)
 
     if (!env.CONTACT_EMAIL || !env.CONTACT_FROM || !env.CONTACT_TO) {

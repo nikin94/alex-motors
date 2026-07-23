@@ -32,6 +32,12 @@ dist-ssr
 *.sln
 *.sw?
 
+# Working files that live in the tree but never in the repo:
+# the content manager's review doc and raw photo sources (the committed
+# asset is the compressed webp under src/assets/).
+CONTENT-REVIEW.md
+car_parts.jpg
+
 # wrangler files
 .wrangler
 .dev.vars*

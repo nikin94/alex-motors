@@ -57,8 +57,10 @@ test('contact form validates, then reaches the pre-domain fallback', async ({ pa
   await expect(page.locator('#contact-name')).toBeFocused()
 
   // Valid input → POST /api/contact answers 503 (no email binding in dev),
-  // so the honest call/WhatsApp fallback line must appear.
+  // so the honest call/WhatsApp fallback line must appear. Typing into a
+  // field must also clear its stale error right away.
   await page.locator('#contact-name').fill('Playwright Smoke')
+  await expect(page.locator('#contact-name-error')).toHaveCount(0)
   await page.locator('#contact-phone').fill('+353 85 123 4567')
   await page.locator('#contact-message').fill('Smoke-test enquiry — please ignore.')
   await send.click()

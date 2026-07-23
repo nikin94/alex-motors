@@ -82,6 +82,12 @@ describe('validation', () => {
     const { env } = capturingEnv()
     expect((await post({ ...VALID, email: undefined }, env)).status).toBe(200)
   })
+
+  it('400s an over-limit or non-string email instead of silently dropping it', async () => {
+    const long = `${'x'.repeat(200)}@example.ie`
+    expect((await post({ ...VALID, email: long })).status).toBe(400)
+    expect((await post({ ...VALID, email: 42 })).status).toBe(400)
+  })
 })
 
 describe('delivery', () => {

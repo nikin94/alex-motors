@@ -238,7 +238,12 @@ function MobileSlider({
         <div className="pointer-events-none absolute inset-0 bg-black/15" />
       </div>
 
-      <p className="mt-4 text-center text-sm leading-relaxed text-stone-300">{description}</p>
+      {/* Its own polite live region, paired with the title's: stepping with
+          the chevrons announces the new service's description, not just its
+          name (the two can't share one region — the photo sits between). */}
+      <p aria-live="polite" className="mt-4 text-center text-sm leading-relaxed text-stone-300">
+        {description}
+      </p>
     </div>
   )
 }

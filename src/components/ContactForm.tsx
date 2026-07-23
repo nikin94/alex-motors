@@ -55,10 +55,12 @@ export function ContactForm() {
     setErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev))
   }
 
+  // aria-* wiring only; each field clears its own error in its onInput, so
+  // the one field with a sanitizer (phone) doesn't silently discard a second
+  // handler this helper would otherwise attach.
   const ariaFor = (field: Field) => ({
     'aria-invalid': errors[field] ? true : undefined,
     'aria-describedby': errors[field] ? `contact-${field}-error` : undefined,
-    onInput: () => clearError(field),
   })
 
   /* type="tel" does not restrict input, so letters are stripped as they are
@@ -129,6 +131,7 @@ export function ContactForm() {
           placeholder={t.contact.placeholders.name}
           className={inputClass}
           {...ariaFor('name')}
+          onInput={() => clearError('name')}
         />
         {errorFor('name')}
       </div>
@@ -166,6 +169,7 @@ export function ContactForm() {
             placeholder={t.contact.placeholders.email}
             className={inputClass}
             {...ariaFor('email')}
+            onInput={() => clearError('email')}
           />
           {errorFor('email')}
         </div>
@@ -187,18 +191,21 @@ export function ContactForm() {
           placeholder={t.contact.placeholders.message}
           className={`${inputClass} flex-1 resize-none`}
           {...ariaFor('message')}
+          onInput={() => clearError('message')}
         />
         {errorFor('message')}
       </div>
 
-      {/* Honeypot — humans never see or reach it. */}
+      {/* Honeypot — humans never see or reach it. sr-only (clipped, not
+          display:none) so bots that skip display:none fields still fill it;
+          aria-hidden + tabIndex keep it out of the a11y tree and tab order. */}
       <input
         type="text"
         name="company"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden
-        className="hidden"
+        className="sr-only"
       />
 
       <Button type="submit" disabled={status === 'sending'}>
