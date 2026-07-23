@@ -25,7 +25,7 @@ export const en: Dictionary = {
       engine: {
         title: 'Engine Repair',
         description:
-          'From misfires and oil leaks to major engine work — honest assessment first, then a clear quote. Daily drivers, vans and sports cars alike.',
+          'From misfires and oil leaks to major engine work — honest assessment first, then a clear quote. Daily drivers and sports cars alike.',
       },
       timing: {
         title: 'Timing Belt & Chain',
@@ -41,6 +41,11 @@ export const en: Dictionary = {
         title: 'Battery & Electrics',
         description:
           'Battery testing and replacement, alternators, starters and wiring faults — including the ones that only show up on cold mornings.',
+      },
+      parts: {
+        title: 'Parts Sourcing',
+        description:
+          'Hard-to-find part? We track down new and quality used parts matched to your exact model — checked before fitting, fairly priced, no dealer markup.',
       },
     },
   },
@@ -97,7 +102,7 @@ export const en: Dictionary = {
     items: [
       {
         q: 'Do you work on all makes?',
-        a: 'Yes — all makes and models: daily drivers, vans and sports cars alike.',
+        a: 'Yes — all makes and models: daily drivers and sports cars alike.',
       },
       {
         q: 'What does a pre-NCT check cover?',

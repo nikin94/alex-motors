@@ -7,6 +7,7 @@ export type ServiceId =
   | 'timing'
   | 'brakes'
   | 'electrics'
+  | 'parts'
 
 type ServiceCopy = { title: string; description: string }
 

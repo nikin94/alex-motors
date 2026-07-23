@@ -4,7 +4,6 @@ import logoCar from './assets/logo-car.webp'
 import { ContactScreen } from './components/ContactScreen'
 import { Faq } from './components/Faq'
 import { HeroScreen } from './components/HeroScreen'
-import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
 import { ScrollChevron } from './components/ScrollChevron'
 import { ServicesShowcase } from './components/ServicesShowcase'
@@ -14,17 +13,17 @@ import { localBusinessJsonLd, PHONE_E164, WHATSAPP_URL } from './config/business
 import { useI18n } from './i18n/context'
 
 /* Scene composition only: five snap screens over one shared brick wall, plus
-   the fixed chrome (language switcher, sticky call CTA) and the JSON-LD.
-   Screens with real markup of their own live in components/ (HeroScreen,
-   ContactScreen); the middle screens are a heading + one feature component,
-   so they stay inline here where the reading order is visible. */
+   the fixed chrome (the sticky call/WhatsApp/language cluster) and the
+   JSON-LD. Screens with real markup of their own live in components/
+   (HeroScreen, ContactScreen); the middle screens are a heading + one
+   feature component, so they stay inline here where the reading order is
+   visible. */
 
 function App() {
   const { t } = useI18n()
 
   return (
     <main className="brick-wall">
-      <LanguageSwitcher />
       <StickyCall phoneE164={PHONE_E164} whatsappUrl={WHATSAPP_URL} />
 
       <HeroScreen />

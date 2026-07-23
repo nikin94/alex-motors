@@ -16,6 +16,7 @@ import enginePhoto from '../assets/services/engine.webp'
 import timingPhoto from '../assets/services/timing.webp'
 import brakesPhoto from '../assets/services/brakes.webp'
 import electricsPhoto from '../assets/services/electrics.webp'
+import partsPhoto from '../assets/services/parts.webp'
 
 /* Interactive services.
    Desktop (>= 768px): a vertical list of title tiles is a tablist; selecting one
@@ -39,6 +40,7 @@ const TAB_ORDER: TabId[] = [
   'timing',
   'brakes',
   'electrics',
+  'parts',
 ]
 
 const PHOTOS: Record<TabId, string> = {
@@ -49,6 +51,7 @@ const PHOTOS: Record<TabId, string> = {
   timing: timingPhoto,
   brakes: brakesPhoto,
   electrics: electricsPhoto,
+  parts: partsPhoto,
 }
 
 export function ServicesShowcase() {

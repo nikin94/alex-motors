@@ -2,7 +2,6 @@ import { FaClock, FaLocationDot, FaPhone, FaRoute } from 'react-icons/fa6'
 
 import { Button } from './Button'
 import { ContactForm } from './ContactForm'
-import { LanguageSwitcher } from './LanguageSwitcher'
 import { WallStencil } from './WallStencil'
 import { ADDRESS_LINES, DIRECTIONS_URL, HOURS, PHONE_DISPLAY, PHONE_E164 } from '../config/business'
 import { useI18n } from '../i18n/context'
@@ -99,13 +98,6 @@ export function ContactScreen() {
         </div>
 
         <ContactForm />
-      </div>
-
-      {/* Language switcher lives in the top-right corner on desktop; on mobile
-          it moves to a centred footer on the last screen so the corner stays
-          clear. */}
-      <div className="absolute inset-x-0 bottom-6">
-        <LanguageSwitcher variant="footer" />
       </div>
     </section>
   )
