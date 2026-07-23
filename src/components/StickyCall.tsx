@@ -8,12 +8,13 @@ import { LANGS } from '../i18n/dictionary'
    while the hero is on screen: the hero already leads with the phone number
    and its entrance sequence stays clean, so the cluster only appears once the
    visitor scrolls into the content screens (same rule on desktop and mobile).
-   Mobile stacks icon circles in the corner (language on top), desktop lays
-   them in a row (language rightmost). The language trigger shows the current
-   code (EN/GA/RU); pressing it slides a vertical menu up from the trigger —
-   the current language stays in the trigger's spot, highlighted, with the
-   other two above it. The hidden states are inert and aria-hidden, keeping
-   every control out of the tab order. */
+   One DOM order for both viewports — call, WhatsApp, language last — so the
+   mobile column ends with the language trigger at the bottom and the desktop
+   row ends with it rightmost. The trigger shows the current code (EN/GA/RU);
+   pressing it slides the menu out of the trigger — leftward toward the screen
+   centre on mobile, upward on desktop — with the current language staying in
+   the trigger's spot, highlighted. The hidden states are inert and
+   aria-hidden, keeping every control out of the tab order. */
 
 const SHOW_BELOW_HERO_RATIO = 0.35
 
@@ -45,13 +46,11 @@ function LangMenu() {
   }, [open])
 
   /* The current language renders LAST so it sits exactly where the trigger
-     is; the other two stack above it and the whole column slides up. */
+     is — rightmost of the mobile row, bottom of the desktop column. */
   const stack = [...LANGS.filter(({ code }) => code !== lang), ...LANGS.filter(({ code }) => code === lang)]
 
   return (
-    /* order-first puts the trigger on top of the mobile column; md:order-none
-       returns it to DOM order — rightmost in the desktop row. */
-    <div ref={wrapRef} className="relative order-first md:order-none">
+    <div ref={wrapRef} className="relative">
       <button
         type="button"
         lang="en"
@@ -65,14 +64,18 @@ function LangMenu() {
         {LANGS.find(({ code }) => code === lang)?.label}
       </button>
 
-      {/* Bottom-anchored over the trigger, so the current language's button
-          lands in the trigger's exact spot when the menu is open. */}
+      {/* Anchored to the trigger's corner so the current language's button
+          lands in the trigger's exact spot when the menu is open: a row
+          growing leftward on mobile, a column growing upward from md. The
+          closed state nudges toward the trigger on the same axis. */}
       <nav
         aria-label={t.a11y.selectLanguage}
         aria-hidden={!open}
         inert={!open}
-        className={`absolute right-0 bottom-0 flex flex-col gap-2 motion-safe:transition-all motion-safe:duration-200 ${
-          open ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
+        className={`absolute right-0 bottom-0 flex gap-2 md:flex-col motion-safe:transition-all motion-safe:duration-200 ${
+          open
+            ? 'translate-x-0 translate-y-0 opacity-100'
+            : 'pointer-events-none translate-x-2 opacity-0 md:translate-x-0 md:translate-y-2'
         }`}
       >
         {stack.map(({ code, label }) => (
