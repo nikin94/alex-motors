@@ -25,7 +25,7 @@ export const ga: Dictionary = {
       engine: {
         title: 'Deisiú Innill',
         description:
-          'Ó mhí-adhaint agus sceitheadh ola go mórobair innill — measúnú macánta ar dtús, ansin luachan shoiléir. Gluaisteáin laethúla, veaineanna agus spórtcharranna araon.',
+          'Ó mhí-adhaint agus sceitheadh ola go mórobair innill — measúnú macánta ar dtús, ansin luachan shoiléir. Gluaisteáin laethúla agus spórtcharranna araon.',
       },
       timing: {
         title: 'Crios & Slabhra Ama',
@@ -41,6 +41,11 @@ export const ga: Dictionary = {
         title: 'Cadhnra & Leictreachas',
         description:
           'Tástáil agus athsholáthar cadhnra, ailtéarnóirí, tosaitheoirí agus fabhtanna sreangaithe — na cinn nach dtaispeánann iad féin ach ar maidin fhuar san áireamh.',
+      },
+      parts: {
+        title: 'Soláthar Páirteanna',
+        description:
+          'Páirt dheacair a aimsiú? Aimsímid páirteanna nua agus athláimhe ar ardchaighdeán a mheaitseálann do mhúnla go beacht — seiceáilte roimh fheistiú, ar phraghas cothrom, gan bhreis dhéileálaí.',
       },
     },
   },
@@ -97,7 +102,7 @@ export const ga: Dictionary = {
     items: [
       {
         q: 'An oibríonn sibh ar gach déanamh?',
-        a: 'Oibrímid — gach déanamh agus múnla: gluaisteáin laethúla, veaineanna agus carranna spóirt.',
+        a: 'Oibrímid — gach déanamh agus múnla: gluaisteáin laethúla agus carranna spóirt.',
       },
       {
         q: 'Cad a chlúdaíonn seiceáil réamh-NCT?',

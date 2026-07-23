@@ -30,7 +30,7 @@ subtitle, not in a card.
 ## About block / footer (future)
 
 > Alex Motors is an independent garage in Letterkenny, Co. Donegal. We work on
-> all makes and models — daily drivers, vans and sports cars — with a focus on
+> all makes and models — daily drivers and sports cars — with a focus on
 > honest diagnostics and NCT preparation. Open Monday to Saturday, with call-outs
 > available if your car won't make it to us. Call or WhatsApp Alex to book.
 

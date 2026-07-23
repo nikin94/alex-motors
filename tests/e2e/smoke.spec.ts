@@ -15,12 +15,23 @@ test('hero shows the phone number and contact links', async ({ page }) => {
   }
 })
 
-test('language switch swaps the copy and <html lang>', async ({ page }) => {
+test('language menu in the sticky cluster swaps the copy and <html lang>', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'RU', exact: true }).click()
+  // The sticky cluster (and with it the language menu) only appears once the
+  // hero is scrolled away.
+  await page.locator('#services').scrollIntoViewIfNeeded()
+  const trigger = page.getByRole('button', { name: 'Select language' })
+  await expect(trigger).toBeVisible()
+  await expect(trigger).toHaveText('EN')
+  await trigger.click()
+  await page.getByRole('navigation', { name: 'Select language' }).getByRole('button', { name: 'RU', exact: true }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru')
   await expect(page.getByRole('heading', { name: 'Наши услуги' })).toBeAttached()
-  await page.getByRole('button', { name: 'EN', exact: true }).click()
+  // The trigger reflects the new language; switch back through the menu.
+  const ruTrigger = page.getByRole('button', { name: 'Выбрать язык' })
+  await expect(ruTrigger).toHaveText('RU')
+  await ruTrigger.click()
+  await page.getByRole('navigation', { name: 'Выбрать язык' }).getByRole('button', { name: 'EN', exact: true }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
 })
 
