@@ -55,6 +55,16 @@ export default {
     if (url.pathname !== '/api/contact') return json(404, false)
     if (request.method !== 'POST') return json(405, false)
 
+    /* Cross-site browser abuse guard. A text/plain POST is a "simple request"
+       (no CORS preflight), so any third-party page could otherwise trigger a
+       real email send — the attacker never reads the response, but the mail
+       still goes out. Browsers always attach Origin to cross-site POSTs, so a
+       mismatched Origin is rejected; an ABSENT Origin (curl, same-origin
+       fetches in some browsers) passes — non-browser flood is the rate-limit
+       rule's job, not this check's. */
+    const origin = request.headers.get('origin')
+    if (origin !== null && origin !== url.origin) return json(403, false)
+
     let data: Record<string, unknown>
     try {
       data = await request.json()
@@ -63,7 +73,10 @@ export default {
     }
 
     // Honeypot filled → a bot. Pretend success so it has nothing to adapt to.
-    if (typeof data.company === 'string' && data.company.trim() !== '') {
+    // The field name is deliberately meaningless: autofill-token names like
+    // "company" get filled in by password managers, silently dropping a real
+    // enquiry from a human whose browser was just being helpful.
+    if (typeof data.contact_ref === 'string' && data.contact_ref.trim() !== '') {
       return json(200, true)
     }
 

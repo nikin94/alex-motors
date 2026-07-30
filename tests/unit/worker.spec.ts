@@ -9,11 +9,11 @@ import { EmailMessage } from '../stubs/cloudflare-email'
 
 type Env = Parameters<(typeof worker)['fetch']>[1]
 
-const post = (body: unknown, env: Env = {}) =>
+const post = (body: unknown, env: Env = {}, headers: Record<string, string> = {}) =>
   worker.fetch(
     new Request('http://site.test/api/contact', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...headers },
       body: typeof body === 'string' ? body : JSON.stringify(body),
     }),
     env,
@@ -55,12 +55,29 @@ describe('routing', () => {
   it('400s a non-JSON body', async () => {
     expect((await post('not json')).status).toBe(400)
   })
+
+  it('403s a cross-site Origin before any email side effect', async () => {
+    // text/plain cross-site POSTs skip the CORS preflight, so the guard must
+    // reject them itself — and BEFORE the send, or the mail still goes out.
+    const { env, sent } = capturingEnv()
+    const res = await post(VALID, env, { origin: 'https://evil.example' })
+    expect(res.status).toBe(403)
+    expect(sent).toHaveLength(0)
+  })
+
+  it('accepts a same-origin Origin and an absent one', async () => {
+    const { env } = capturingEnv()
+    expect((await post(VALID, env, { origin: 'http://site.test' })).status).toBe(200)
+    // curl and some same-origin browser fetches send no Origin at all —
+    // those pass; non-browser flood is the zone rate-limit rule's job.
+    expect((await post(VALID, env)).status).toBe(200)
+  })
 })
 
 describe('validation', () => {
   it('fakes success for a filled honeypot and sends nothing', async () => {
     const { env, sent } = capturingEnv()
-    const res = await post({ ...VALID, company: 'SpamCo' }, env)
+    const res = await post({ ...VALID, contact_ref: 'SpamCo' }, env)
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
     expect(sent).toHaveLength(0)

@@ -8,9 +8,11 @@ import { useI18n } from '../i18n/context'
    Delivery rides Cloudflare Email Routing, which needs the production domain
    on Cloudflare — until that is wired up the endpoint answers 503 and the
    form shows its call/WhatsApp fallback line, so nothing here changes when
-   delivery goes live. The `company` field is a honeypot: visually hidden and
-   out of the tab order, so a human never fills it and a form-stuffing bot
-   does — the server quietly drops those.
+   delivery goes live. The `contact_ref` field is a honeypot: visually hidden
+   and out of the tab order, so a human never fills it and a form-stuffing bot
+   does — the server quietly drops those. Its name is deliberately meaningless
+   so password managers never autofill it (autofill tokens like "company"
+   would drop a real enquiry).
    Validation is ours (noValidate): required name/phone/message plus phone and
    email shape checks, so the messages come localised from the dictionary
    instead of the browser chrome. Required labels carry a * explained by the
@@ -201,7 +203,7 @@ export function ContactForm() {
           aria-hidden + tabIndex keep it out of the a11y tree and tab order. */}
       <input
         type="text"
-        name="company"
+        name="contact_ref"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden

@@ -1,0 +1,12 @@
+# Security headers for every static-asset response (Workers Static Assets
+# reads this file from the assets directory). Kept deliberately minimal for a
+# marketing site: nosniff stops MIME confusion, the referrer policy trims
+# outbound leakage, the permissions policy declares we use no sensitive APIs,
+# and frame-ancestors 'none' blocks clickjacking (supersedes X-Frame-Options).
+# HSTS is NOT set here on purpose — enable it on the Cloudflare zone (edge)
+# once alex-motors.ie is live, so the whole domain is covered consistently.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Content-Security-Policy: frame-ancestors 'none'
