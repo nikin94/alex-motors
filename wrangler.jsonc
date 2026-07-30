@@ -11,10 +11,10 @@
   },
   // Only API calls invoke the Worker script; every other request keeps the
   // plain static-asset/SPA behaviour the site had before the contact form.
-  "run_worker_first": ["/api/*"],
-  "compatibility_flags": [
-    "nodejs_compat"
-  ]
+  // No compatibility_flags: the worker uses only Web APIs (TextEncoder, btoa,
+  // crypto, URL, cloudflare:email) — nodejs_compat would just add polyfill
+  // surface. Buffer appears solely in the Node-side unit tests.
+  "run_worker_first": ["/api/*"]
   // Contact-form delivery rides Cloudflare Email Routing (free, no third-party
   // service) — it needs the production domain on Cloudflare. To activate:
   //   1. Add the alex-motors.ie zone, enable Email Routing on it, and verify
