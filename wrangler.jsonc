@@ -14,15 +14,14 @@
   // No compatibility_flags: the worker uses only Web APIs (TextEncoder, btoa,
   // crypto, URL, cloudflare:email) — nodejs_compat would just add polyfill
   // surface. Buffer appears solely in the Node-side unit tests.
-  "run_worker_first": ["/api/*"]
-  // Contact-form delivery rides Cloudflare Email Routing (free, no third-party
-  // service) — it needs the production domain on Cloudflare. To activate:
-  //   1. Add the alex-motors.ie zone, enable Email Routing on it, and verify
-  //      the owner's inbox as a destination address.
-  //   2. Uncomment the two blocks below with the real addresses (CONTACT_FROM
-  //      must be an address on the Email Routing domain).
-  // Until then POST /api/contact answers 503 and the form shows its
-  // call/WhatsApp fallback line.
-  // ,"send_email": [{ "name": "CONTACT_EMAIL", "destination_address": "OWNER_INBOX@example.com" }]
-  // ,"vars": { "CONTACT_FROM": "contact@alex-motors.ie", "CONTACT_TO": "OWNER_INBOX@example.com" }
+  "run_worker_first": ["/api/*"],
+  // Contact-form delivery via Cloudflare Email Routing on alex-motors.ie.
+  // Enquiries go ONLY to the owner's iCloud inbox (Serhiy's decision) — the
+  // other verified destination addresses on the account receive nothing:
+  // delivery is keyed on this binding + CONTACT_TO, not on the account list.
+  // The destination address must show "Verified" in Email Routing before a
+  // deploy with this binding can send; an unverified target rejects the send
+  // (the endpoint answers 502 and the form falls back to call/WhatsApp).
+  "send_email": [{ "name": "CONTACT_EMAIL", "destination_address": "alx.sol@icloud.com" }],
+  "vars": { "CONTACT_FROM": "contact@alex-motors.ie", "CONTACT_TO": "alx.sol@icloud.com" }
 }
