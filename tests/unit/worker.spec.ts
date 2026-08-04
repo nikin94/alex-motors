@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import worker from '../../worker/index'
 import { EmailMessage } from '../stubs/cloudflare-email'
@@ -104,6 +104,63 @@ describe('validation', () => {
     const long = `${'x'.repeat(200)}@example.ie`
     expect((await post({ ...VALID, email: long })).status).toBe(400)
     expect((await post({ ...VALID, email: 42 })).status).toBe(400)
+  })
+})
+
+describe('turnstile', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  /* Stubs the global fetch the worker uses for the siteverify exchange. */
+  const stubSiteverify = (success: boolean) => {
+    const calls: { url: string; body: Record<string, unknown> }[] = []
+    vi.stubGlobal(
+      'fetch',
+      async (url: string | URL, init?: RequestInit) => {
+        calls.push({ url: String(url), body: JSON.parse(String(init?.body)) })
+        return new Response(JSON.stringify({ success }), {
+          headers: { 'content-type': 'application/json' },
+        })
+      },
+    )
+    return calls
+  }
+
+  const withSecret = () => {
+    const { env, sent } = capturingEnv()
+    env.TURNSTILE_SECRET = 'test-secret'
+    return { env, sent }
+  }
+
+  it('is skipped entirely when no secret is bound (dev/CI)', async () => {
+    const { env, sent } = capturingEnv()
+    expect((await post(VALID, env)).status).toBe(200)
+    expect(sent).toHaveLength(1)
+  })
+
+  it('403s a missing or non-string token without calling siteverify', async () => {
+    const calls = stubSiteverify(true)
+    const { env, sent } = withSecret()
+    expect((await post(VALID, env)).status).toBe(403)
+    expect((await post({ ...VALID, turnstileToken: 42 }, env)).status).toBe(403)
+    expect(calls).toHaveLength(0)
+    expect(sent).toHaveLength(0)
+  })
+
+  it('403s a token Cloudflare rejects and sends nothing', async () => {
+    stubSiteverify(false)
+    const { env, sent } = withSecret()
+    expect((await post({ ...VALID, turnstileToken: 'bad-token' }, env)).status).toBe(403)
+    expect(sent).toHaveLength(0)
+  })
+
+  it('sends when siteverify confirms the token, passing secret and token through', async () => {
+    const calls = stubSiteverify(true)
+    const { env, sent } = withSecret()
+    expect((await post({ ...VALID, turnstileToken: 'good-token' }, env)).status).toBe(200)
+    expect(sent).toHaveLength(1)
+    expect(calls).toHaveLength(1)
+    expect(calls[0].url).toContain('challenges.cloudflare.com/turnstile/v0/siteverify')
+    expect(calls[0].body).toMatchObject({ secret: 'test-secret', response: 'good-token' })
   })
 })
 

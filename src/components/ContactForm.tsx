@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 
 import { CONTACT_LIMITS, isEmail, isPhone } from '../../shared/contact'
 import { Button } from './Button'
@@ -16,10 +16,76 @@ import { useI18n } from '../i18n/context'
    Validation is ours (noValidate): required name/phone/message plus phone and
    email shape checks, so the messages come localised from the dictionary
    instead of the browser chrome. Required labels carry a * explained by the
-   note at the card's bottom. */
+   note at the card's bottom.
+   Turnstile (interaction-only) runs invisibly for legitimate visitors and
+   hands the form a token the Worker verifies server-side; only when Cloudflare
+   suspects a bot does a visible challenge unfold above the submit button. */
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 type Field = 'name' | 'phone' | 'email' | 'message'
+
+/* The sitekey is public by design (it only identifies the widget; the secret
+   lives server-side). Dev and CI use Cloudflare's documented always-pass test
+   key so local runs never need real keys or show challenges. */
+const TURNSTILE_SITEKEY = import.meta.env.DEV
+  ? '1x00000000000000000000AA'
+  : '0x4AAAAAAEGfqh3u6KRtYyUq'
+
+const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady'
+
+type TurnstileApi = {
+  render: (el: HTMLElement, opts: Record<string, unknown>) => string
+  reset: (id?: string) => void
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi
+    onTurnstileReady?: () => void
+  }
+}
+
+/* Loads the Turnstile script once and renders one widget into `el`, feeding
+   fresh tokens to `onToken` (and '' on expiry). Returns the widget id. */
+function useTurnstile(onToken: (token: string) => void) {
+  const elRef = useRef<HTMLDivElement>(null)
+  const widgetId = useRef<string | null>(null)
+  const onTokenRef = useRef(onToken)
+  onTokenRef.current = onToken
+
+  useEffect(() => {
+    const render = () => {
+      if (!elRef.current || widgetId.current !== null || !window.turnstile) return
+      widgetId.current = window.turnstile.render(elRef.current, {
+        sitekey: TURNSTILE_SITEKEY,
+        theme: 'dark',
+        size: 'flexible',
+        appearance: 'interaction-only',
+        callback: (token: string) => onTokenRef.current(token),
+        'expired-callback': () => onTokenRef.current(''),
+        'error-callback': () => onTokenRef.current(''),
+      })
+    }
+    if (window.turnstile) {
+      render()
+      return
+    }
+    window.onTurnstileReady = render
+    if (!document.querySelector(`script[src="${TURNSTILE_SRC}"]`)) {
+      const script = document.createElement('script')
+      script.src = TURNSTILE_SRC
+      script.async = true
+      document.head.appendChild(script)
+    }
+  }, [])
+
+  const reset = () => {
+    onTokenRef.current('')
+    if (widgetId.current !== null) window.turnstile?.reset(widgetId.current)
+  }
+
+  return { elRef, reset }
+}
 
 const FIELDS: Field[] = ['name', 'phone', 'email', 'message']
 
@@ -40,6 +106,12 @@ export function ContactForm() {
   const { t } = useI18n()
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({})
+  // Ref, not state: the token is read only at submit time and must never
+  // re-render the form while the visitor is typing.
+  const turnstileToken = useRef('')
+  const turnstile = useTurnstile((token) => {
+    turnstileToken.current = token
+  })
 
   const validate = (data: Record<string, string>) => {
     const rules = t.contact.validation
@@ -98,7 +170,7 @@ export function ContactForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstileToken: turnstileToken.current }),
         // A hung request (flaky mobile network) must not pin the form on
         // "Sending…" forever — after this it falls into the error state,
         // whose copy already points at call/WhatsApp.
@@ -109,6 +181,10 @@ export function ContactForm() {
       setStatus('sent')
     } catch {
       setStatus('error')
+    } finally {
+      // Tokens are single-use: get a fresh one for a possible second enquiry
+      // (and for a retry after an error).
+      turnstile.reset()
     }
   }
 
@@ -209,6 +285,11 @@ export function ContactForm() {
         aria-hidden
         className="sr-only"
       />
+
+      {/* Turnstile mounts here. interaction-only keeps it collapsed and
+          invisible for normal visitors; a suspected bot sees the challenge
+          unfold in this slot, above the submit button. */}
+      <div ref={turnstile.elRef} className="empty:hidden" />
 
       <Button type="submit" disabled={status === 'sending'}>
         {status === 'sending' ? t.contact.sending : t.contact.submit}

@@ -11,8 +11,11 @@ import { CONTACT_LIMITS, isEmail } from '../shared/contact'
    send_email binding is configured the endpoint answers 503 and the form shows
    its call/WhatsApp fallback — see the setup note in wrangler.jsonc.
 
-   Anti-spam: honeypot field + strict field validation. If the mailbox still
-   gets noise once live, the next step is a Turnstile widget on the form. */
+   Anti-spam, in order of the checks below: same-origin guard, honeypot,
+   strict field validation, then Turnstile. The Turnstile secret is a Worker
+   secret (dashboard / `wrangler secret put TURNSTILE_SECRET`), never a var in
+   wrangler.jsonc — when it is absent (local dev, CI) verification is skipped,
+   which is safe because the deployed production Worker always carries it. */
 
 interface SendEmailBinding {
   send(message: EmailMessage): Promise<void>
@@ -22,6 +25,27 @@ interface Env {
   CONTACT_EMAIL?: SendEmailBinding
   CONTACT_FROM?: string
   CONTACT_TO?: string
+  TURNSTILE_SECRET?: string
+}
+
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+
+/* Server-side half of Turnstile: the widget's token is worthless until this
+   exchange with Cloudflare confirms it. Network or parse failures count as
+   not-verified — failing open would make the whole check decorative. */
+async function turnstilePasses(secret: string, token: string, ip: string | null): Promise<boolean> {
+  try {
+    const res = await fetch(TURNSTILE_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ secret, response: token, remoteip: ip ?? undefined }),
+    })
+    if (!res.ok) return false
+    const outcome = (await res.json()) as { success?: boolean }
+    return outcome.success === true
+  } catch {
+    return false
+  }
 }
 
 function json(status: number, ok: boolean): Response {
@@ -90,6 +114,16 @@ export default {
     const email = data.email === undefined ? '' : field(data.email, CONTACT_LIMITS.email)
     if (email === null) return json(400, false)
     if (email !== '' && !isEmail(email)) return json(400, false)
+
+    /* Turnstile, after the cheap checks so garbage never costs a siteverify
+       round-trip. Skipped only when no secret is bound (local dev / CI). */
+    if (env.TURNSTILE_SECRET) {
+      const token = typeof data.turnstileToken === 'string' ? data.turnstileToken : ''
+      const ip = request.headers.get('cf-connecting-ip')
+      if (!token || !(await turnstilePasses(env.TURNSTILE_SECRET, token, ip))) {
+        return json(403, false)
+      }
+    }
 
     if (!env.CONTACT_EMAIL || !env.CONTACT_FROM || !env.CONTACT_TO) {
       // Email Routing is not wired up yet (waiting on the production domain).
