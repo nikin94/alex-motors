@@ -46,7 +46,7 @@ test('selecting a service tab swaps the detail panel', async ({ page }) => {
   ).toBeVisible()
 })
 
-test('contact form validates, then reaches the pre-domain fallback', async ({ page }) => {
+test('contact form validates, then submits successfully', async ({ page }) => {
   await page.goto('/')
   const send = page.getByRole('button', { name: 'Send' })
   await send.scrollIntoViewIfNeeded()
@@ -56,13 +56,14 @@ test('contact form validates, then reaches the pre-domain fallback', async ({ pa
   await expect(page.locator('#contact-name-error')).toHaveText('This field is required.')
   await expect(page.locator('#contact-name')).toBeFocused()
 
-  // Valid input → POST /api/contact answers 503 (no email binding in dev),
-  // so the honest call/WhatsApp fallback line must appear. Typing into a
-  // field must also clear its stale error right away.
+  // Valid input → POST /api/contact reaches the send_email binding, which
+  // the local dev runtime simulates as a successful no-op send, so the form
+  // must land on its success line — same as production with the binding
+  // live. Typing into a field must also clear its stale error right away.
   await page.locator('#contact-name').fill('Playwright Smoke')
   await expect(page.locator('#contact-name-error')).toHaveCount(0)
   await page.locator('#contact-phone').fill('+353 85 123 4567')
   await page.locator('#contact-message').fill('Smoke-test enquiry — please ignore.')
   await send.click()
-  await expect(page.getByText('Could not send — please call or WhatsApp us instead.')).toBeVisible()
+  await expect(page.getByText("Thanks! We'll get back to you soon.")).toBeVisible()
 })
