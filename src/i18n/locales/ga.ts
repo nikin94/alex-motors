@@ -151,6 +151,31 @@ export const ga: Dictionary = {
     success: 'Go raibh maith agat! Beimid i dteagmháil leat go luath.',
     error: 'Níorbh fhéidir é a sheoladh — glaoigh orainn nó úsáid WhatsApp.',
   },
+  privacy: {
+    linkLabel: 'Polasaí Príobháideachais',
+    title: 'Polasaí Príobháideachais',
+    updated: 'Nuashonraithe: Lúnasa 2026',
+    intro:
+      'Is é an suíomh seo baile ar líne ceardlainne beaga áitiúla. Ní shocraíonn sé fianáin, ní ritheann sé anailísíocht ná rianairí tríú páirtí, agus ní thógann sé próifíl de na daoine a thugann cuairt air. Is é an t-aon áit a mbailíonn sé aon rud ná an fhoirm fiosrúcháin — agus níl ann ach an méid a chlóscríobhann tú féin.',
+    form: {
+      title: 'An fhoirm fiosrúcháin',
+      body: 'Nuair a sheolann tú fiosrúchán, seoltar an t-ainm, an uimhir ghutháin, an ríomhphost (má chuireann tú leis é) agus an teachtaireacht díreach chugainn mar ríomhphost ionas gur féidir linn freagra a thabhairt ort. Ní stóráiltear i mbunachar sonraí iad, ní dhíoltar iad agus ní roinntear le haon duine eile iad — ní úsáidimid iad ach chun freagra a thabhairt ort.',
+    },
+    spam: {
+      title: 'Cosaint ar thurscar',
+      body: 'Chun mí-úsáid na foirme a stopadh, seiceálann Cloudflare Turnstile gach seoladh — rogha atá níos fearr don phríobháideachas ná CAPTCHA. Chun daoine a aithint thar bhotaí, próiseálann Cloudflare sonraí teicniúla teoranta (do sheoladh IP, mar shampla); ní úsáideann sé iad chun tú a rianú ar shuíomhanna eile. Tá na sonraí i gcáipéis Cloudflare',
+      addendumLink: 'Turnstile Privacy Addendum',
+    },
+    hosting: {
+      title: 'Óstáil',
+      body: 'Freastalaítear an suíomh ó líonra imill dhomhanda Cloudflare. Chun é a sheachadadh agus a chosaint, próiseálann Cloudflare gnáth-mheiteashonraí iarratais ar nós do sheolta IP agus do chineál brabhsálaí. Ní choinnímid aon chuid de.',
+    },
+    questions: {
+      title: 'Ceisteanna',
+      body: 'Má tá aon cheist agat faoi seo — nó más mian leat do fhiosrúchán a scriosadh — glaoigh orainn:',
+    },
+    backToSite: 'Ar ais chuig an suíomh',
+  },
   a11y: {
     scrollToServices: 'Scrollaigh go dtí na seirbhísí',
     scrollToReviews: 'Scrollaigh go dtí na léirmheasanna',

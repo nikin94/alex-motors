@@ -151,6 +151,31 @@ export const en: Dictionary = {
     success: "Thanks! We'll get back to you soon.",
     error: 'Could not send — please call or WhatsApp us instead.',
   },
+  privacy: {
+    linkLabel: 'Privacy Policy',
+    title: 'Privacy Policy',
+    updated: 'Last updated August 2026',
+    intro:
+      'This site is the online home of a small local workshop. It sets no cookies, runs no analytics or third-party trackers, and builds no profile of the people who visit it. The only place it collects anything is the enquiry form — and only what you type there.',
+    form: {
+      title: 'The enquiry form',
+      body: 'When you send an enquiry, the name, phone number, email (if you add one) and message you enter are delivered straight to our inbox as an email so we can get back to you. They are not stored in a database, sold, or shared with anyone else, and we use them only to respond to you.',
+    },
+    spam: {
+      title: 'Spam protection',
+      body: "To stop the form being abused, submissions are checked by Cloudflare Turnstile — a privacy-preserving alternative to CAPTCHA. To tell humans from bots, Cloudflare processes limited technical data (such as your IP address); it doesn't use it to track you across sites. The details are in Cloudflare's",
+      addendumLink: 'Turnstile Privacy Addendum',
+    },
+    hosting: {
+      title: 'Hosting',
+      body: "The site is served from Cloudflare's global edge network. To deliver and protect it, Cloudflare processes standard request metadata such as your IP address and browser type. We retain none of it.",
+    },
+    questions: {
+      title: 'Questions',
+      body: "Anything you'd like to ask about this — or want your enquiry deleted — just call us:",
+    },
+    backToSite: 'Back to the site',
+  },
   a11y: {
     scrollToServices: 'Scroll to services',
     scrollToReviews: 'Scroll to reviews',
