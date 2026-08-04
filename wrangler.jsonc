@@ -16,12 +16,13 @@
   // surface. Buffer appears solely in the Node-side unit tests.
   "run_worker_first": ["/api/*"],
   // Contact-form delivery via Cloudflare Email Routing on alex-motors.ie.
-  // Enquiries go ONLY to the owner's iCloud inbox (Serhiy's decision) — the
-  // other verified destination addresses on the account receive nothing:
-  // delivery is keyed on this binding + CONTACT_TO, not on the account list.
-  // The destination address must show "Verified" in Email Routing before a
-  // deploy with this binding can send; an unverified target rejects the send
-  // (the endpoint answers 502 and the form falls back to call/WhatsApp).
-  "send_email": [{ "name": "CONTACT_EMAIL", "destination_address": "alx.sol@icloud.com" }],
+  // CONTACT_TO below is the ONE place the recipient lives: the binding
+  // deliberately has no destination_address lock, so changing the inbox is a
+  // one-line edit here. Email Routing still only delivers to addresses
+  // verified on the account, and the worker only ever sends to CONTACT_TO —
+  // the other verified destination addresses receive nothing. An unverified
+  // target rejects the send (the endpoint answers 502 and the form falls
+  // back to call/WhatsApp).
+  "send_email": [{ "name": "CONTACT_EMAIL" }],
   "vars": { "CONTACT_FROM": "contact@alex-motors.ie", "CONTACT_TO": "alx.sol@icloud.com" }
 }
