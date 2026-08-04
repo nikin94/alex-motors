@@ -62,6 +62,23 @@ export type Dictionary = {
     success: string
     error: string
   }
+  privacy: {
+    /* Standalone /privacy page — the disclosure Cloudflare requires for
+       running Turnstile in its invisible widget mode. Doubles as the honest
+       "no cookies, no trackers" note; linked from a quiet footer link. */
+    linkLabel: string
+    title: string
+    updated: string
+    intro: string
+    form: { title: string; body: string }
+    /* `body` ends mid-sentence — the page appends the linked Turnstile
+       Privacy Addendum (`addendumLink` is the link text) and a full stop. */
+    spam: { title: string; body: string; addendumLink: string }
+    hosting: { title: string; body: string }
+    /* `body` ends mid-sentence too: the page appends the phone link. */
+    questions: { title: string; body: string }
+    backToSite: string
+  }
   a11y: {
     scrollToServices: string
     scrollToReviews: string

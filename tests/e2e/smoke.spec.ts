@@ -67,3 +67,16 @@ test('contact form validates, then submits successfully', async ({ page }) => {
   await send.click()
   await expect(page.getByText("Thanks! We'll get back to you soon.")).toBeVisible()
 })
+
+test('privacy policy page is reachable from the quiet footer link', async ({ page }) => {
+  await page.goto('/')
+  const link = page.getByRole('link', { name: 'Privacy Policy' })
+  await link.scrollIntoViewIfNeeded()
+  await link.click()
+  await expect(page).toHaveURL(/\/privacy$/)
+  await expect(page.getByRole('heading', { name: 'Privacy Policy', level: 1 })).toBeVisible()
+  // The Turnstile disclosure this page exists for.
+  await expect(page.getByRole('link', { name: 'Turnstile Privacy Addendum' })).toBeVisible()
+  await page.getByRole('link', { name: 'Back to the site' }).click()
+  await expect(page.getByRole('img', { name: 'Alex Motors' })).toBeVisible()
+})

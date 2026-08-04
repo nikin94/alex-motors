@@ -4,6 +4,7 @@ import logoCar from './assets/logo-car.webp'
 import { ContactScreen } from './components/ContactScreen'
 import { Faq } from './components/Faq'
 import { HeroScreen } from './components/HeroScreen'
+import { PrivacyPage } from './components/PrivacyPage'
 import { ReviewsCarousel } from './components/ReviewsCarousel'
 import { ScrollChevron } from './components/ScrollChevron'
 import { ServicesShowcase } from './components/ServicesShowcase'
@@ -21,6 +22,12 @@ import { useI18n } from './i18n/context'
 
 function App() {
   const { t } = useI18n()
+
+  /* The privacy page renders instead of the snap scene. Plain <a> full-load
+     navigation, no router — the Workers SPA fallback serves index.html for
+     /privacy, and the path can't change without a reload, so reading it once
+     per render is sound. */
+  if (window.location.pathname === '/privacy') return <PrivacyPage />
 
   return (
     <main className="brick-wall">

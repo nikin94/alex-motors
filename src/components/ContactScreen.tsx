@@ -8,8 +8,8 @@ import { useI18n } from '../i18n/context'
 
 /* Last screen: contact details and the enquiry form side by side — the
    address/hours/phone card and the form are two halves of the same question,
-   how to reach us. On mobile they stack and the language switcher moves into
-   a centred footer here so the top-right corner stays clear for thumbs. */
+   how to reach us. On mobile they stack. The quiet privacy link lives in this
+   screen's bottom-left corner, opposite the sticky call cluster. */
 
 function InfoRow({ Icon, children }: { Icon: typeof FaClock; children: React.ReactNode }) {
   return (
@@ -99,6 +99,17 @@ export function ContactScreen() {
 
         <ContactForm />
       </div>
+
+      {/* Quiet privacy link — deliberately understated (tiny, faint, tucked
+          into the last screen's bottom-left corner, opposite the sticky call
+          cluster) so it's discoverable without competing for attention. It is
+          the required disclosure for the invisible Turnstile widget. */}
+      <a
+        href="/privacy"
+        className="absolute bottom-4 left-4 text-[11px] text-stone-500/70 transition-colors hover:text-stone-400 sm:left-6"
+      >
+        {t.privacy.linkLabel}
+      </a>
     </section>
   )
 }
