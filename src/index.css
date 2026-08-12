@@ -278,18 +278,21 @@ button:not(:disabled) {
    and because the browser owns all the gesture state there is no momentum
    tail, debounce or anchor bookkeeping to get wrong — the JS wheel-paging
    hook that used to live here was four bug-fix iterations of exactly that
-   and is deliberately gone. Below 768px (mobile per project convention)
-   the media query never turns snapping on — the page scrolls normally.
-   Smooth scrolling is deliberately outside the media query: the chevron
-   anchor jump should be smooth on every viewport, not only where snapping
-   is active. Snap stays `mandatory` even with over-tall screens: per the
-   CSS spec, a snap area larger than the viewport scrolls freely inside
-   itself, so long content is never trapped between snap points. */
+   and is deliberately gone. Snapping is gated on BOTH width and a real
+   cursor (hover + fine pointer): a width-only gate let landscape phones
+   and tablets (>= 768px CSS width) fall into mandatory snap, where touch
+   momentum fights the snap settle and the screen visibly stutters — touch
+   devices of any size scroll plainly instead. Smooth scrolling is
+   deliberately outside the media query: the chevron anchor jump should be
+   smooth on every viewport, not only where snapping is active. Snap stays
+   `mandatory` even with over-tall screens: per the CSS spec, a snap area
+   larger than the viewport scrolls freely inside itself, so long content
+   is never trapped between snap points. */
 html {
   scroll-behavior: smooth;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
   html {
     scroll-snap-type: y mandatory;
   }
