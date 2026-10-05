@@ -11,6 +11,7 @@ import type { IconType } from 'react-icons'
 
 import { Button } from './Button'
 import { tileShell } from './tile'
+import { SHOW_ADDRESS } from '../config/business'
 import { useIsDesktop } from '../hooks/useIsDesktop'
 import { useRevealOnView } from '../hooks/useRevealOnView'
 import { useTablist } from '../hooks/useTablist'
@@ -49,7 +50,9 @@ const ICONS: IconType[] = [
 export function Faq() {
   const { t } = useI18n()
   const isDesktop = useIsDesktop()
-  const items = t.faq.items
+  // "Where exactly are you?" is the last item (and last icon), so dropping it
+  // while the address is hidden keeps the index-keyed icons aligned.
+  const items = SHOW_ADDRESS ? t.faq.items : t.faq.items.slice(0, -1)
   const [active, setActive] = useState(0)
 
   /* The mobile accordion allows "all collapsed" (active = -1), but the desktop
