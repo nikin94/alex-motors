@@ -12,7 +12,8 @@ subtitle, not in a card.
 
 ## Facts
 
-- Address (published, footer + JSON-LD): Altaghaderry, Killea, Co. Donegal, F93 P768
+- Address (footer + JSON-LD): Altaghaderry, Killea, Co. Donegal, F93 P768 —
+  temporarily hidden on the site (`SHOW_ADDRESS = false` in `src/config/business.ts`)
 - Town in meta/copy is **Derry** ("near Derry") since PR #15 — the workshop sits
   on the border minutes from Derry city, the largest population centre nearby.
   The Services subtitle also names Donegal, so both markets are covered.

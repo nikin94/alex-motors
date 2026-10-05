@@ -3,7 +3,14 @@ import { FaClock, FaLocationDot, FaPhone, FaRoute } from 'react-icons/fa6'
 import { Button } from './Button'
 import { ContactForm } from './ContactForm'
 import { WallStencil } from './WallStencil'
-import { ADDRESS_LINES, DIRECTIONS_URL, HOURS, PHONE_DISPLAY, PHONE_E164 } from '../config/business'
+import {
+  ADDRESS_LINES,
+  DIRECTIONS_URL,
+  HOURS,
+  PHONE_DISPLAY,
+  PHONE_E164,
+  SHOW_ADDRESS,
+} from '../config/business'
 import { useI18n } from '../i18n/context'
 
 /* Last screen: contact details and the enquiry form side by side — the
@@ -47,16 +54,18 @@ export function ContactScreen() {
       <div className="relative grid w-full max-w-4xl justify-items-center gap-6 lg:grid-cols-2 lg:items-stretch lg:justify-items-stretch">
         <div className="flex w-full max-w-md flex-col rounded-lg border border-amber-100/15 bg-black/55 p-6 sm:p-8 lg:max-w-none">
           <div className="my-auto flex flex-col gap-6">
-            <InfoRow Icon={FaLocationDot}>
-              <h3 className={rowHeading}>{t.location.workshop}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-stone-300 sm:text-base">
-                {ADDRESS_LINES.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </p>
-            </InfoRow>
+            {SHOW_ADDRESS && (
+              <InfoRow Icon={FaLocationDot}>
+                <h3 className={rowHeading}>{t.location.workshop}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-stone-300 sm:text-base">
+                  {ADDRESS_LINES.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              </InfoRow>
+            )}
 
             <InfoRow Icon={FaClock}>
               <h3 className={rowHeading}>{t.location.openingHours}</h3>
@@ -90,11 +99,15 @@ export function ContactScreen() {
 
           {/* Bottom-pinned, with a spacer mirroring the form's note line so
               this button and the form's Send sit at the same level. */}
-          <Button href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" className="mt-6">
-            <FaRoute aria-hidden className="size-4" />
-            {t.location.getDirections}
-          </Button>
-          <p aria-hidden className="mt-2 hidden min-h-4 lg:block" />
+          {SHOW_ADDRESS && (
+            <>
+              <Button href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer" className="mt-6">
+                <FaRoute aria-hidden className="size-4" />
+                {t.location.getDirections}
+              </Button>
+              <p aria-hidden className="mt-2 hidden min-h-4 lg:block" />
+            </>
+          )}
         </div>
 
         <ContactForm />

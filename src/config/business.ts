@@ -13,7 +13,7 @@ export const CONTACT_LINKS = [
   { name: 'WhatsApp', href: WHATSAPP_URL, external: true },
   { name: 'Viber', href: `viber://chat?number=${encodeURIComponent(PHONE_E164)}`, external: false },
   { name: 'Telegram', href: 'https://t.me/Alex_Motors_ie', external: true },
-  { name: 'Instagram', href: 'https://www.instagram.com/alex.vag.motors', external: true },
+  { name: 'Instagram', href: 'https://www.instagram.com/alex.motorsport.ie', external: true },
   { name: 'TikTok', href: 'https://www.tiktok.com/@alex.motorsport.ie', external: true },
 ] as const
 
@@ -23,6 +23,11 @@ export type ContactLinkName = (typeof CONTACT_LINKS)[number]['name']
    workshop sits on the border minutes from Derry city, where the search demand
    is. Address is a proper noun and stays untranslated; only the labels localise. */
 export const ADDRESS_LINES = ['Altaghaderry, Killea', 'Co. Donegal, F93 P768']
+/* Temporarily off at the owner's request: hides the workshop address, the
+   Get Directions button, the "Where exactly are you?" FAQ entry and the
+   address/geo/map fields of the JSON-LD. Flip back to true to restore all of
+   them — the address data below stays as-is. */
+export const SHOW_ADDRESS = false
 export const HOURS = { weekdays: '9:00–17:00', saturday: '9:00–13:00' }
 // Townland-level coordinate from OSM Nominatim geocoding of "Altaghaderry, Killea".
 // TODO: owner to confirm the pin sits on the actual workshop entrance.
@@ -38,16 +43,8 @@ export const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destinatio
 // hasMap expects (the directions deep-link above is an action, not a map).
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`
 
-// Schema.org is language-independent structured data, so it stays in English
-// regardless of the UI language.
-export const localBusinessJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'AutoRepair',
-  name: 'Alex Motors',
-  // Planned production domain (see canonical/OG in index.html); one host to change if it ships elsewhere.
-  url: 'https://alex-motors.ie/',
-  image: 'https://alex-motors.ie/og-image.jpg',
-  telephone: PHONE_E164,
+// Location fields of the JSON-LD, gated by SHOW_ADDRESS.
+const addressJsonLd = {
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Altaghaderry',
@@ -62,6 +59,19 @@ export const localBusinessJsonLd = {
     longitude: GEO.lng,
   },
   hasMap: MAP_URL,
+}
+
+// Schema.org is language-independent structured data, so it stays in English
+// regardless of the UI language.
+export const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoRepair',
+  name: 'Alex Motors',
+  // Planned production domain (see canonical/OG in index.html); one host to change if it ships elsewhere.
+  url: 'https://alex-motors.ie/',
+  image: 'https://alex-motors.ie/og-image.jpg',
+  telephone: PHONE_E164,
+  ...(SHOW_ADDRESS ? addressJsonLd : {}),
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
